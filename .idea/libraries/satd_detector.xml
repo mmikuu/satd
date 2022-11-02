@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="satd_detector">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/satd_detector.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
