@@ -1,0 +1,265 @@
+1: TODO: compute relevances
+2: FIXME: When both exist, order could become an issue.
+3: TODO(stephan): ever reached? for ReferenceExpression? (would need a corresponding new call to flushBoundOutbox()).
+4: FIXME: re-enable!
+5: TODO Look for opportunities to merge small blocks
+6: TODO: working around a compiler issue
+7: moduleDecl.resolveBinding(); TODO: Implement resolveBinding
+8: performance could be improved by caching computed flags
+9: do not cache - performance could be improved by caching computed flags
+10: TODO: working around a compiler issue
+11: moduleDecl.resolveBinding(); TODO: Implement resolveBinding
+12: performance could be improved by caching computed flags
+13: do not cache - performance could be improved by caching computed flags
+14: TODO : Change to ExportsReference/PackageReference once we have the new compiler ast.node
+15: TODO: can't we do away with all these additions except for ProvidesStatement - to check
+16: TODO: change to compliance 9 once tests run with 9
+17: TODO uncomment after bug509050 is done
+18: TODO
+19:							if (exportReference instanceof CompletionOnKeywordModuleInfo) {
+20:						if (implementation instanceof CompletionOnProvidesImplementationsSingleTypeReference ||
+21:								implementation instanceof CompletionOnProvidesImplementationsQualifiedTypeReference) {
+22:		} else if (reference instanceof CompletionOnProvidesImplementationsQualifiedTypeReference) {
+23:TODO
+24: TODO
+25:TODO refer super.consumeSingleRequiresModuleName
+26: TODO exports_flags - check when they are set
+27: TODO opens_flags - check when they are set
+28: TODO: need a check for empty package as well
+29: TODO: This should be replaced with RecoveredRequiresStatement ala. RecoveredImport
+30: TODO replace with RecoveredUsesStatement
+31: TODO: to be uncommented once RecoveredRequiresStatement is introduced
+32: TODO uncomment once RecoveredUsesStatement is in place
+33: TODO: really necessary?
+34: TODO Look for opportunities to merge small blocks
+35: TODO Look for opportunities to merge small blocks
+36: TODO: ideally we want to report an error.
+37: TODO: check with spec on what the behavior should be
+38: FIXME: re-enable!
+39: TODO: Ideally, for source roots, we should get this information from the raw classpath
+40: TODO: This is only needed because SourceFile.module() uses the module set on the location
+41: TODO: Ideally we need to do something like mapToModulePathEntry using the path and if it is indeed
+42: TODO: Ideally we need to do something like mapToModulePathEntry using the path and if it is indeed
+43: static nested class. That's probably a bug;
+44: this already worked without the patch for bug 501031.
+45: exposed bugs in 2a,b
+46: exposed bugs in 3b(ii)
+47: TODO(sxenos): setup the external annotation provider if the IBinaryType came from the index
+48: TODO(sxenos): the old code always passed null as the third argument to setupExternalAnnotationProvider,
+49: but this looks like a bug. I've preserved it for now but we need to figure out what was supposed to go
+50: TODO(sxenos): this is causing each change event for an external jar file to be fired twice.
+51: TODO(sxenos): rename this to something like "StructDescriptor" -- it's more than a factory and the word
+52: a bug.
+53: If you're debugging issues related to duplicate deletions, set DEBUG_DUPLICATE_DELETIONS to true
+54: A lock release probably means that some AST is going away. The result cache has to be
+55: cleared since it may contain objects belonging to the AST that is going away. A failure
+56: to release an AST object would cause a memory leak since the whole AST would remain
+57: TODO(sprigogin): It would be more efficient to replace the global result cache with
+58: give up on read locks
+59: Derived data. Holds the address for the last block we know about
+60: This assert verifies the alignment. We expect the low bits to be clear.
+61: there should never be duplicates
+62: There should never be duplicates.
+63: There should never be duplicates.
+64: TODO: make use of lower-level System.arrayCopy
+65: Clear out the block, lots of people are expecting this.
+66: TODO Look for opportunities to merge blocks
+67: If there is no generic signature, then fall back to heuristics based on what we know about
+68:TODO: check callers for handling of comments
+69: TODO(sxenos): It would be much more efficient to mark files as being in one
+70: of three states: unknown, dirty, or clean. Files would start in the unknown
+71: event. They would move into the clean state after passing this sort of
+72: it would eliminate the vast majority of these (slow) fingerprint tests.
+73: TODO: delete and recreate the index
+74: TODO(sxenos): Create something like a union to hold these, to eliminate this
+75: InlineMethodTests in the JDT UI project. Need to investigate why before using it.
+76: TODO(sxenos): Find a more appropriate and more specific place to trigger re-indexing
+77: no better answer was found
+78: If neither one is better, use the one with the earlier classpath position
+79: static nested class. That's probably a bug;
+80:TODO: If module was already part of another source folder, flag an error?
+81:TODO, could be null
+82: TODO: Implement use cases to construct modules from location/key
+83: Do what's needed. Question is, how are we going to look up for modules somewhere else in a workspace?
+84: TODO: really necessary?
+85: TODO: really necessary?
+86: TODO: really necessary?
+87:TODO add the rest of the stuff
+88: TODO: B3, rather than B2?!
+89:TODO: Hack until ui fixes this issue.
+90: TODO: return null on answer false?
+91:						if (samParam instanceof InferenceVariable)
+92: this already worked without the patch for bug 501031.
+93: Nested anonymous diamonds - TODO - confirm that this is indeed correct as per spec
+94: Redundant type argument specification - TODO - confirm that this is correct
+95:TODO: Remove once jdt.ui allows
+96:TODO: Remove once jdt.ui allows
+97: TODO ignore for now
+98:		TODO: Enable the code once NameLookup supports moduleContext when module-info.java file is still in flux
+99: TODO: need better representation of IModuleEnvironment and IModulePathEntry
+100: TODO: need a check for empty package as well
+101: InlineMethodTests in the JDT UI project. Need to investigate why before using it.
+102: If there is no generic signature, then fall back to heuristics based on what we know about
+103: TODO(sxenos): this is causing each change event for an external jar file to be fired twice.
+104: TODO: delete and recreate the index
+105: If you're debugging issues related to duplicate deletions, set DEBUG_DUPLICATE_DELETIONS to true
+106: no better answer was found
+107: If neither one is better, use the one with the earlier classpath position
+108: TODO(sxenos): Temporarily filter out any types that are contained in the workspace since the old index
+109: TODO(sxenos): It would be much more efficient to mark files as being in one
+110: of three states: unknown, dirty, or clean. Files would start in the unknown
+111: event. They would move into the clean state after passing this sort of
+112: it would eliminate the vast majority of these (slow) fingerprint tests.
+113: TODO(sxenos): uncomment this after EclipseCon, then replace it with a more efficient
+114: mechanism for determining if the index matches the file system. Perhaps some sort of
+115: TODO(sxenos): setup the external annotation provider if the IBinaryType came from the index
+116: TODO(sxenos): the old code always passed null as the third argument to setupExternalAnnotationProvider,
+117: but this looks like a bug. I've preserved it for now but we need to figure out what was supposed to go
+118: TODO: delete and recreate the index
+119: A lock release probably means that some AST is going away. The result cache has to be
+120: cleared since it may contain objects belonging to the AST that is going away. A failure
+121: to release an AST object would cause a memory leak since the whole AST would remain
+122: give up on read locks
+123: on them so we reinsert the missing exception declarations if they're not present.
+124: TODO: there's no need to invoke this "delete" method on the first initialization of a search key. We could
+125: Derived data. Holds the address for the last block we know about
+126: TODO(sxenos): Create something like a union to hold these, to eliminate this
+127: a bug.
+128: TODO(sxenos): Sometimes the same node gets scheduled for deletion more than once, which is why
+129: pendingDeletions is a HashSet rather than a queue. We need to understand the circumstances in which
+130: TODO: Revisit 
+131: TODO: BETA_JAVA9 Should report better
+132: ignore broken entry, keep searching
+133:TODO - if the package is part of a named module, then we should check if the module exports the package
+134: TODO: Situation can probably improved by adding NOtFoundPackage to this.declaredPackages 
+135: TODO: improve this
+136: TODO: these should be abstract
+137:				if (!(this.classpaths[i] instanceof ClasspathDirectory)) continue;
+138: No direct way to lookup, use the java model APIs instead
+139: No direct way to lookup, use the java model APIs instead
+140: No direct way to lookup, use the java model APIs instead
+141: No direct way to lookup, use the java model APIs instead
+142: TODO: this should refer to the ModuleSourcePathManager to map this module to
+143: TODO : Should we signal error via JavaModelException
+144: TODO: need better representation of IModuleEnvironment and IModulePathEntry
+145: TODO: need better representation of IModuleEnvironment and IModulePathEntry
+146:if (unit instanceof CompilationUnit && unit.exists()) {
+147: TODO BETA_JAVA9
+148: TODO: revisit this - is this really required??
+149: FIXME: Eclipse has a bug
+150: TODO: speculative addition:
+151: TODO improve test for getJLS8()
+152: TODO improve test for getJLS8()
+153: TODO improve test for getJLS8()
+154: TODO improve test for getJLS8()
+155: TODO improve test for getJLS8()
+156: TODO improve test for getJLS8()
+157: TODO improve test for getJLS8()
+158: TODO improve test for getJLS8()
+159: FIXME: Eclipse has a bug
+160: TODO: speculative addition:
+161: this is the missing part without the fix in RecoveredMethod#add(Block....)
+162: this is the missing part without the fix in RecoveredMethod#add(Block....)
+163:bugs.eclipse.org/429340 [content assist] No Javadoc proposals anywhere before @deprecated tag
+164: whereas in fact the type of all expressions of this shape depend on their type variable (if any)
+165: may happen for class files generated by eclipse before bug 460491 was fixed. 
+166:TODO enable once we know how to update project cache
+167: TODO: should project compliance level be checked here?
+168: TODO: semicolon should not be part of source range
+169: TODO: selective flagging if ref.binding is not one of earlier inlined LVBs.
+170: effective finality maybe tricky to find here.
+171:TODO: For field accesses in the form of a.b.c and b.c - could there be a non-trivial dup - to check?
+172: TODO: Check if unnecessary
+173: may happen for class files generated by eclipse before bug 460491 was fixed. 
+174: enable this after bug 492322 is fixed:
+175:bugs.eclipse.org/429340 [content assist] No Javadoc proposals anywhere before @deprecated tag
+176: TODO: better to validate the option before processing it further?
+177: whereas in fact the type of all expressions of this shape depend on their type variable (if any)
+178: e2.toString breaks without fix
+179: e2.toString breaks without fix
+180: TODO: BETA_JAVA9 Should report better
+181: TODO: This needs revisit in case a source file specified in command line is
+182: TODO: What about chained jars from MANIFEST.MF? Check with spec
+183: TODO what to do??
+184: TODO: Add support for JPFRs?
+185:TODO: Hack until ui fixes this issue.
+186:TODO: Hack until ui fixes this issue.
+187: TODO: Filter the results wrt accessibility and add relevance to the results.
+188: TODO: Filter the results wrt accessibility and add relevance to the results.
+189: TODO : filter the results.
+190: TODO : filter the results.
+191: HERE: ReferenceExpression had a bug
+192: eventually ensures: forall iv in inferenceVariables : allEdges.get(iv) != null
+193: This is a performance optimization, because it is very expensive to search for secondary types and it isn't necessary to check when creating a package,
+194:bugs.eclipse.org/460491 TODO: remove once really fixed
+195: TODO: not an invocation really but ref -> add flavor to returned level
+196: HERE: ReferenceExpression had a bug
+197: This is a performance optimization, because it is very expensive to search for secondary types and it isn't necessary to check when creating a package,
+198: HERE: ReferenceExpression had a bug
+199: HERE: ReferenceExpression had a bug
+200: This is a performance optimization, because it is very expensive to search for secondary types and it isn't necessary to check when creating a package,
+201: TODO: not an invocation really but ref -> add flavor to returned level
+202: TODO: Revisit
+203: TODO: we haven't finalized what path the JRT is represented by. Don't attempt to validate it.
+204: eventually ensures: forall iv in inferenceVariables : allEdges.get(iv) != null
+205: we really mean 'T' unannotated, believe it due to @NonNullByDefault
+206: TODO: isn't doing this for just one of these enough because they all share
+207: we really mean 'T' unannotated, believe it due to @NonNullByDefault
+208: FIXME: still reports an unexpected error
+209: Compile error because Eclipse thinks 'thing' is Object\n" + 
+210: forward reference, workaround by using reflection
+211: forward reference, workaround by using reflection
+212: forward reference, workaround by using reflection
+213:bugs.eclipse.org/487375 - [formatter] block comment in front of method signature effects too much indentation
+214:bugs.eclipse.org/487375 - [formatter] block comment in front of method signature effects too much indentation
+215: not solely a search issue but easily reproducible using search
+216: shouldn't occur in declarations
+217: FIXME: still reports an unexpected er
+218: shouldn't occur in declarations
+219:TODO: Hack until ui fixes this issue.
+220:TODO: find Modules
+221:TODO
+222: TODO: Filter the results wrt accessibility and add relevance to the results.
+223: TODO : filter the results.
+224:TODO: Waiting for findModules lookup implementation.
+225:TODO : Implement
+226: TODO: Implement
+227: FIXME: still reports an unexpected error
+228: Compile error because Eclipse thinks 'thing' is Object\n" + 
+229:bugs.eclipse.org/487375 - [formatter] block comment in front of method signature effects too much indentation
+230: TODO: Do we need to add java.base here?
+231:TODO: Should be replaced by ModuleBinding
+232:md.resetModule(this.nameEnvironment.getModule(md)); TODO: revisit why this is needed
+233: TODO: BETA_JAVA9 Should really check with the module context.
+234: forward reference, workaround by using reflection
+235: forward reference, workaround by using reflection
+236: forward reference, workaround by using reflection
+237:bugs.eclipse.org/487375 - [formatter] block comment in front of method signature effects too much indentation
+238: TODO BETA_JAVA9 - entry[1] contains the module, use it.
+239: TODO BETA_JAVA9 - entry[1] contains the module, use it.
+240: TODO BETA_JAVA9
+241: TODO BETA_JAVA9
+242:TODO: BETA_JAVA9 - should ideally return ModuleBinding?
+243:TODO: Should it be something like ModuleBinding?
+244: TODO: BETA_JAVA9 Think about clearing the cache too.
+245: TODO: BETA_JAVA9 Revisit
+246: TOOD: BETA_JAVA9 - Should really check for packages with the module context
+247: TODO: BETA_JAVA9 Should report better
+248: TODO: BETA_JAVA9 Should report better
+249: TODO BETA_JAVA9
+250: TODO: BETA_JAVA9 Should really check with the module context.
+251: TODO BETA_JAVA9: figure out module?
+252: not solely a search issue but easily reproducible using search
+253: TODO Is there a better way of doing this?
+254: Kludge?
+255: reduced example without generics that still exhibits the bug
+256: bug behaviour visible via switch
+257: fix the bug:		
+258: just needed as workaround if bug 484981 is not fixed\n" +
+259: just needed as workaround if bug 484981 is not fixed\n" +
+260: javac bug: 8b115 complains of ambiguity here.
+261: javac bug: 8b115 complains of ambiguity here.
+262: bug 482309
+263: bug 482309
+264: improve problem rendering when using a declaration annotation in a 1.8 setting
+265: TODO need configuration for this, now only handles line br
