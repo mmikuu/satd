@@ -92,7 +92,7 @@ public class main_yuta {
                             addedSATDnumber[i]+=added_number;
                             deletdSATDnumber[i]+=deleted_number;
                             commitNumber[i]++;
-                            if(miner_check == true) {
+                            if(miner_check == true) {//commitid
                                 filewriter_commit.write(commit.getName() + "\n");
                             }
                             miner_check = false;
