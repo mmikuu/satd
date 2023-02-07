@@ -56,32 +56,55 @@ public class CommandExecutor {
             String addedSatdRegrex = "\\s*\\+\\s*.*\\/\\/(.+)";
             String deletedSatdRegrex = "\\s*-\\s*.*\\/\\/(.+)";
             String fileRegrex = "^diff\\s-{2}git\\s(.{1,})";
+            String lineNoRegrex = "@@\\s-(\\d+).*\\s\\+(\\d+).*\\s@@";
             Pattern fileNamePattern = Pattern.compile(fileRegrex);
             Pattern addedSatdPattern = Pattern.compile(addedSatdRegrex);
             Pattern deletedSatdPattern = Pattern.compile(deletedSatdRegrex);
+            Pattern lineNoPattern = Pattern.compile(lineNoRegrex);
             try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
-                String line = null;
-                String fileName = null;
-                int lineNo = 0;
+                String line;
+                String aFile = null;
+                String bFile = null;
+                Integer aFileLineNo = null;
+                Integer bFileLineNo = null;
                 while ((line = br.readLine()) != null) {
-                    lineNo ++;
+                    //Get file names
                     Matcher fileNameMatcher = fileNamePattern.matcher(line);
                     if(fileNameMatcher.find()){
-                        fileName = fileNameMatcher.group(1).split(" ")[1];
-                    }
-
-                    Matcher addedMatcher = addedSatdPattern.matcher(line);
-                    SATD satd = detect(addedMatcher, SATD.Type.ADDED, fileName, lineNo);
-                    if(satd!=null){
-                        satdList.add(satd);
+                        String[] tmp = fileNameMatcher.group(1).split(" ");
+                        aFile = tmp[0];
+                        bFile = tmp[1];
+                        aFileLineNo = null;
+                        bFileLineNo = null;
                         continue;
                     }
-                    Matcher deletedMatcher = deletedSatdPattern.matcher(line);
-                    satd = detect(deletedMatcher, SATD.Type.DELETED, fileName, lineNo);
-                    if(satd!=null){
-                        satdList.add(satd);
+                    //Get the start line number in diff files
+                    Matcher lineNoMatcher = lineNoPattern.matcher(line);
+                    if(lineNoMatcher.find()){
+                        aFileLineNo = Integer.parseInt(lineNoMatcher.group(1));
+                        bFileLineNo = Integer.parseInt(lineNoMatcher.group(2));
                         continue;
                     }
+                    //Skip irrelevant line (---, +++)
+                    if (aFileLineNo == null) continue;
+                    //Count line number
+                    SATD satd = null;
+                   if (line.startsWith("-")){//When only deleted
+                        aFileLineNo ++;
+                       //Detect added SATD
+                       Matcher deletedMatcher = deletedSatdPattern.matcher(line);
+                       satd = detect(deletedMatcher, SATD.Type.DELETED, aFile, aFileLineNo);
+                    } else if (line.startsWith("+")){//When only added
+                       bFileLineNo ++;
+                       //Detect deleted SATD
+                       Matcher addedMatcher = addedSatdPattern.matcher(line);
+                       satd = detect(addedMatcher, SATD.Type.ADDED, bFile,bFileLineNo);
+                    }else {//When no changes
+                        aFileLineNo ++;
+                        bFileLineNo ++;
+                        continue;
+                    }
+                    if(satd!=null) satdList.add(satd);
                 }
             } catch (IOException e) {
                 throw new RuntimeException(e);
