@@ -1,3 +1,7 @@
+package jp.naist.sdlab.miku.main;
+
+import jp.naist.sdlab.miku.module.CommandExecutor;
+import jp.naist.sdlab.miku.module.SATD;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
@@ -91,10 +95,10 @@ public class main_yuta {
 
 
         //System.out.println("true回数" + added_number + "miner回数" + deleted_number);
-        System.out.println("Added SATD number:" + addedSatdNumber);
-        System.out.println("Deleted SATD number:" + deletedSatdNumber);
-        System.out.println("Added SATD commits:" + addedSatdCommits.size());
-        System.out.println("Deleted SATD commits:" + deletedSatdCommits.size());
+        System.out.println("Added jp.naist.sdlab.miku.module.SATD number:" + addedSatdNumber);
+        System.out.println("Deleted jp.naist.sdlab.miku.module.SATD number:" + deletedSatdNumber);
+        System.out.println("Added jp.naist.sdlab.miku.module.SATD commits:" + addedSatdCommits.size());
+        System.out.println("Deleted jp.naist.sdlab.miku.module.SATD commits:" + deletedSatdCommits.size());
     }
 }
 

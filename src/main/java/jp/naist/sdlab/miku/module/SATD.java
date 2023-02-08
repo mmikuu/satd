@@ -1,7 +1,9 @@
+package jp.naist.sdlab.miku.module;
+
 public class SATD {
     String content;
-    Type type;
-    String commitId;
+    public Type type;
+    public String commitId;
     String fileName;
     int line = 0;
 

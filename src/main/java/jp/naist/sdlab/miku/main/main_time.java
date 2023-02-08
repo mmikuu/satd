@@ -1,3 +1,5 @@
+package jp.naist.sdlab.miku.main;
+
 import org.eclipse.jgit.api.BlameCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.blame.BlameResult;

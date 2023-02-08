@@ -1,3 +1,5 @@
+package jp.naist.sdlab.miku.module;
+
 import satd_detector.core.utils.SATDDetector;
 
 import java.io.BufferedReader;
@@ -91,12 +93,12 @@ public class CommandExecutor {
                     SATD satd = null;
                    if (line.startsWith("-")){//When only deleted
                         aFileLineNo ++;
-                       //Detect added SATD
+                       //Detect added jp.naist.sdlab.miku.module.SATD
                        Matcher deletedMatcher = deletedSatdPattern.matcher(line);
                        satd = detect(deletedMatcher, SATD.Type.DELETED, aFile, aFileLineNo);
                     } else if (line.startsWith("+")){//When only added
                        bFileLineNo ++;
-                       //Detect deleted SATD
+                       //Detect deleted jp.naist.sdlab.miku.module.SATD
                        Matcher addedMatcher = addedSatdPattern.matcher(line);
                        satd = detect(addedMatcher, SATD.Type.ADDED, bFile,bFileLineNo);
                     }else {//When no changes
