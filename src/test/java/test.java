@@ -1,3 +1,4 @@
+import org.junit.Assert;
 import org.junit.Test;
 import satd_detector.core.utils.SATDDetector;
 import java.util.regex.Matcher;
@@ -20,6 +21,37 @@ public class test {
             boolean result = detector1.isSATD(check);
             System.out.println("結果"+result);
 
+        }
+    }
+
+    String lineNoRegrex = "@@\\s-(\\d+).*\\s\\+(\\d+).*\\s@@";
+    @Test
+    public void testLineNoRegrex1(){
+        String line="@@ -212,35 +200,10 @@ void recordStructuralDependency(IProject prereqProject, State prereqState) {";
+
+        Pattern p = Pattern.compile(lineNoRegrex);
+
+        Matcher m = p.matcher(line);
+        if(m.find()){
+            Assert.assertEquals("212", m.group(1));
+            Assert.assertEquals("200", m.group(2));
+        }else{
+            Assert.fail();
+        }
+    }
+
+    @Test
+    public void testLineNoRegrex2(){
+        String line="@@ -65 +65 @@ public class JrtUtilTest extends TestCase {";
+
+        Pattern p = Pattern.compile(lineNoRegrex);
+
+        Matcher m = p.matcher(line);
+        if(m.find()){
+            Assert.assertEquals("65", m.group(1));
+            Assert.assertEquals("65", m.group(2));
+        }else{
+            Assert.fail();
         }
     }
 }
