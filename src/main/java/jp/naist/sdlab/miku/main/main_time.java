@@ -4,6 +4,7 @@ package jp.naist.sdlab.miku.main;
 import org.apache.commons.csv.CSVPrinter;
 import org.eclipse.jgit.api.BlameCommand;
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.blame.BlameResult;
 import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.lib.ObjectId;
@@ -63,42 +64,45 @@ public class main_time {
 
 
             for(int j = 0; j<filename.size()-1;j++) {
-
                 String startCommitId = commitID.get(j);
                 startCommitId=startCommitId.replace(" ","");
                 String fileName = filename.get(j);
-
                 System.out.println(startCommitId);
-                boolean reverse = false;
-
-                Git git = new Git(repository);
-                ObjectId startCommit = repository.resolve(startCommitId);//ここを開始拠点とする
-                /*
-                 * ブレーム
-                 */
-                BlameCommand blamer = git.blame();
-                if (!reverse) {//普通のBlame
-                    blamer.setStartCommit(startCommit);
-                } else {//リバースの場合
-                    blamer.reverse(startCommit, repository.resolve("HEAD"));
-                }
-                blamer.setFilePath(fileName);
-                BlameResult result = blamer.call();
-
-                /*
-                 * 表示
-                 */
-                int lines = result.getResultContents().size();
-                for (int i = 0; i < lines; i++) {//NOTE: 1行目は0から始まるので注意．
-                    System.out.println(result.getResultContents().getString(i));
-                    RevCommit commit = result.getSourceCommit(i);
-                    if (commit == null) continue;
-                    PersonIdent authorIdent = commit.getAuthorIdent();
-                    Date authorDate = authorIdent.getWhen();
-                    System.out.println("Line: " + i + ": " + commit + "(" + authorDate.toString() + ")");
-                    //NOTE: 月は"authorDate.getMonth()+1"で取れる．0が１月
-                }
+                blame(repository, startCommitId, fileName, Integer.parseInt(line.get(j)));
             }
 
+    }
+
+    public static void blame(Repository repository, String startCommitId, String fileName, int i) throws IOException, GitAPIException {
+        boolean reverse = false;
+
+        Git git = new Git(repository);
+        ObjectId startCommit = repository.resolve(startCommitId);//ここを開始拠点とする
+        /*
+         * ブレーム
+         */
+        BlameCommand blamer = git.blame();
+        if (!reverse) {//普通のBlame
+            blamer.setStartCommit(startCommit);
+        } else {//リバースの場合
+            blamer.reverse(startCommit, repository.resolve("HEAD"));
+        }
+        blamer.setFilePath(fileName);
+        BlameResult result = blamer.call();
+        System.out.println(fileName);
+        /*
+         * 表示
+         */
+//        int lines = result.getResultContents().size();
+//        for (int i = 0; i < lines; i++) {//NOTE: 1行目は0から始まるので注意．
+//
+//        }
+        System.out.println(result.getResultContents().getString(i));
+        RevCommit commit = result.getSourceCommit(i);
+        if (commit == null) return;
+        PersonIdent authorIdent = commit.getCommitterIdent();
+        Date authorDate = authorIdent.getWhen();
+        System.out.println("Line: " + i + ": " + commit + "(" + authorDate.toString() + ")");
+        //NOTE: 月は"authorDate.getMonth()+1"で取れる．0が１月
     }
 }

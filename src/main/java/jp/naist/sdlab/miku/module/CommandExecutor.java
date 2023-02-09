@@ -124,7 +124,7 @@ public class CommandExecutor {
                         //Detect added jp.naist.sdlab.miku.module.SATD
                         for(Pattern pattern :addedRegrexesPatterns) {
                             Matcher addedMatcher = pattern.matcher(line);
-                            satd = detect(addedMatcher, SATD.Type.ADDED, aFile, aFileLineNo);
+                            satd = detect(addedMatcher, SATD.Type.ADDED, bFile, bFileLineNo);
                             if(satd !=null){
                                 AddedCount +=1;
                                 break;

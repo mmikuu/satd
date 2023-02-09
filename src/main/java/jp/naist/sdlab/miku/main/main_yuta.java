@@ -26,10 +26,10 @@ import java.util.List;
 public class main_yuta {
 
     static String url = "https://github.com/eclipse-jdt/eclipse.jdt.core";
-    public static int AddedSatd = 0;
-    public static int DeletedSatd = 0;
-    public static List<Integer> ReleaseAddedSatdes = new ArrayList(Arrays.asList(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0));
-    public static List<Integer> ReleaseDeletedSatdes = new ArrayList(Arrays.asList(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0));
+
+
+
+
     public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static List<String> releaseDates = Arrays.asList("2016-06-22", "2017-06-28", "2018-06-27", "2018-09-19", "2018-12-19", "2019-03-20", "2019-06-19", "2019-09-19", "2019-12-18", "2020-03-18", "2020-06-17", "2020-09-16", "2020-12-16", "2021-03-17", "2021-06-16");//, "2020-06-16", "2020-06-16", "2021-09-15", "2021-12-08", "2022-03-16"
 
@@ -112,6 +112,9 @@ public class main_yuta {
     private static void writeResult(Map<String, List<SATD>> satdPerRelease) throws IOException {
         FileWriter addedCountFileWriter = new FileWriter("added_satd.csv");
         FileWriter deletedCountFileWriter = new FileWriter("deleted_satd.csv");
+        addedCountFileWriter.write("release,type,commitID,filename,line,content\n");
+        deletedCountFileWriter.write("release,type,commitID,filename,line,content\n");
+
         int addedSatdNumber = 0;
         Set<String> addedSatdCommits = new HashSet<>();
         int deletedSatdNumber = 0;
