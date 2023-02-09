@@ -78,12 +78,12 @@ public class main_yuta {
             for (SATD satd: satdList){
                 switch (satd.type){
                     case ADDED:
-                        addedCountFileWriter.write(satd.toString() + "\n");
+                        addedCountFileWriter.write(r+","+satd.toString() + "\n");
                         addedSatdNumber ++;
                         addedSatdCommits.add(satd.commitId);
                         break;
                     case DELETED:
-                        deletedCountFileWriter.write(satd.toString() + "\n");
+                        deletedCountFileWriter.write(r+","+satd.toString() + "\n");
                         deletedSatdNumber ++;
                         deletedSatdCommits.add(satd.commitId);
                         break;
