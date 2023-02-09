@@ -15,7 +15,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class CommandExecutor {
-
+    public static int AddedCount = 0;
+    public static int DeletedCount = 0;
     public static List<SATD> runCommand(String commitId, Path directory, String... command) throws IOException, InterruptedException {
         Objects.requireNonNull(directory, "directory");
         if (!Files.exists(directory)) {
@@ -55,13 +56,29 @@ public class CommandExecutor {
 
         @Override
         public void run() {
-            String addedSatdRegrex = "\\s*\\+\\s*.*\\/\\/(.+)";
-            String deletedSatdRegrex = "\\s*-\\s*.*\\/\\/(.+)";
+            List<String> addedSatdRegrex = new ArrayList<>();
+            List<String> deletedSatdRegrex = new ArrayList<>();
+            List<Pattern> addedRegrexesPatterns = new ArrayList<>();
+            List<Pattern> deletedRegrexesPatterns = new ArrayList<>();
+
+            addedSatdRegrex.add("\\s*\\+\\s*.*\\/\\/(.+)");
+            addedSatdRegrex.add("\\s*\\+\\s*.*\\/\\*(.+)");
+            addedSatdRegrex.add("\\s*\\+\\s*.*\\*(.+)");
+            addedSatdRegrex.add("\\s*\\+\\s*(.+)\\*\\/");
+
+            deletedSatdRegrex.add("\\s*-\\s*.*\\/\\/(.+)");
+            deletedSatdRegrex.add("\\s*-\\s*.*\\/\\*(.+)");
+            deletedSatdRegrex.add("\\s*-\\s*.*\\*(.+)");
+            deletedSatdRegrex.add("\\s*-\\s*(.+)\\*\\/");
+
             String fileRegrex = "^diff\\s-{2}git\\s(.{1,})";
             String lineNoRegrex = "@@\\s-(\\d+).*\\s\\+(\\d+).*\\s@@";
+
             Pattern fileNamePattern = Pattern.compile(fileRegrex);
-            Pattern addedSatdPattern = Pattern.compile(addedSatdRegrex);
-            Pattern deletedSatdPattern = Pattern.compile(deletedSatdRegrex);
+            for (int i = 0; i<addedSatdRegrex.size(); i++) {
+                addedRegrexesPatterns.add(Pattern.compile(addedSatdRegrex.get(i)));
+                deletedRegrexesPatterns.add(Pattern.compile(deletedSatdRegrex.get(i)));
+            }
             Pattern lineNoPattern = Pattern.compile(lineNoRegrex);
             try (BufferedReader br = new BufferedReader(new InputStreamReader(is))) {
                 String line;
@@ -91,16 +108,28 @@ public class CommandExecutor {
                     if (aFileLineNo == null) continue;
                     //Count line number
                     SATD satd = null;
-                   if (line.startsWith("-")){//When only deleted
+                    if (line.startsWith("-")){//When only deleted
                         aFileLineNo ++;
-                       //Detect added jp.naist.sdlab.miku.module.SATD
-                       Matcher deletedMatcher = deletedSatdPattern.matcher(line);
-                       satd = detect(deletedMatcher, SATD.Type.DELETED, aFile, aFileLineNo);
+                        //Detect deleted jp.naist.sdlab.miku.module.SATD
+                        for(Pattern pattern :deletedRegrexesPatterns) {
+                            Matcher deletedMatcher = pattern.matcher(line);
+                            satd = detect(deletedMatcher, SATD.Type.DELETED, aFile, aFileLineNo);
+                            if(satd !=null){
+                                DeletedCount += 1;
+                                break;
+                            }
+                        }
                     } else if (line.startsWith("+")){//When only added
-                       bFileLineNo ++;
-                       //Detect deleted jp.naist.sdlab.miku.module.SATD
-                       Matcher addedMatcher = addedSatdPattern.matcher(line);
-                       satd = detect(addedMatcher, SATD.Type.ADDED, bFile,bFileLineNo);
+                        bFileLineNo ++;
+                        //Detect added jp.naist.sdlab.miku.module.SATD
+                        for(Pattern pattern :addedRegrexesPatterns) {
+                            Matcher addedMatcher = pattern.matcher(line);
+                            satd = detect(addedMatcher, SATD.Type.ADDED, aFile, aFileLineNo);
+                            if(satd !=null){
+                                AddedCount +=1;
+                                break;
+                            }
+                        }
                     }else {//When no changes
                         aFileLineNo ++;
                         bFileLineNo ++;

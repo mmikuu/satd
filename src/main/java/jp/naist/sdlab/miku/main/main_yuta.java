@@ -1,10 +1,12 @@
 package jp.naist.sdlab.miku.main;
 
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jp.naist.sdlab.miku.module.CommandExecutor;
 import jp.naist.sdlab.miku.module.SATD;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
+import org.kohsuke.github.GHEventPayload;
 import org.refactoringminer.api.GitService;
 import org.refactoringminer.util.GitServiceImpl;
 
@@ -26,7 +28,10 @@ import java.util.List;
 public class main_yuta {
 
     static String url = "https://github.com/eclipse-jdt/eclipse.jdt.core";
-
+    public static int AddedSatd = 0;
+    public static int DeletedSatd = 0;
+    public static List<Integer> ReleaseAddedSatdes = new ArrayList(Arrays.asList(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0));
+    public static List<Integer> ReleaseDeletedSatdes = new ArrayList(Arrays.asList(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0));
     static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     static List<String> releaseDates = Arrays.asList("2016-06-22", "2017-06-28", "2018-06-27", "2018-09-19", "2018-12-19", "2019-03-20", "2019-06-19", "2019-09-19", "2019-12-18", "2020-03-18", "2020-06-17", "2020-09-16", "2020-12-16", "2021-03-17", "2021-06-16");//, "2020-06-16", "2020-06-16", "2021-09-15", "2021-12-08", "2022-03-16"
 
@@ -36,9 +41,14 @@ public class main_yuta {
         String project = tmp[tmp.length-1];
         String cloneDir = "repos/"+project;
         Map<String, List<SATD>> satdPerRelease = new LinkedHashMap<>();
+        Map<String, Integer> satdAddedRelease = new LinkedHashMap<>();
+        Map<String, Integer> satdDeletedRelease = new LinkedHashMap<>();
         Repository repository = gitService.cloneIfNotExists(cloneDir, url);
         Git git = new Git(repository);
         Iterable<RevCommit> log = git.log().call();
+        FileWriter releaseAddedFileWriter = new FileWriter("releaseAddedSatd.csv");
+        FileWriter releaseDeletedFileWriter = new FileWriter("releaseDeletedSatd.csv");
+
 
         for (RevCommit commit : log) {
             LocalDateTime commitDate = LocalDateTime.ofInstant(commit.getAuthorIdent().getWhen().toInstant(), ZoneId.systemDefault());
@@ -50,17 +60,45 @@ public class main_yuta {
                 if (commitDate.isBefore(releaseStartDate) ) {
                     break;
                 }else if (commitDate.isBefore(releaseEndDate)){
+
                     List<SATD> allSATDs = satdPerRelease.getOrDefault(releaseDates.get(i), new ArrayList<>());
                     List<SATD> results = CommandExecutor.runCommand(commit.getId().getName(), Paths.get(cloneDir).toAbsolutePath(), "git", "diff", "--no-ext-diff", "--unified=0", "--no-prefix", "-a", "-w", commit.getName() + "^.." + commit.getName());
                     allSATDs.addAll(results);
                     satdPerRelease.put(releaseDates.get(i), allSATDs);
-                    break;
+
                 }else {
                     continue;
                 }
+
+
             }
         }
         writeResult(satdPerRelease);
+        for(String dates: releaseDates){
+            if(dates.equals("2021-06-16")){
+                break;
+            }
+            List<SATD> satdList = satdPerRelease.get(dates);
+            for( SATD totalsatd: satdList){
+                switch(totalsatd.type){
+                    case ADDED:
+                        Integer AddedCount = satdAddedRelease.getOrDefault(dates,0);
+                        AddedCount +=1;
+                        satdAddedRelease.put(dates,AddedCount);
+                    case DELETED:
+                        Integer DeletedCount = satdDeletedRelease.getOrDefault(dates,0);
+                        DeletedCount +=1;
+                        satdDeletedRelease.put(dates,DeletedCount);
+                }
+            }
+            System.out.println(dates+" : "+satdAddedRelease.get(dates));
+            releaseAddedFileWriter.write(satdAddedRelease.get(dates)+"\n");
+            System.out.println(dates+" : "+satdDeletedRelease.get(dates));
+            releaseDeletedFileWriter.write(satdDeletedRelease.get(dates).toString()+"\n");
+        }
+
+
+
     }
 
 
