@@ -22,6 +22,7 @@ import java.util.Map;
 
 import static jp.naist.sdlab.miku.main.main_yuta.formatter;
 import static jp.naist.sdlab.miku.main.main_yuta.releaseDates;
+import static jp.naist.sdlab.miku.module.CommitUtil.getCommit;
 
 public class TestGetSATD {
 
@@ -69,13 +70,5 @@ public class TestGetSATD {
         }
 
     }
-    public RevCommit getCommit(Repository repo, String commitId) throws IOException {
-        ObjectId evalCommitId = repo.resolve(commitId);
-        try (RevWalk walk = new RevWalk(repo)) {
-            RevCommit evalCommit = walk.parseCommit(evalCommitId);
-            walk.parseCommit(evalCommit.getParent(0).getId());
-            walk.dispose();
-            return evalCommit;
-        }
-    }
+
 }

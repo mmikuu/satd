@@ -6,11 +6,11 @@ import org.apache.commons.csv.CSVPrinter;
 import java.io.IOException;
 
 public class SATD {
-    String content;
+    public String content;
     public Type type;
     public String commitId;
-    String fileName;
-    int line = 0;
+    public String fileName;
+    public int line = 0;
 
     public enum Type{
         DELETED, ADDED

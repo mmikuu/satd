@@ -1,6 +1,7 @@
 package jp.naist.sdlab.miku.main;
 
 
+import jp.naist.sdlab.miku.module.SATD;
 import org.apache.commons.csv.CSVPrinter;
 import org.eclipse.jgit.api.BlameCommand;
 import org.eclipse.jgit.api.Git;
@@ -27,13 +28,13 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
+import static jp.naist.sdlab.miku.module.CommitUtil.getCommit;
+
 public class main_time {
     static String url = "https://github.com/eclipse-jdt/eclipse.jdt.core";
     public static void main(String[] args) throws Exception {
-        List<String> filename = new ArrayList<>();
-        List<String> line = new ArrayList<>();
-        List<String> commitID = new ArrayList<>();
-        List<String> content = new ArrayList<>();
+        List<SATD> satdList = new ArrayList<>();
+
 
 
             /*
@@ -44,16 +45,14 @@ public class main_time {
                Iterable<CSVRecord> records =
                        CSVFormat.EXCEL.withHeader().parse(in);
                for(CSVRecord record : records){
-                   filename.add(record.get("filename"));
-                   line.add(record.get("line"));
-                   commitID.add(record.get("commitID"));
-                   content.add(record.get("content"));
-                   System.out.println(filename.get(0));
+                   SATD satd = new SATD();
+                   satd.fileName=record.get("filename");
+                   satd.line= Integer.parseInt(record.get("line"));
+                   satd.commitId= record.get("commitID");
+                   satd.content = record.get("content");
+                   satdList.add(satd);
                }
-            }catch(IOException e){
-                System.out.println(e);
-            }
-            catch(Exception e){
+            } catch(Exception e){
                 System.out.println(e);
             }
             GitService gitService = new GitServiceImpl();
@@ -63,28 +62,31 @@ public class main_time {
             Repository repository = gitService.cloneIfNotExists(cloneDir, url);
 
 
-            for(int j = 0; j<filename.size()-1;j++) {
-                String startCommitId = commitID.get(j);
-                startCommitId=startCommitId.replace(" ","");
-                String fileName = filename.get(j);
-                System.out.println(startCommitId);
-                blame(repository, startCommitId, fileName, Integer.parseInt(line.get(j)));
+            for(SATD satd: satdList) {
+                RevCommit satdDeletedCommit = getCommit(repository, satd.commitId);
+                System.out.println("Find this SATD in " + satd.commitId +" : "+ satd.fileName + " @ " + satd.line +" : " + satd.content );
+                RevCommit satdAddedCommit = blame(repository, satd.commitId, satd.fileName, satd.line);
+                PersonIdent authorIdent = satdAddedCommit.getCommitterIdent();
+                Date authorDate = authorIdent.getWhen();
+                System.out.println("Found in " + satdAddedCommit.getId().getName() + "(" + authorDate.toString() + ")");
+                //TODO: 時間を計測（satdDeletedCommit-satdAddedCommit）
             }
 
     }
 
-    public static void blame(Repository repository, String startCommitId, String fileName, int i) throws IOException, GitAPIException {
+    public static RevCommit blame(Repository repository, String startCommitId, String fileName, int i) throws IOException, GitAPIException {
         boolean reverse = false;
 
         Git git = new Git(repository);
-        ObjectId startCommit = repository.resolve(startCommitId);//ここを開始拠点とする
         /*
          * ブレーム
          */
         BlameCommand blamer = git.blame();
         if (!reverse) {//普通のBlame
+            ObjectId startCommit = repository.resolve(startCommitId+"^");//ここを開始拠点とする
             blamer.setStartCommit(startCommit);
         } else {//リバースの場合
+            ObjectId startCommit = repository.resolve(startCommitId);//ここを開始拠点とする
             blamer.reverse(startCommit, repository.resolve("HEAD"));
         }
         blamer.setFilePath(fileName);
@@ -99,10 +101,7 @@ public class main_time {
 //        }
         System.out.println(result.getResultContents().getString(i));
         RevCommit commit = result.getSourceCommit(i);
-        if (commit == null) return;
-        PersonIdent authorIdent = commit.getCommitterIdent();
-        Date authorDate = authorIdent.getWhen();
-        System.out.println("Line: " + i + ": " + commit + "(" + authorDate.toString() + ")");
+        return commit;
         //NOTE: 月は"authorDate.getMonth()+1"で取れる．0が１月
     }
 }
