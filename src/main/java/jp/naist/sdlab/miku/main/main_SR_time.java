@@ -1,14 +1,13 @@
 package jp.naist.sdlab.miku.main;
 
 
-import com.sun.scenario.effect.Offset;
 import jp.naist.sdlab.miku.module.SATD;
-import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVRecord;
 import org.eclipse.jgit.api.BlameCommand;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.blame.BlameResult;
-import org.eclipse.jgit.diff.RawTextComparator;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.lib.Repository;
@@ -16,29 +15,25 @@ import org.eclipse.jgit.revwalk.RevCommit;
 import org.refactoringminer.api.GitService;
 import org.refactoringminer.util.GitServiceImpl;
 
-
 import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.Reader;
-import org.apache.commons.csv.CSVFormat;
-import org.apache.commons.csv.CSVRecord;
-import java.lang.Exception;
-import java.io.*;
-import java.io.FileNotFoundException;
-import java.sql.Time;
-import java.time.DayOfWeek;
-import java.time.Month;
+import java.text.SimpleDateFormat;
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.TimeZone;
 
 import static jp.naist.sdlab.miku.module.CommitUtil.getCommit;
-import java.text.SimpleDateFormat;
-public class main_time {
+
+public class main_SR_time {
     static String url = "https://github.com/eclipse-jdt/eclipse.jdt.core";
     public static void main(String[] args) throws Exception {
         List<SATD> satdList = new ArrayList<>();
-        FileWriter commitBlameWrite = new FileWriter("commitdeletedBlame.csv");
+        FileWriter commitBlameWrite = new FileWriter("commitdeletedBlame_SR.csv");
              /*
              * 入力 csvファイルの中身取得
              */
@@ -67,7 +62,7 @@ public class main_time {
 
             for(SATD satd: satdList) {
                 SimpleDateFormat df = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss ZZZ");
-                Date d = df.parse("2018/06/26 23:59:59 UTC");
+                Date d = df.parse("2020/06/17 23:59:59 UTC");
                 OffsetDateTime TR_end = OffsetDateTime.ofInstant(d.toInstant(), TimeZone.getTimeZone("UTC").toZoneId());
 
                 RevCommit satdDeletedCommit = getCommit(repository, satd.commitId);
@@ -83,7 +78,7 @@ public class main_time {
                 RevCommit satdAddedCommit = blame(repository, satd.commitId, satd.fileName, satd.line);
                 if (satdAddedCommit != null) {
                     SimpleDateFormat df1 = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss ZZZ");
-                    Date d1 = df.parse("2016/06/22 0:0:0 UTC");
+                    Date d1 = df.parse("2018/06/27 0:0:0 UTC");
                     OffsetDateTime TR_first = OffsetDateTime.ofInstant(d1.toInstant(), TimeZone.getTimeZone("UTC").toZoneId());
 
                     PersonIdent AddedIdent = satdAddedCommit.getCommitterIdent();
