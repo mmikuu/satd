@@ -37,12 +37,12 @@ public class main_time {
     static String url = "https://github.com/eclipse-jdt/eclipse.jdt.core";
     public static void main(String[] args) throws Exception {
         List<SATD> satdList = new ArrayList<>();
-        FileWriter commitBlameWrite = new FileWriter("commitdeletedBlame.csv");
+        FileWriter commitBlameWrite = new FileWriter("commitaddedBlame_TR.csv");
              /*
              * 入力 csvファイルの中身取得
              */
             try{
-               Reader in = new FileReader("deleted_satd.csv");
+               Reader in = new FileReader("added_satd.csv");
                Iterable<CSVRecord> records =
                        CSVFormat.EXCEL.withHeader().parse(in);
                for(CSVRecord record : records){
@@ -89,17 +89,11 @@ public class main_time {
                     Date AddedDate = AddedIdent.getWhen();
                     OffsetDateTime added_odt = OffsetDateTime.ofInstant(AddedDate.toInstant(), TimeZone.getTimeZone("UTC").toZoneId());
 
-                    //System.out.println("Found in " + satdAddedCommit.getId().getName() + "(" + added_odt + ")");
-
-                    //System.out.println(ChronoUnit.SECONDS.between(deleted_odt, added_odt));
-                    ;
-                    //System.out.println(ChronoUnit.MONTHS.between(deleted_odt, added_odt));
                     // 時間を計測（satdDeletedCommit-satdAddedCommit）
                     if(added_odt.isBefore(TR_first)){
                         continue;
                     }
                     commitBlameWrite.write(satdDeletedCommit.getId().getName() + "," + deleted_odt + "," + satdAddedCommit.getId().getName() + "," + added_odt + "," + ChronoUnit.DAYS.between(added_odt,deleted_odt) + "\n");
-                    System.out.println("juuuuuuuuu");
                 }else{
                     commitBlameWrite.write(satdDeletedCommit.getId().getName() + "," + deleted_odt + ",null,null,null\n");
 
@@ -110,7 +104,6 @@ public class main_time {
     }
 
     public static RevCommit blame(Repository repository, String startCommitId, String fileName, int i) throws IOException, GitAPIException {
-        boolean reverse = false;
         if (startCommitId.equals("e3517ddc41f3c9536a29ef9be4e7dd3104993ab2")&&fileName.equals("org.eclipse.jdt.core/compiler/org/eclipse/jdt/internal/compiler/parser/Parser.java")){
             return null;
         }
