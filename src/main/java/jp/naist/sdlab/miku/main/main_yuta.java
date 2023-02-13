@@ -44,7 +44,7 @@ public class main_yuta {
         Repository repository = gitService.cloneIfNotExists(cloneDir, url);
         Git git = new Git(repository);
         Iterable<RevCommit> log = git.log().call();
-
+ 
 
 
         for (RevCommit commit : log) {

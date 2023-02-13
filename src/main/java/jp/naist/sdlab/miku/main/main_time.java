@@ -1,6 +1,7 @@
 package jp.naist.sdlab.miku.main;
 
 
+import com.sun.scenario.effect.Offset;
 import jp.naist.sdlab.miku.module.SATD;
 import org.apache.commons.csv.CSVPrinter;
 import org.eclipse.jgit.api.BlameCommand;
@@ -23,25 +24,26 @@ import org.apache.commons.csv.CSVRecord;
 import java.lang.Exception;
 import java.io.*;
 import java.io.FileNotFoundException;
+import java.sql.Time;
+import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 
 import static jp.naist.sdlab.miku.module.CommitUtil.getCommit;
-
+import java.text.SimpleDateFormat;
 public class main_time {
     static String url = "https://github.com/eclipse-jdt/eclipse.jdt.core";
     public static void main(String[] args) throws Exception {
         List<SATD> satdList = new ArrayList<>();
-
-
-
-            /*
+        FileWriter commitBlameWrite = new FileWriter("commitaddedBlame.csv");
+             /*
              * 入力 csvファイルの中身取得
              */
             try{
-               Reader in = new FileReader("deleted_satd.csv");
+               Reader in = new FileReader("added_satd.csv");
                Iterable<CSVRecord> records =
                        CSVFormat.EXCEL.withHeader().parse(in);
                for(CSVRecord record : records){
@@ -51,6 +53,7 @@ public class main_time {
                    satd.commitId= record.get("commitID");
                    satd.content = record.get("content");
                    satdList.add(satd);
+                   System.out.println(satd.fileName);
                }
             } catch(Exception e){
                 System.out.println(e);
@@ -63,19 +66,40 @@ public class main_time {
 
 
             for(SATD satd: satdList) {
+
                 RevCommit satdDeletedCommit = getCommit(repository, satd.commitId);
                 System.out.println("Find this SATD in " + satd.commitId +" : "+ satd.fileName + " @ " + satd.line +" : " + satd.content );
-                RevCommit satdAddedCommit = blame(repository, satd.commitId, satd.fileName, satd.line);
-                PersonIdent authorIdent = satdAddedCommit.getCommitterIdent();
-                Date authorDate = authorIdent.getWhen();
-                System.out.println("Found in " + satdAddedCommit.getId().getName() + "(" + authorDate.toString() + ")");
-                //TODO: 時間を計測（satdDeletedCommit-satdAddedCommit）
-            }
+                PersonIdent deletedIdent = satdDeletedCommit.getCommitterIdent();
+                Date deletedDate = deletedIdent.getWhen();
+                OffsetDateTime deleted_odt = OffsetDateTime.ofInstant(deletedDate.toInstant(), TimeZone.getTimeZone("UTC").toZoneId());
 
+
+
+                RevCommit satdAddedCommit = blame(repository, satd.commitId, satd.fileName, satd.line);
+                if (satdAddedCommit != null) {
+                    PersonIdent AddedIdent = satdAddedCommit.getCommitterIdent();
+                    Date AddedDate = AddedIdent.getWhen();
+                    OffsetDateTime added_odt = OffsetDateTime.ofInstant(AddedDate.toInstant(), TimeZone.getTimeZone("UTC").toZoneId());
+
+                    //System.out.println("Found in " + satdAddedCommit.getId().getName() + "(" + added_odt + ")");
+
+                    //System.out.println(ChronoUnit.SECONDS.between(deleted_odt, added_odt));
+                    //System.out.println(ChronoUnit.DAYS.between(deleted_odt,added_odt));
+                    //System.out.println(ChronoUnit.MONTHS.between(deleted_odt, added_odt));
+                    // 時間を計測（satdDeletedCommit-satdAddedCommit）
+
+                    commitBlameWrite.write(satdDeletedCommit.getId().getName() + "," + deleted_odt + "," + satdAddedCommit.getId().getName() + "," + added_odt + "," + ChronoUnit.DAYS.between(deleted_odt,added_odt) + "\n");
+                }else{
+                    commitBlameWrite.write(satdDeletedCommit.getId().getName() + "," + deleted_odt + ",null,null,null\n");
+
+                }
+
+            }
+        commitBlameWrite.close();
     }
 
     public static RevCommit blame(Repository repository, String startCommitId, String fileName, int i) throws IOException, GitAPIException {
-        boolean reverse = false;
+        boolean reverse = true;
 
         Git git = new Git(repository);
         /*
@@ -91,7 +115,7 @@ public class main_time {
         }
         blamer.setFilePath(fileName);
         BlameResult result = blamer.call();
-        System.out.println(fileName);
+
         /*
          * 表示
          */
@@ -99,8 +123,9 @@ public class main_time {
 //        for (int i = 0; i < lines; i++) {//NOTE: 1行目は0から始まるので注意．
 //
 //        }
-        System.out.println(result.getResultContents().getString(i));
+        //System.out.println(result.getResultContents().getString(i-1));//TODO ayasii
         RevCommit commit = result.getSourceCommit(i);
+        //System.out.println(commit);
         return commit;
         //NOTE: 月は"authorDate.getMonth()+1"で取れる．0が１月
     }

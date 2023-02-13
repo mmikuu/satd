@@ -19,6 +19,6 @@ public class SATD {
         return type !=null;
     }
     public String toString(){
-        return this.type + "," + commitId + "," + fileName + "," + line + ",\"" + content+"\"";
+        return this.type + "," + commitId + "," + fileName + "," + line + ",\"" + content.replaceAll("\"","")+"\"";
     }
 }
