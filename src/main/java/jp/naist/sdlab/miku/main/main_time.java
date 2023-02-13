@@ -1,7 +1,6 @@
 package jp.naist.sdlab.miku.main;
 
 
-import com.sun.scenario.effect.Offset;
 import jp.naist.sdlab.miku.module.SATD;
 import org.apache.commons.csv.CSVPrinter;
 import org.eclipse.jgit.api.BlameCommand;
@@ -99,6 +98,24 @@ public class main_time {
     }
 
     public static RevCommit blame(Repository repository, String startCommitId, String fileName, int i) throws IOException, GitAPIException {
+        if (startCommitId.equals("e3517ddc41f3c9536a29ef9be4e7dd3104993ab2")&&fileName.equals("org.eclipse.jdt.core/compiler/org/eclipse/jdt/internal/compiler/parser/Parser.java")){
+            return null;
+        }
+        if (startCommitId.equals("28e2fc99c0e1bcaffcd4fcfc53a3c19326d33a79")&&fileName.equals("org.eclipse.jdt.core.tests.compiler/src/org/eclipse/jdt/core/tests/compiler/regression/SealedTypesTests.java")){
+            return null;
+        }
+        if (startCommitId.equals("28e2fc99c0e1bcaffcd4fcfc53a3c19326d33a79")&&fileName.equals("org.eclipse.jdt.core/compiler/org/eclipse/jdt/internal/compiler/parser/Parser.java")){
+            return null;
+        }
+        if (startCommitId.equals("18a7dc2e684ffa0791a31611369c86d846acba9b")&&fileName.equals("org.eclipse.jdt.core.tests.compiler/src/org/eclipse/jdt/core/tests/compiler/regression/RecordsRestrictedClassTest.java")){
+            return null;
+        }
+        if (startCommitId.equals("18a7dc2e684ffa0791a31611369c86d846acba9b")&&fileName.equals("org.eclipse.jdt.core.tests.compiler/src/org/eclipse/jdt/core/tests/compiler/regression/SealedTypes15Tests.java")){
+            return null;
+        }
+        if (startCommitId.equals("18a7dc2e684ffa0791a31611369c86d846acba9b")&&fileName.equals("org.eclipse.jdt.core/compiler/org/eclipse/jdt/internal/compiler/parser/Parser.java")){
+            return null;
+        }
         boolean reverse = true;
 
         Git git = new Git(repository);
