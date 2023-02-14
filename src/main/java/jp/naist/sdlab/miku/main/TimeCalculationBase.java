@@ -117,24 +117,10 @@ public abstract class TimeCalculationBase {
 
 
     public RevCommit blame(Repository repository, String startCommitId, String fileName, int i) throws IOException, GitAPIException {
-        if (startCommitId.equals("e3517ddc41f3c9536a29ef9be4e7dd3104993ab2")&&fileName.equals("org.eclipse.jdt.core/compiler/org/eclipse/jdt/internal/compiler/parser/Parser.java")){
+        if (shouldSkip(startCommitId, fileName)){
             return null;
         }
-        if (startCommitId.equals("28e2fc99c0e1bcaffcd4fcfc53a3c19326d33a79")&&fileName.equals("org.eclipse.jdt.core.tests.compiler/src/org/eclipse/jdt/core/tests/compiler/regression/SealedTypesTests.java")){
-            return null;
-        }
-        if (startCommitId.equals("28e2fc99c0e1bcaffcd4fcfc53a3c19326d33a79")&&fileName.equals("org.eclipse.jdt.core/compiler/org/eclipse/jdt/internal/compiler/parser/Parser.java")){
-            return null;
-        }
-        if (startCommitId.equals("18a7dc2e684ffa0791a31611369c86d846acba9b")&&fileName.equals("org.eclipse.jdt.core.tests.compiler/src/org/eclipse/jdt/core/tests/compiler/regression/RecordsRestrictedClassTest.java")){
-            return null;
-        }
-        if (startCommitId.equals("18a7dc2e684ffa0791a31611369c86d846acba9b")&&fileName.equals("org.eclipse.jdt.core.tests.compiler/src/org/eclipse/jdt/core/tests/compiler/regression/SealedTypes15Tests.java")){
-            return null;
-        }
-        if (startCommitId.equals("18a7dc2e684ffa0791a31611369c86d846acba9b")&&fileName.equals("org.eclipse.jdt.core/compiler/org/eclipse/jdt/internal/compiler/parser/Parser.java")){
-            return null;
-        }
+
 
         Git git = new Git(repository);
         /*
@@ -149,9 +135,39 @@ public abstract class TimeCalculationBase {
             blamer.reverse(startCommit, repository.resolve("HEAD"));
         }
         blamer.setFilePath(fileName);
+        //blamer.setFollowFileRenames(true);//いつかOnにしたい
+        Runtime.getRuntime().gc();//Garbage collection
         BlameResult result = blamer.call();
 
         return result.getSourceCommit(i);
         //NOTE: 月は"authorDate.getMonth()+1"で取れる．0が１月
+    }
+
+    private boolean shouldSkip(String startCommitId, String fileName) {
+        if (startCommitId.equals("e3517ddc41f3c9536a29ef9be4e7dd3104993ab2")&&fileName.equals("org.eclipse.jdt.core/compiler/org/eclipse/jdt/internal/compiler/parser/Parser.java")){
+            return true;
+        }
+        if (startCommitId.equals("28e2fc99c0e1bcaffcd4fcfc53a3c19326d33a79")&&fileName.equals("org.eclipse.jdt.core.tests.compiler/src/org/eclipse/jdt/core/tests/compiler/regression/SealedTypesTests.java")){
+            return true;
+        }
+        if (startCommitId.equals("28e2fc99c0e1bcaffcd4fcfc53a3c19326d33a79")&&fileName.equals("org.eclipse.jdt.core/compiler/org/eclipse/jdt/internal/compiler/parser/Parser.java")){
+            return true;
+        }
+        if (startCommitId.equals("18a7dc2e684ffa0791a31611369c86d846acba9b")&&fileName.equals("org.eclipse.jdt.core.tests.compiler/src/org/eclipse/jdt/core/tests/compiler/regression/RecordsRestrictedClassTest.java")){
+            return true;
+        }
+        if (startCommitId.equals("18a7dc2e684ffa0791a31611369c86d846acba9b")&&fileName.equals("org.eclipse.jdt.core.tests.compiler/src/org/eclipse/jdt/core/tests/compiler/regression/SealedTypes15Tests.java")){
+            return true;
+        }
+        if (startCommitId.equals("18a7dc2e684ffa0791a31611369c86d846acba9b")&&fileName.equals("org.eclipse.jdt.core/compiler/org/eclipse/jdt/internal/compiler/parser/Parser.java")){
+            return true;
+        }
+        if (startCommitId.equals("fa7aa0006a3c6d1734561abd7cd691bbcd0b2746")&&fileName.equals("org.eclipse.jdt.compiler.tool.tests/src/org/eclipse/jdt/compiler/tool/tests/CompilerToolTests.java")){
+            return true;
+        }
+        if (startCommitId.equals("c960670d342ed783ee2c0a56da2b91dd180d5c4e")&&fileName.equals("org.eclipse.jdt.compiler.tool.tests/src/org/eclipse/jdt/compiler/tool/tests/CompilerToolTests.java")){
+            return true;
+        }
+        return false;
     }
 }
