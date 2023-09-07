@@ -1,265 +1,1221 @@
-1: TODO: compute relevances
-2: FIXME: When both exist, order could become an issue.
-3: TODO(stephan): ever reached? for ReferenceExpression? (would need a corresponding new call to flushBoundOutbox()).
-4: FIXME: re-enable!
-5: TODO Look for opportunities to merge small blocks
-6: TODO: working around a compiler issue
-7: moduleDecl.resolveBinding(); TODO: Implement resolveBinding
-8: performance could be improved by caching computed flags
-9: do not cache - performance could be improved by caching computed flags
-10: TODO: working around a compiler issue
-11: moduleDecl.resolveBinding(); TODO: Implement resolveBinding
-12: performance could be improved by caching computed flags
-13: do not cache - performance could be improved by caching computed flags
-14: TODO : Change to ExportsReference/PackageReference once we have the new compiler ast.node
-15: TODO: can't we do away with all these additions except for ProvidesStatement - to check
-16: TODO: change to compliance 9 once tests run with 9
-17: TODO uncomment after bug509050 is done
-18: TODO
-19:							if (exportReference instanceof CompletionOnKeywordModuleInfo) {
-20:						if (implementation instanceof CompletionOnProvidesImplementationsSingleTypeReference ||
-21:								implementation instanceof CompletionOnProvidesImplementationsQualifiedTypeReference) {
-22:		} else if (reference instanceof CompletionOnProvidesImplementationsQualifiedTypeReference) {
-23:TODO
-24: TODO
-25:TODO refer super.consumeSingleRequiresModuleName
-26: TODO exports_flags - check when they are set
-27: TODO opens_flags - check when they are set
-28: TODO: need a check for empty package as well
-29: TODO: This should be replaced with RecoveredRequiresStatement ala. RecoveredImport
-30: TODO replace with RecoveredUsesStatement
-31: TODO: to be uncommented once RecoveredRequiresStatement is introduced
-32: TODO uncomment once RecoveredUsesStatement is in place
-33: TODO: really necessary?
-34: TODO Look for opportunities to merge small blocks
-35: TODO Look for opportunities to merge small blocks
-36: TODO: ideally we want to report an error.
-37: TODO: check with spec on what the behavior should be
-38: FIXME: re-enable!
-39: TODO: Ideally, for source roots, we should get this information from the raw classpath
-40: TODO: This is only needed because SourceFile.module() uses the module set on the location
-41: TODO: Ideally we need to do something like mapToModulePathEntry using the path and if it is indeed
-42: TODO: Ideally we need to do something like mapToModulePathEntry using the path and if it is indeed
-43: static nested class. That's probably a bug;
-44: this already worked without the patch for bug 501031.
-45: exposed bugs in 2a,b
-46: exposed bugs in 3b(ii)
-47: TODO(sxenos): setup the external annotation provider if the IBinaryType came from the index
-48: TODO(sxenos): the old code always passed null as the third argument to setupExternalAnnotationProvider,
-49: but this looks like a bug. I've preserved it for now but we need to figure out what was supposed to go
-50: TODO(sxenos): this is causing each change event for an external jar file to be fired twice.
-51: TODO(sxenos): rename this to something like "StructDescriptor" -- it's more than a factory and the word
-52: a bug.
-53: If you're debugging issues related to duplicate deletions, set DEBUG_DUPLICATE_DELETIONS to true
-54: A lock release probably means that some AST is going away. The result cache has to be
-55: cleared since it may contain objects belonging to the AST that is going away. A failure
-56: to release an AST object would cause a memory leak since the whole AST would remain
-57: TODO(sprigogin): It would be more efficient to replace the global result cache with
-58: give up on read locks
-59: Derived data. Holds the address for the last block we know about
-60: This assert verifies the alignment. We expect the low bits to be clear.
-61: there should never be duplicates
-62: There should never be duplicates.
-63: There should never be duplicates.
-64: TODO: make use of lower-level System.arrayCopy
-65: Clear out the block, lots of people are expecting this.
-66: TODO Look for opportunities to merge blocks
-67: If there is no generic signature, then fall back to heuristics based on what we know about
-68:TODO: check callers for handling of comments
-69: TODO(sxenos): It would be much more efficient to mark files as being in one
-70: of three states: unknown, dirty, or clean. Files would start in the unknown
-71: event. They would move into the clean state after passing this sort of
-72: it would eliminate the vast majority of these (slow) fingerprint tests.
-73: TODO: delete and recreate the index
-74: TODO(sxenos): Create something like a union to hold these, to eliminate this
-75: InlineMethodTests in the JDT UI project. Need to investigate why before using it.
-76: TODO(sxenos): Find a more appropriate and more specific place to trigger re-indexing
-77: no better answer was found
-78: If neither one is better, use the one with the earlier classpath position
-79: static nested class. That's probably a bug;
-80:TODO: If module was already part of another source folder, flag an error?
-81:TODO, could be null
-82: TODO: Implement use cases to construct modules from location/key
-83: Do what's needed. Question is, how are we going to look up for modules somewhere else in a workspace?
-84: TODO: really necessary?
-85: TODO: really necessary?
-86: TODO: really necessary?
-87:TODO add the rest of the stuff
-88: TODO: B3, rather than B2?!
-89:TODO: Hack until ui fixes this issue.
-90: TODO: return null on answer false?
-91:						if (samParam instanceof InferenceVariable)
-92: this already worked without the patch for bug 501031.
-93: Nested anonymous diamonds - TODO - confirm that this is indeed correct as per spec
-94: Redundant type argument specification - TODO - confirm that this is correct
-95:TODO: Remove once jdt.ui allows
-96:TODO: Remove once jdt.ui allows
-97: TODO ignore for now
-98:		TODO: Enable the code once NameLookup supports moduleContext when module-info.java file is still in flux
-99: TODO: need better representation of IModuleEnvironment and IModulePathEntry
-100: TODO: need a check for empty package as well
-101: InlineMethodTests in the JDT UI project. Need to investigate why before using it.
-102: If there is no generic signature, then fall back to heuristics based on what we know about
-103: TODO(sxenos): this is causing each change event for an external jar file to be fired twice.
-104: TODO: delete and recreate the index
-105: If you're debugging issues related to duplicate deletions, set DEBUG_DUPLICATE_DELETIONS to true
-106: no better answer was found
-107: If neither one is better, use the one with the earlier classpath position
-108: TODO(sxenos): Temporarily filter out any types that are contained in the workspace since the old index
-109: TODO(sxenos): It would be much more efficient to mark files as being in one
-110: of three states: unknown, dirty, or clean. Files would start in the unknown
-111: event. They would move into the clean state after passing this sort of
-112: it would eliminate the vast majority of these (slow) fingerprint tests.
-113: TODO(sxenos): uncomment this after EclipseCon, then replace it with a more efficient
-114: mechanism for determining if the index matches the file system. Perhaps some sort of
-115: TODO(sxenos): setup the external annotation provider if the IBinaryType came from the index
-116: TODO(sxenos): the old code always passed null as the third argument to setupExternalAnnotationProvider,
-117: but this looks like a bug. I've preserved it for now but we need to figure out what was supposed to go
-118: TODO: delete and recreate the index
-119: A lock release probably means that some AST is going away. The result cache has to be
-120: cleared since it may contain objects belonging to the AST that is going away. A failure
-121: to release an AST object would cause a memory leak since the whole AST would remain
-122: give up on read locks
-123: on them so we reinsert the missing exception declarations if they're not present.
-124: TODO: there's no need to invoke this "delete" method on the first initialization of a search key. We could
-125: Derived data. Holds the address for the last block we know about
-126: TODO(sxenos): Create something like a union to hold these, to eliminate this
-127: a bug.
-128: TODO(sxenos): Sometimes the same node gets scheduled for deletion more than once, which is why
-129: pendingDeletions is a HashSet rather than a queue. We need to understand the circumstances in which
-130: TODO: Revisit 
-131: TODO: BETA_JAVA9 Should report better
-132: ignore broken entry, keep searching
-133:TODO - if the package is part of a named module, then we should check if the module exports the package
-134: TODO: Situation can probably improved by adding NOtFoundPackage to this.declaredPackages 
-135: TODO: improve this
-136: TODO: these should be abstract
-137:				if (!(this.classpaths[i] instanceof ClasspathDirectory)) continue;
-138: No direct way to lookup, use the java model APIs instead
-139: No direct way to lookup, use the java model APIs instead
-140: No direct way to lookup, use the java model APIs instead
-141: No direct way to lookup, use the java model APIs instead
-142: TODO: this should refer to the ModuleSourcePathManager to map this module to
-143: TODO : Should we signal error via JavaModelException
-144: TODO: need better representation of IModuleEnvironment and IModulePathEntry
-145: TODO: need better representation of IModuleEnvironment and IModulePathEntry
-146:if (unit instanceof CompilationUnit && unit.exists()) {
-147: TODO BETA_JAVA9
-148: TODO: revisit this - is this really required??
-149: FIXME: Eclipse has a bug
-150: TODO: speculative addition:
-151: TODO improve test for getJLS8()
-152: TODO improve test for getJLS8()
-153: TODO improve test for getJLS8()
-154: TODO improve test for getJLS8()
-155: TODO improve test for getJLS8()
-156: TODO improve test for getJLS8()
-157: TODO improve test for getJLS8()
-158: TODO improve test for getJLS8()
-159: FIXME: Eclipse has a bug
-160: TODO: speculative addition:
-161: this is the missing part without the fix in RecoveredMethod#add(Block....)
-162: this is the missing part without the fix in RecoveredMethod#add(Block....)
-163:bugs.eclipse.org/429340 [content assist] No Javadoc proposals anywhere before @deprecated tag
-164: whereas in fact the type of all expressions of this shape depend on their type variable (if any)
-165: may happen for class files generated by eclipse before bug 460491 was fixed. 
-166:TODO enable once we know how to update project cache
-167: TODO: should project compliance level be checked here?
-168: TODO: semicolon should not be part of source range
-169: TODO: selective flagging if ref.binding is not one of earlier inlined LVBs.
-170: effective finality maybe tricky to find here.
-171:TODO: For field accesses in the form of a.b.c and b.c - could there be a non-trivial dup - to check?
-172: TODO: Check if unnecessary
-173: may happen for class files generated by eclipse before bug 460491 was fixed. 
-174: enable this after bug 492322 is fixed:
-175:bugs.eclipse.org/429340 [content assist] No Javadoc proposals anywhere before @deprecated tag
-176: TODO: better to validate the option before processing it further?
-177: whereas in fact the type of all expressions of this shape depend on their type variable (if any)
-178: e2.toString breaks without fix
-179: e2.toString breaks without fix
-180: TODO: BETA_JAVA9 Should report better
-181: TODO: This needs revisit in case a source file specified in command line is
-182: TODO: What about chained jars from MANIFEST.MF? Check with spec
-183: TODO what to do??
-184: TODO: Add support for JPFRs?
-185:TODO: Hack until ui fixes this issue.
-186:TODO: Hack until ui fixes this issue.
-187: TODO: Filter the results wrt accessibility and add relevance to the results.
-188: TODO: Filter the results wrt accessibility and add relevance to the results.
-189: TODO : filter the results.
-190: TODO : filter the results.
-191: HERE: ReferenceExpression had a bug
-192: eventually ensures: forall iv in inferenceVariables : allEdges.get(iv) != null
-193: This is a performance optimization, because it is very expensive to search for secondary types and it isn't necessary to check when creating a package,
-194:bugs.eclipse.org/460491 TODO: remove once really fixed
-195: TODO: not an invocation really but ref -> add flavor to returned level
-196: HERE: ReferenceExpression had a bug
-197: This is a performance optimization, because it is very expensive to search for secondary types and it isn't necessary to check when creating a package,
-198: HERE: ReferenceExpression had a bug
-199: HERE: ReferenceExpression had a bug
-200: This is a performance optimization, because it is very expensive to search for secondary types and it isn't necessary to check when creating a package,
-201: TODO: not an invocation really but ref -> add flavor to returned level
-202: TODO: Revisit
-203: TODO: we haven't finalized what path the JRT is represented by. Don't attempt to validate it.
-204: eventually ensures: forall iv in inferenceVariables : allEdges.get(iv) != null
-205: we really mean 'T' unannotated, believe it due to @NonNullByDefault
-206: TODO: isn't doing this for just one of these enough because they all share
-207: we really mean 'T' unannotated, believe it due to @NonNullByDefault
-208: FIXME: still reports an unexpected error
-209: Compile error because Eclipse thinks 'thing' is Object\n" + 
-210: forward reference, workaround by using reflection
-211: forward reference, workaround by using reflection
-212: forward reference, workaround by using reflection
-213:bugs.eclipse.org/487375 - [formatter] block comment in front of method signature effects too much indentation
-214:bugs.eclipse.org/487375 - [formatter] block comment in front of method signature effects too much indentation
-215: not solely a search issue but easily reproducible using search
-216: shouldn't occur in declarations
-217: FIXME: still reports an unexpected er
-218: shouldn't occur in declarations
-219:TODO: Hack until ui fixes this issue.
-220:TODO: find Modules
-221:TODO
-222: TODO: Filter the results wrt accessibility and add relevance to the results.
-223: TODO : filter the results.
-224:TODO: Waiting for findModules lookup implementation.
-225:TODO : Implement
-226: TODO: Implement
-227: FIXME: still reports an unexpected error
-228: Compile error because Eclipse thinks 'thing' is Object\n" + 
-229:bugs.eclipse.org/487375 - [formatter] block comment in front of method signature effects too much indentation
-230: TODO: Do we need to add java.base here?
-231:TODO: Should be replaced by ModuleBinding
-232:md.resetModule(this.nameEnvironment.getModule(md)); TODO: revisit why this is needed
-233: TODO: BETA_JAVA9 Should really check with the module context.
-234: forward reference, workaround by using reflection
-235: forward reference, workaround by using reflection
-236: forward reference, workaround by using reflection
-237:bugs.eclipse.org/487375 - [formatter] block comment in front of method signature effects too much indentation
-238: TODO BETA_JAVA9 - entry[1] contains the module, use it.
-239: TODO BETA_JAVA9 - entry[1] contains the module, use it.
-240: TODO BETA_JAVA9
-241: TODO BETA_JAVA9
-242:TODO: BETA_JAVA9 - should ideally return ModuleBinding?
-243:TODO: Should it be something like ModuleBinding?
-244: TODO: BETA_JAVA9 Think about clearing the cache too.
-245: TODO: BETA_JAVA9 Revisit
-246: TOOD: BETA_JAVA9 - Should really check for packages with the module context
-247: TODO: BETA_JAVA9 Should report better
-248: TODO: BETA_JAVA9 Should report better
-249: TODO BETA_JAVA9
-250: TODO: BETA_JAVA9 Should really check with the module context.
-251: TODO BETA_JAVA9: figure out module?
-252: not solely a search issue but easily reproducible using search
-253: TODO Is there a better way of doing this?
-254: Kludge?
-255: reduced example without generics that still exhibits the bug
-256: bug behaviour visible via switch
-257: fix the bug:		
-258: just needed as workaround if bug 484981 is not fixed\n" +
-259: just needed as workaround if bug 484981 is not fixed\n" +
-260: javac bug: 8b115 complains of ambiguity here.
-261: javac bug: 8b115 complains of ambiguity here.
-262: bug 482309
-263: bug 482309
-264: improve problem rendering when using a declaration annotation in a 1.8 setting
-265: TODO need configuration for this, now only handles line br
+1:+		// XXX UTF-16, UTF-32 may have BOM too
+1:+	// Can be replaced with Arrays.compare once JDT core moves to BREE >= 9
+2:+	// Would be slightly better to have a HashMap specialization to char[] keys.
+1:+	// TODO: Recheck whether we need this in Pattern
+2:+		// TODO : ERROR
+1:+	// disabled by default until Bug574171 is fixed.
+1:+			modularClassFile.getType(); // note: it would be better to remove the deprecated methods from interface
+1:+			// TODO: what about case default, case null - should be covered in expressions - check
+2:+	if (aepNode == null) { // TODO check the case for patterns
+3:+	// TODO : This needs a revamp - currently we are assuming that mix of pattern and expressions
+4:+// TODO: Just a placeholder - refactor and add code for patterns;
+1:+		//XXX java.nio.file.Files.readString().toCharArray() is faster on recent JDKs
+1:+		//XXX java.nio.file.Files.readString().toCharArray() is faster on recent JDKs
+1:+	// completion for instanceof pattern variable for false condition - inside the instanceof block
+2:+	// completion for instanceof pattern variable for true condition - outside the instanceof block
+3:+	// completion for instanceof pattern variable for false condition - outside the instanceof block - in do-while loop
+4:+	// completion for instanceof pattern variable - double negation
+5:+	// completion for instanceof pattern variable - triple negation
+6:+	// completion for instanceof pattern variable - double negation
+7:+	// completion for instanceof pattern variable for false condition
+8:+	// completion for instanceof pattern variable for true condition
+9:+			// resetting containsPotentialPolyExpression could become necessary when we search the outerExpression within
+10:+					return false; // top expr on expressionStack belongs to a block statement (e.g., an if-condition)
+1:+	// TODO: Change the error messages after implementing post grammar processing parts
+2:+	// Enable after code gen is fixed for switch pattern case default
+3:+			pushOnPatternStack(pattern.getPatternVariables()[0]); // TODO: decide whether to push
+1:+// TODO: Fix this and Enable
+2:+		defaultOptions.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_17); // FIXME
+3:+	// TODO: Change the error messages after implementing post grammar processing parts
+4:+	// TODO: Change the error messages after implementing post grammar processing parts
+5:+	// TODO: Change the error messages after implementing post grammar processing parts
+6:+	// TODO: Change the error messages after implementing post grammar processing parts
+7:+	// TODO: Change the error messages after implementing post grammar processing parts
+8:+	// TODO: Change the error messages after implementing post grammar processing parts
+9:+	// TODO: Change the error messages after implementing post grammar processing parts
+10:+	// TODO: Change the error messages after implementing post grammar processing parts
+11:+	// TODO: Change the error messages after implementing post grammar processing parts
+12:+	// TODO: Change the error messages after implementing post grammar processing parts
+13:+	// Enable after code gen is fixed for switch pattern case default
+14:+		// TODO Change this while implementing flow analysis
+15:+	// TODO: Recheck whether we need this in Pattern
+16:+	 // TODO - check if parenthesis to be used for source position adjustment
+17:+ // TODO - check if parenthesis to be used for source position adjustment
+18:+			// TODO: Change to switch
+1:+					return false; // top expr on expressionStack belongs to a block statement (e.g., an if-condition)
+1:+	// completion for instanceof pattern variable for false condition - inside the instanceof block
+2:+	// completion for instanceof pattern variable for true condition - outside the instanceof block
+3:+	// completion for instanceof pattern variable for false condition - outside the instanceof block - in do-while loop
+4:+	// completion for instanceof pattern variable - double negation
+5:+	// completion for instanceof pattern variable - triple negation
+6:+	// completion for instanceof pattern variable - double negation
+7:+	// completion for instanceof pattern variable for false condition
+8:+	// completion for instanceof pattern variable for true condition
+1:+			// resetting containsPotentialPolyExpression could become necessary when we search the outerExpression within
+1:+			contents = new char[length]; // best guess
+1:+		//XXX java.nio.file.Files.readString().toCharArray() is faster on recent JDKs
+1:+		defaultOptions.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_17); // FIXME
+2:+		defaultOptions.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_17); // FIXME
+1:+	// TODO: unsuccessful attempt to show that completion would work right after "<>" but for that
+2:+	String expectedCompletionNodeToString = "<NONE>"; // TODO: improve
+3:+		"  public void foo() {\n" + // TODO improve
+4:+		// wait for a OS scheduler slice begin to increase probability to finish within a single slice:
+5:+		// if more then one slice we better take the OS value:
+6:+			// TODO: it would be great if type inference could narrow this down to only proposals of type String
+7:+			// TODO: it would be great if type inference could narrow this down to only proposals of type String
+8:+								return true; // this could possible help type inference, let's assume the best
+9:+//	 * the bindings to say that there is a canonical constructor. To take care at binding resolution time.
+10:+		// in assist scenarii we cannot guarantee uniqueness of equal blocks, so simply update the duplicate, too:
+1:+	// TODO: unsuccessful attempt to show that completion would work right after "<>" but for that
+2:+	String expectedCompletionNodeToString = "<NONE>"; // TODO: improve
+3:+		"  public void foo() {\n" + // TODO improve
+4:+			// TODO: it would be great if type inference could narrow this down to only proposals of type String
+5:+			// TODO: it would be great if type inference could narrow this down to only proposals of type String
+6:+								return true; // this could possible help type inference, let's assume the best
+7:+		// in assist scenarii we cannot guarantee uniqueness of equal blocks, so simply update the duplicate, too:
+1:+		// wait for a OS scheduler slice begin to increase probability to finish within a single slice:
+2:+		// if more then one slice we better take the OS value:
+1:+//	 * the bindings to say that there is a canonical constructor. To take care at binding resolution time.
+1:+		defaultOptions.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_17); // FIXME
+2:+		defaultOptions.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_17); // FIXME
+1:+							// Order of the element kind enums is not as per the declaration. Known issue.
+1:+		// Code above seem to hang...
+1:+	// completion for final keyword in instanceof pattern variable
+2:+	// completion for final keyword in instanceof pattern variable at higher relevance than Fin* classes
+1:+		options.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_16); // FIXME
+2:+		options.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_16); // FIXME
+3:+			// TODO (kent) need verifier to detect when an Enum should be tagged as abstract
+4:+			"   public static final int OFFSET = 0;  // cannot move this above, else more errors\n" +
+5:+			"    		public static final int OFFSET = 0;  // cannot move this above, else more errors\n" +
+6:+		"	public static final int OFFSET = 0;  // cannot move this above, else more errors\n" +
+7:+// warnings about enumerators. Since these could be used in indirect ways not obvious.
+8:+// warnings about enumerators. Since these could be used in indirect ways not obvious. This
+9:+		defaultOptions.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_16); // FIXME
+10:+		defaultOptions.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_16); // FIXME
+11:+	// RelationalExpression ::= RelationalExpression 'instanceof' ReferenceType
+1:+	// completion for final keyword in instanceof pattern variable
+2:+	// completion for final keyword in instanceof pattern variable at higher relevance than Fin* classes
+1:+		options.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_15); // FIXME
+2:+		defaultOptions.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_15); // FIXME
+3:+		defaultOptions.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_15); // FIXME
+4:+		defaultOptions.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_15); // FIXME
+5:+	// RelationalExpression ::= RelationalExpression 'instanceof' ReferenceType
+1:+			// regression test for Bug 569512 - CCE in State.writeBinaryLocations:
+2:+				// TODO, here we cannot handle MODULE_MAIN_CLASS nor MODULE_PACKAGES (ModuleUpdater stores a lambda), should we?
+1:+			// regression test for Bug 569512 - CCE in State.writeBinaryLocations:
+2:+				// TODO, here we cannot handle MODULE_MAIN_CLASS nor MODULE_PACKAGES (ModuleUpdater stores a lambda), should we?
+1:+ * https://bugs.eclipse.org/570220 - [formatter] Bug for 'if' open parenthesis inside lambda body preceded by comment line
+2:+			// replace the implicit yield expression to exercise the fix
+1:+			// replace the implicit yield expression to exercise the fix
+1:+	// RelationalExpression ::= RelationalExpression 'instanceof' ReferenceType
+1:+ * https://bugs.eclipse.org/570220 - [formatter] Bug for 'if' open parenthesis inside lambda body preceded by comment line
+1:+			"   public static final int OFFSET = 0;  // cannot move this above, else more errors\n" +
+2:+		"	public static final int OFFSET = 0;  // cannot move this above, else more errors\n" +
+1:+ * https://bugs.eclipse.org/569798 - [formatter] Brace position - next line indented: bug for array within annotation
+1:+ * https://bugs.eclipse.org/569798 - [formatter] Brace position - next line indented: bug for array within annotation
+1:+		options.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_16); // FIXME
+2:+			// TODO (kent) need verifier to detect when an Enum should be tagged as abstract
+3:+			"    public static final int OFFSET = 0;  // cannot move this above, else more errors\n" +
+4:+			"    public static final int OFFSET = 0;  // cannot move this above, else more errors\n" +
+5:+// warnings about enumerators. Since these could be used in indirect ways not obvious.
+6:+// warnings about enumerators. Since these could be used in indirect ways not obvious. This
+1:+		// bug 566262: check if the index file was deleted in parallel, if so throw an IOException instead of risking to run into index OOB exceptions
+2:+		// FIXME: this seems bogus ... if we are searching with a module name and there is NONE, an empty set should be returned, shouldn't it?
+1:+		// FIXME: this seems bogus ... if we are searching with a module name and there is NONE, an empty set should be returned, shouldn't it?
+1:+		// bug 566262: check if the index file was deleted in parallel, if so throw an IOException instead of risking to run into index OOB exceptions
+1:+		options.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_16); // FIXME
+2:+		defaultOptions.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_16); // FIXME
+3:+		defaultOptions.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_16); // FIXME
+4:+		defaultOptions.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_16); // FIXME
+1:+				// Performance improvement: Avoid String.join(".") with
+1:+ * https://bugs.eclipse.org/222083 - [formatter] Formatting bug for GWT code
+1:+			// pattern matching instanceof expression
+1:+		options.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_15); // FIXME
+2:+		defaultOptions.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_15); // FIXME
+3:+	// Javac rejects the code on the IF itself (same as above)
+4:+	// Javac rejects the code on the IF itself (same as above)
+5:+		defaultOptions.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_15); // FIXME
+6:+		defaultOptions.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_15); // FIXME
+7:+	// TODO : Enable after error flag code implemented
+8:+							// if last param then perhaps a varargs
+9:+		//TODO: check if record
+10:+		 		// See https://bugs.eclipse.org/bugs/show_bug.cgi?id=565180 ( reason for 1 result instead of 3)
+11:+		// TODO: permittedTypes codegen
+12:+		// Kludge - to remove the AccBlankFinal added by the LocalDeclaration#resolve() due to the
+13:+		this.elementVariable.binding.modifiers |= ExtraCompilerModifiers.AccUnresolved; // TODO: Change to a different mechanism
+14:+// TODO: Optimize the multiple loops - defer until the feature becomes standard.
+15:+				// TODO (frederic) currently reset to previous position, perhaps signal a syntax error would be more appropriate
+16:+		typeDecl.bits |= (typeReference.bits & ASTNode.HasTypeAnnotations); // TODO: Confirm with spec
+17:+//		typeReference.bits |= ASTNode.IsSuperType; // TODO: Check equivalent required
+18:+//									// Kludge, retain the '\' and also
+19:+	// and here's the kludge
+20:+	// and here's the kludge
+21:+		// more efficient than just calling unsupportedIn2() to check
+1:+	// Javac rejects the code on the IF itself (same as above)
+2:+	// Javac rejects the code on the IF itself (same as above)
+1:+		// Kludge - to remove the AccBlankFinal added by the LocalDeclaration#resolve() due to the
+1:+		this.elementVariable.binding.modifiers |= ExtraCompilerModifiers.AccUnresolved; // TODO: Change to a different mechanism
+1:+							// if last param then perhaps a varargs
+1:+	// TODO: Move these to an enum?
+1:+		defaultOptions.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_15); // FIXME
+1:+	// TODO: Move these to an enum?
+1:+				// TODO (frederic) currently reset to previous position, perhaps signal a syntax error would be more appropriate
+1:+		// TODO: more intelligent solution?
+2:+		// TODO: Inefficient method due to redoing of the same source, investigate alternate
+1:+		// TODO: more intelligent solution?
+2:+		// TODO: Inefficient method due to redoing of the same source, investigate alternate
+1:+	((LocalVariableBinding) lhs.binding).markReferenced(); // TODO : Can be skipped?
+1:+	((LocalVariableBinding) lhs.binding).markReferenced(); // TODO : Can be skipped?
+1:+		 		// See https://bugs.eclipse.org/bugs/show_bug.cgi?id=565180 ( reason for 1 result instead of 3)
+1:+		//TODO: check if record
+1:+		//TODO: check if record
+1:+//									// Kludge, retain the '\' and also
+1:+		// close the project, since the bug 564905 occurs when build state is read from disk
+1:+		// close the project, since the bug 564905 occurs when build state is read from disk
+1:+			//TODO: check if record
+1:+		// more efficient than just calling unsupportedIn2() to check
+1:+// TODO: Optimize the multiple loops - defer until the feature becomes standard.
+1:+		// not the efficient way!
+1:+	// TODO : Enable after error flag code implemented
+2:+		// TODO: permittedTypes codegen
+3:+		typeDecl.bits |= (typeReference.bits & ASTNode.HasTypeAnnotations); // TODO: Confirm with spec
+4:+//		typeReference.bits |= ASTNode.IsSuperType; // TODO: Check equivalent required
+5:+	// and here's the kludge
+6:+	// and here's the kludge
+1:+		// not the efficient way!
+1:+		defaultOptions.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_15); // FIXME
+1:+						if(scope.environment().usesNullTypeAnnotations()) { //TODO Bug 562478
+2:+		// TODO: Null Analysis Address via bug 562478?
+3:+//						TODO: BUG 562478 Consideration - to uncomment/modify the following:
+4:+				TagBits.AnnotationForParameter | // See JLS 14 8.10.4 Records Preview - TODO revisit in J15
+5:+	// hence use the type of RHS of the instanceof operator
+6:+		//TODO: Add error checking if relevant.
+7:+			return; // TODO: can this ever happen?
+8:+		// check @Deprecated annotation presence - Mostly in the future :)
+9:+	// TODO: check when to call/relevance?
+10:+	private TypeBound[] mostRecentBounds = new TypeBound[4]; // for quick & dirty duplicate elimination
+11:+		// iterate the field declarations to create the bindings, lose all duplicates
+12:+		// TODO: check - do we need a provider.forRecordComponent; won't the field be sufficient - SH?
+13:+	// TODO: check
+14:+//	TODO: Annotation propagation to be done later.
+15:+				// TODO: to check for relevance
+16:+	if ((component.getAnnotationTagBits() & TagBits.AnnotationDeprecated) != 0)  // TODO: Watch out the spec changes
+17:+		// TODO Bug 562478: apply null default: - to check anything to be done? - SH
+18:+	components(); // In a record declaration, the components should be complete prior to fields and probably for methods
+19:+	components(); // In a record declaration, the components should be complete prior to fields and probably for methods
+20:+//		if (rcb.type instanceof TypeVariableBinding ||
+21:+//				rcb.type instanceof ParameterizedTypeBinding)
+22:+		f.endPart1Position = recComp.sourceEnd; //TODO BETA_JAVA14 - recheck
+23:+			return null; // TODO : SEE Bug 562736/ BUG 562637
+24:+				// Read the file in a "classic" way from the JDK itself
+1:+		// Probably something was broken, so falling back to value traversal
+1:+	// hence use the type of RHS of the instanceof operator
+1:+				// Read the file in a "classic" way from the JDK itself
+1:+	private TypeBound[] mostRecentBounds = new TypeBound[4]; // for quick & dirty duplicate elimination
+1:+		// TODO: Null Analysis Address via bug 562478?
+1:+//TODO :Enable alongwith bug 562637
+2:+						if(scope.environment().usesNullTypeAnnotations()) { //TODO Bug 562478
+3:+//						TODO: BUG 562478 Consideration - to uncomment/modify the following:
+4:+				TagBits.AnnotationForParameter | // See JLS 14 8.10.4 Records Preview - TODO revisit in J15
+5:+		//TODO: Add error checking if relevant.
+6:+			return; // TODO: can this ever happen?
+7:+		// check @Deprecated annotation presence - Mostly in the future :)
+8:+	// TODO: check when to call/relevance?
+9:+		// iterate the field declarations to create the bindings, lose all duplicates
+10:+		// TODO: check - do we need a provider.forRecordComponent; won't the field be sufficient - SH?
+11:+	// TODO: check
+12:+//	TODO: Annotation propagation to be done later.
+13:+				// TODO: to check for relevance
+14:+	if ((component.getAnnotationTagBits() & TagBits.AnnotationDeprecated) != 0)  // TODO: Watch out the spec changes
+15:+		// TODO Bug 562478: apply null default: - to check anything to be done? - SH
+16:+	components(); // In a record declaration, the components should be complete prior to fields and probably for methods
+17:+	components(); // In a record declaration, the components should be complete prior to fields and probably for methods
+18:+//		if (rcb.type instanceof TypeVariableBinding ||
+19:+//				rcb.type instanceof ParameterizedTypeBinding)
+20:+		f.endPart1Position = recComp.sourceEnd; //TODO BETA_JAVA14 - recheck
+21:+			return null; // TODO : SEE Bug 562736/ BUG 562637
+1:+				"		return (ArrayList<String>) l;\n" + // warn, TODO(stephan) with flow analysis (bug 415292) we might recover the original @NonNull...
+2: + // warn, TODO(stephan) with flow analysis (bug 415292) we might recover the original @NonNull...
+1: + // warn, TODO(stephan) with flow analysis (bug 415292) we might recover the original @NonNull...
+2:+				"		return (ArrayList<String>) l;\n" + // warn, TODO(stephan) with flow analysis (bug 415292) we might recover the original @NonNull...
+1:+		options.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_15); // FIXME
+2:+		defaultOptions.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_15); // FIXME
+1:+//		if (this.offset > 0xFFFF) { // no more than 65535 words of locals // TODO - also the cumulative at MethodScope
+2:+		((LocalVariableBinding) lhs.binding).markReferenced(); // TODO : Can be skipped?
+3:+			 // no finally - TODO: Check for SynSta?
+4:+	// TODO: revisit after bug 561726 is fixed
+1:+				// Bug 62854: close only the openable's buffer
+1:+		// TODO: Add code for BinaryTypeBinding, which, as of now doesn't seem to contain components
+2:+//TODO:  Enable after Bug 552769  is fixed
+3:+		//TODO:To add SwitchExpressionYieldTests here as well as master
+4:+// TODO: Enable after Bug 552769 is fixed
+5:+		options.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_14); // FIXME
+6:+		defaultOptions.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_14); // FIXME
+7:+		IJavaProject p =  createJavaProject("Foo", new String[] {"src"}, new String[] {jclLib}, "bin", "14"); // FIXME jcl12?
+8:+		//TODO: check if record
+9:+     * @deprecated Per https://bugs.openjdk.java.net/browse/JDK-8231435 this problem is no longer raised
+10:+		// TODO: watch out for spec changes once preview to standard of records
+11:+		//TODO: Check whether anything has to be done for null analysis.
+12:+		// Why cant this be done in the constructor?
+13:+		this.missingAbstractMethods = t.missingAbstractMethods; // TODO: Investigate whether this is relevant.
+14:+						output.append("/* Implicit */"); //$NON-NLS-1$ //TODO BETA_JAVA14: Move this to FD?
+15:+						output.append("/* Implicit */\n"); //$NON-NLS-1$// TODO BETA_JAVA14: Move this to MD?
+16:+	private MethodBinding[] recordComponentAccessors = null; // hash maybe an overkill
+17:+// TODO: Refactor code for constructor and compact one once records are standardized.
+18:+		f.endPart1Position = arg.sourceEnd; //TODO BETA_JAVA14 - recheck
+19:+	//TODO: BETA_JAVA14_RECORD flag TypeDeclaration.RECORD_DECL ?
+20:+// TODO: merge consumeFormalParameter and this method once record becomes a standard feature
+21:+	//TODO: Throw an error for empty record?
+22:+	// TODO: Ideally a consumeConstructorHeader should be ok; but if this is overridden and
+23:+							// If already at the EOF, bail out.
+24:+									// Kludge, retain the '\' and also
+25:+	// and here's the kludge
+26:+	// TODO : Need to handle Compact Constructor here
+1:+		options.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_14); // FIXME
+1:+	if ((requiredType.tagBits & TagBits.AnnotationNonNull) != 0) { // some problems need a closer look to report the best possible message:
+1:+	if ((requiredType.tagBits & TagBits.AnnotationNonNull) != 0) { // some problems need a closer look to report the best possible message:
+1:+	private MethodBinding[] recordComponentAccessors = null; // hash maybe an overkill
+1:+		// TODO: Looks like no direct way of accessing the synthetic directly from the field binding.
+2:+		// TODO: Add code for BinaryTypeBinding, which, as of now doesn't seem to contain components
+1:+		// TODO: Do this at the appropriate point only
+1:+     * @deprecated Per https://bugs.openjdk.java.net/browse/JDK-8231435 this problem is no longer raised
+1:+	//TODO: check if record
+1:+	// TODO : Need to handle Compact Constructor here
+1:+		// Kludge
+2:+		// Why cant this be done in the constructor?
+1:+//Bug 395977 - Resource leak warning behavior possibly incorrect for anonymous inner class
+2:+			"        		//                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  TODO Warning ok\n" + 
+3:+			"            		//                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  FIXME Warning missing!\n" + 
+4:+			"            		//                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  FIXME Warning missing!\n" + 
+5:+			"            		//                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  TODO Warning ok\n" + 
+6:+			"            		//                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  FIXME Warning missing!\n" + 
+7:+			"            		//                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  FIXME Warning missing!\n" + 
+8:+			"            		//                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  TODO Warning ok\n" + 
+9:+			"        		//                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  TODO Warning ok\n" + 
+10:+// regression caused by Bug 527761
+11:+				return FlowInfo.conditional(flowInfo, infoResourceIsClosed).unconditionalCopy(); // only report potential problems on this flow
+12:+//					&& location instanceof ReturnStatement
+1:+// regression caused by Bug 527761
+1:+//Bug 395977 - Resource leak warning behavior possibly incorrect for anonymous inner class
+1:+				return FlowInfo.conditional(flowInfo, infoResourceIsClosed).unconditionalCopy(); // only report potential problems on this flow
+1:+			"        		//                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  TODO Warning ok\n" + 
+2:+			"            		//                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  FIXME Warning missing!\n" + 
+3:+			"            		//                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  FIXME Warning missing!\n" + 
+4:+			"            		//                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  TODO Warning ok\n" + 
+5:+			"            		//                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  FIXME Warning missing!\n" + 
+6:+			"            		//                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  FIXME Warning missing!\n" + 
+7:+			"            		//                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  TODO Warning ok\n" + 
+8:+			"        		//                                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^  TODO Warning ok\n" + 
+1:+		// FIXME: should detect that format returns the same formatter
+2:+//					&& location instanceof ReturnStatement
+1:+		// TODO: watch out for spec changes once preview to standard of records
+1:+		// if (!(obj instanceof recordName))
+1:+								// Kludge, retain the '\' and also
+1:+		//TODO: Check whether anything has to be done for null analysis.
+1:+							// If already at the EOF, bail out.
+2:+								// Kludge, retain the backspace and also
+1:+		//TODO: set definitelyAssigned to true;
+2:+		//TODO: Check anything to be done for null analysis.
+3:+		return true; // TODO: Enable the code above during flow analysis. 
+1:+		// TODO : Add Code for missing field assignments
+2:+		return true; //temporary workaround for grammar part - to be addressed in flow analysis
+3:+// TODO: Refactor code for constructor and compact one once records are standardized.
+4:+		// TODO : To decide whether to park it for later
+5:+	// TODO: Ideally a consumeConstructorHeader should be ok; but if this is overridden and
+1:+		IJavaProject p =  createJavaProject("Foo", new String[] {"src"}, new String[] {jclLib}, "bin", "14"); // FIXME jcl12?
+1:+						output.append("/* Implicit */"); //$NON-NLS-1$ //TODO BETA_JAVA14: Move this to FD?
+2:+						output.append("/* Implicit */\n"); //$NON-NLS-1$// TODO BETA_JAVA14: Move this to MD?
+1:+//TODO:  Enable after Bug 552769  is fixed
+2:+// TODO: Enable after Bug 552769 is fixed
+1:+			// move module-info away ...
+2:+									// If already at the EOF, bail out.
+3:+									// If already at the EOF, bail out.
+1:+// TODO: merge consumeFormalParameter and this method once record becomes a standard feature
+1:+									// If already at the EOF, bail out.
+2:+									// If already at the EOF, bail out.
+1:+			// move module-info away ...
+1:+		defaultOptions.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_14); // FIXME
+2:+		this.missingAbstractMethods = t.missingAbstractMethods; // TODO: Investigate whether this is relevant.
+3:+							//TODO: BETA_JAVA14_RECORD report the problem if not compact constructor and continue the parsing
+4:+			// TODO: BETA_JAVA14
+5:+		// TODO: BETA_JAVA14_RECORD typeDecl.createDefaultCompactConstructor()
+6:+	//TODO: BETA_JAVA14_RECORD Make sure that there is only one and only one compact constructor?
+7:+			f.endPart1Position = arg.sourceEnd; //TODO BETA_JAVA14 - recheck
+8:+	//TODO: BETA_JAVA14_RECORD flag TypeDeclaration.RECORD_DECL ?
+9:+	//TODO: Throw an error for empty record?
+10:+	// and here's the kludge
+1:+		//TODO:To add SwitchExpressionYieldTests here as well as master
+1:+		defaultOptions.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_13); // FIXME
+2:+		// TODO: Fix me
+3:+		IJavaProject p =  createJavaProject("Foo", new String[] {"src"}, new String[] {jclLib}, "bin", "13"); // FIXME jcl12?
+4:+			// best effort to find a way for reporting this problem: report on the first source
+5:+	// while explicit yield should move up the parent to the switch expression.
+6:+		// TODO
+7:+	if (this.scanner.lookBack[1] == TerminalTokens.TokenNameCOLON) // kludge for yield :(
+8:+	// and here's the kludge
+1:+				newJclLibString = "JCL10_LIB"; // TODO: have no full variant yet
+1:+					// new is not exactly Ljava/lang/Object; (perhaps already annotated?) => replace old with j.l.Object for decoration:
+1:+				"		// TODO: The problem might be that BiConsumer is not declared in the same file?\n" + 
+1:+			// break missing, oh well...
+2:+			// break missing, oh well...
+3:+			// break missing, oh well...
+1:+		{ // TODO
+2:+		{ // TODO
+3:+		{ // TODO
+4:+		{ // TODO
+5:+		{ // TODO
+1:+		{ // TODO
+2:+		{ // TODO
+3:+		{ // TODO
+4:+		{ // TODO
+5:+		{ // TODO
+1:+		((CastExpression) this.expression).setInstanceofType(checkedType); // for cast expression we need to know instanceof type to not tag unnecessary when needed
+1:+			return this; // conflict, return split
+1:+		} catch (IndexOutOfBoundsException | InvalidCursorLocation | AbortCompilation | CompletionNodeFound e){ // internal failure - bugs 5618
+1:+			// when resolving "exports" in a binary module we simply assume the package must exist,
+2:+								// FIXME: check if .java file has any declarations?
+3:+		this.compilerBinding = new PlainPackageBinding(this.compoundName, null, this.environment, this.environment.module); //TODO(SHMOD) enclosingModule
+1:+	// there may be better thresholds available for different scenarios
+1:+				: getType(this.getNullableAnnotationName(), this.UnNamedModule); // FIXME(SHMOD) module for null annotations??
+2:+		// handle buildpath problems (missing classfile, unresolved add-reads...)
+1:+			// Use a set to eliminate duplicates.
+1:+ * https://bugs.eclipse.org/545898 - [formatter] IOOBE with empty javadoc @param
+1:+// TODO after #addDependencies, it will contain simple names, though. See ReferenceCollectionTest
+2:+// TODO there may be better thresholds available for different scenarios
+1:+	// Disabled due bug 545491 comment 15
+2:+	// Disabled due bug 545491 comment 15
+3:+	// Disabled due bug 545491 comment 15
+4:+	// Disabled due bug 545491 comment 15
+5:+	// Disabled due bug 545491 comment 15
+1:+// TODO after #addDependencies, it will contain simple names, though. See ReferenceCollectionTest
+2:+// TODO there may be better thresholds available for different scenarios
+1:+			"Syntax error, insert \": Expression )\" to complete EnhancedForStatementHeader\n" +  // FIXME: bogus suggestion, this rule is compliance 1.5
+2:+						"public class X {\n" + "  void foo(X x) {\n" + "    // FIXME TODO XXX message contents\n"
+3:+						"public class X {\n" + "  void foo(X x) {\n" + "    // FIXME TODO XXX message contents\n"
+4:+						"public class X {\n" + "  void foo(X x) {\n" + "    // FIXME TODO XXX message contents\n"
+5:+						"public class X {\n" + "  void foo(X x) {\n" + "    // FIXME TODO XXX message contents\n"
+6:+						"public class X {\n" + "  void foo(X x) {\n" + "    // FIXME TODO XXX message contents\n"
+7:+						"public class X {\n" + "  void foo(X x) {\n" + "    // FIXME TODO XXX message contents\n"
+8:+		defaultOptions.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_12); // FIXME
+9:+	// TODO: should probably start a new test class
+10:+		IJavaProject p =  createJavaProject("Foo", new String[] {"src"}, new String[] {jcl9lib}, "bin", "12"); // FIXME jcl12?
+11:+		// Expected output is not ideal due to formatting issue Bug 545439
+12:+				// TODO: Uncomment the line below
+13:+						//Where a poly switch expression appears in a context of a particular kind with target type T,
+14:+					// This is a kludge and only way completion can tell this node to resolve all
+15:+					// resultExpressions. Ideal solution is to remove all other expressions except
+16:+		// TODO : ERROR
+17:+				// TODO: Throw Expression Processing. Anything to be done here for resolve?
+18:+	// TODO: Semicolon not there - so we call this early
+19:+//				if (lastChild.getNewValue() instanceof Annotation) {
+20:+		parserOptions.put(CompilerOptions.OPTION_EnablePreviews, CompilerOptions.ENABLED); //TODO
+1:+		// Expected output is not ideal due to formatting issue Bug 545439
+1:+		parserOptions.put(CompilerOptions.OPTION_EnablePreviews, CompilerOptions.ENABLED); //TODO
+1:+				// TODO: Throw Expression Processing. Anything to be done here for resolve?
+1:+//				if (lastChild.getNewValue() instanceof Annotation) {
+1:+		Excuse.EclipseHasSomeMoreWarnings; // javac is inconsistent: accepting both assignments, not issuing a warning though in simpler cases it does
+2:+					this.lookupEnvironment.unitBeingCompleted = parsedUnit; // better resilient to further error reporting
+3:+				// Bug 543727 - check if either cast is really needed
+4:+			binding = addPackage(binding, false); // no further lookup needed, binding is already complete (split?)
+1:+		this.fs = null;// reset and proceed, TODO: this is crude and need to be removed.
+1:+		this.fs = null;// reset and proceed, TODO: this is crude and need to be removed.
+1:+		this.fs = null;// reset and proceed, TODO: this is crude and need to be removed.
+1:+					this.lookupEnvironment.unitBeingCompleted = parsedUnit; // better resilient to further error reporting
+1:+			binding = addPackage(binding, false); // no further lookup needed, binding is already complete (split?)
+1:+			"Syntax error, insert \": Expression )\" to complete EnhancedForStatementHeader\n" +  // FIXME: bogus suggestion, this rule is compliance 1.5
+1:+		Excuse.EclipseHasSomeMoreWarnings; // javac is inconsistent: accepting both assignments, not issuing a warning though in simpler cases it does
+1:+				// Bug 543727 - check if either cast is really needed
+1:+					// This is a kludge and only way completion can tell this node to resolve all
+2:+					// resultExpressions. Ideal solution is to remove all other expressions except
+1:+	// TODO: should probably start a new test class
+2:+		IJavaProject p =  createJavaProject("Foo", new String[] {"src"}, new String[] {jcl9lib}, "bin", "12"); // FIXME jcl12?
+1:+						//Where a poly switch expression appears in a context of a particular kind with target type T,
+1:+		"	Ood getGood(m.Issing provider) {\n" + // <= argument type is missing (we still have the qualified name, though)
+2:+		" * 	// Hello really bad Ganymede formatter !!!\n" + 
+3:+		" *         	// Hello really bad Ganymede formatter !!!\n" + 
+1:+		" * 	// Hello really bad Ganymede formatter !!!\n" + 
+2:+		" *         	// Hello really bad Ganymede formatter !!!\n" + 
+1:+						"public class X {\n" + "  void foo(X x) {\n" + "    // FIXME TODO XXX message contents\n"
+2:+						"public class X {\n" + "  void foo(X x) {\n" + "    // FIXME TODO XXX message contents\n"
+3:+						"public class X {\n" + "  void foo(X x) {\n" + "    // FIXME TODO XXX message contents\n"
+4:+						"public class X {\n" + "  void foo(X x) {\n" + "    // FIXME TODO XXX message contents\n"
+5:+						"public class X {\n" + "  void foo(X x) {\n" + "    // FIXME TODO XXX message contents\n"
+6:+						"public class X {\n" + "  void foo(X x) {\n" + "    // FIXME TODO XXX message contents\n"
+7:+					new ProblemAttributes(CategorizedProblem.CAT_INTERNAL)); // TODO should be removed via
+8:+			expectedProblemAttributes.put("GenericInferenceError", SKIP); // TODO should be removed via
+1:+		"	Ood getGood(m.Issing provider) {\n" + // <= argument type is missing (we still have the qualified name, though)
+1:+						"public class X {\n" + "  void foo(X x) {\n" + "    // FIXME TODO XXX message contents\n"
+2:+						"public class X {\n" + "  void foo(X x) {\n" + "    // FIXME TODO XXX message contents\n"
+3:+						"public class X {\n" + "  void foo(X x) {\n" + "    // FIXME TODO XXX message contents\n"
+4:+						"public class X {\n" + "  void foo(X x) {\n" + "    // FIXME TODO XXX message contents\n"
+5:+						"public class X {\n" + "  void foo(X x) {\n" + "    // FIXME TODO XXX message contents\n"
+6:+						"public class X {\n" + "  void foo(X x) {\n" + "    // FIXME TODO XXX message contents\n"
+7:+					new ProblemAttributes(CategorizedProblem.CAT_INTERNAL)); // TODO should be removed via
+8:+			expectedProblemAttributes.put("GenericInferenceError", SKIP); // TODO should be removed via
+1:+		return buildMinimalComplianceTestSuite(testClass(), F_12); // FIXME
+2:+		defaultOptions.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_12); // FIXME
+1:+		// TODO: is the following correct?
+2:+// Test is disabled, there seem to be no easy way to properly refresh exteral resources cache
+3:+	// Changes to implicit dependencies should be reflected // FIXME: container JavaCore.MODULE_PATH_CONTAINER_ID is unreliable
+1:+	// Changes to implicit dependencies should be reflected // FIXME: container JavaCore.MODULE_PATH_CONTAINER_ID is unreliable
+1:+	// TODO: Semicolon not there - so we call this early
+1:+					// TODO: Throw Expression Processing. Anything to be done here for resolve?
+1:+				// TODO: Uncomment the line below
+1:+	// TODO: Semicolon not there - so we call this early
+2:+		// TODO: Entry point for dom ast conversion.
+1:+	// Changes to implicit dependencies should be reflected // FIXME: container JavaCore.MODULE_PATH_CONTAINER_ID is unreliable
+1:+	// TODO
+2:+	// TODO
+3:+	// TODO
+4:+	// TODO
+5:+	// TODO
+6:+	TypeBinding type = expression.switchLabeledRules[0].resolvedType;  // TODO: Need to show more accurately
+1:+	// switchExpressionType maybe null in error case
+2:+		// TODO
+3:+			// for enum switch, check if all constants are accounted for (perhaps depending on existence of a default case)
+4:+					//Where a poly switch expression appears in a context of a particular kind with target type T,
+5:+				// TODO: should we return if one of the types is null? to check
+6:+				// TODO: should we return if one of the types is null? to check
+7:+				// TODO: check whether 5.6.3 automatically done - check CE.resolveType() as well.
+8:+	TypeBinding type = expression.exprArms[0].resolvedType;  // TODO: Need to show more accurately
+1:+		// TODO: is the following correct?
+1:+// Test is disabled, there seem to be no easy way to properly refresh exteral resources cache
+1:+		// TODO: Entry point for dom ast conversion.
+1:+		return buildMinimalComplianceTestSuite(testClass(), F_9); // FIXME
+2:+		defaultOptions.put(CompilerOptions.OPTION_Compliance, CompilerOptions.VERSION_9); // FIXME
+3:+		// TODO
+4:+		// TODO : ERROR
+1:+ 		assertEquals("Wrong value", ClassFileConstants.getLatestJDKLevel(), reader.getVersion()); // TODO: Fix this for JDK11
+1:+		//TODO
+2:+		//TODO
+3:+		//TODO
+4:+				new JavacHasABug(MismatchType.EclipseErrorsJavacNone, ((long)55)<<16, 0000) : null, // FIXME: use JDK11
+5:+			"                // (2) Missing code implementation in the compiler\n" + 
+6:+		// not really using Java 10, but apiLevel JLS10 as per bug report
+7:+						// and already has P3 on its TODO list.
+8:+			"argument[LOCAL_VARIABLE_REF]{argument, null, Ljava.lang.Object;, argument, null, " + (R_DEFAULT + 21) + "}", // FIXME should be "I" and 22 like test006
+9:+	// Bug 522377 - [null] String.format(""...) shows warning
+10:+			// during extended recovery, if EOF would be wrong, try a few things to reduce our stacks:
+11:+		// when resolving "exports" in a binary module we simply assume the package must exist,
+12:+			return this.intersectingTypes[1].constantPoolName(); // improve stack map
+13:+			if (this.intersectingTypes[i].isClass() && this.intersectingTypes[i].id != TypeIds.T_JavaLangObject) { // ignore j.l.Object to improve stack map
+14:+				// recurse in project to get all its indirect exports (only consider exported entries from there on)
+15:+			classfile = ClassFileReader.read(file, IModule.MODULE_INFO_CLASS); // FIXME: use jar cache
+16:+				classfile = ClassFileReader.read(file, IModule.MODULE_INFO_CLASS); // FIXME: use jar cache
+17:+					// move on
+1:+							// move on
+2:+				classfile = ClassFileReader.read(file, IModule.MODULE_INFO_CLASS); // FIXME: use jar cache
+3:+					// move on
+1:+	// Bug 522377 - [null] String.format(""...) shows warning
+1:+			classfile = ClassFileReader.read(file, IModule.MODULE_INFO_CLASS); // FIXME: use jar cache
+1:+			"argument[LOCAL_VARIABLE_REF]{argument, null, Ljava.lang.Object;, argument, null, " + (R_DEFAULT + 21) + "}", // FIXME should be "I" and 22 like test006
+2:+			// during extended recovery, if EOF would be wrong, try a few things to reduce our stacks:
+1:+						// and already has P3 on its TODO list.
+1:+				// recurse in project to get all its indirect exports (only consider exported entries from there on)
+1:+			// move on
+2:+		//TODO
+3:+		//TODO
+4:+		//TODO
+1:+			return this.intersectingTypes[1].constantPoolName(); // improve stack map
+2:+			if (this.intersectingTypes[i].isClass() && this.intersectingTypes[i].id != TypeIds.T_JavaLangObject) { // ignore j.l.Object to improve stack map
+1:+			"                // (2) Missing code implementation in the compiler\n" + 
+1:+				new JavacHasABug(MismatchType.EclipseErrorsJavacNone, ((long)55)<<16, 0000) : null, // FIXME: use JDK11
+1:+				new JavacHasABug(MismatchType.EclipseErrorsJavacNone, ((long)54)<<16, 0000) : null, // FIXME: use JDK11
+1:+ 		assertEquals("Wrong value", ClassFileConstants.getLatestJDKLevel(), reader.getVersion()); // TODO: Fix this for JDK11
+1:+		// when resolving "exports" in a binary module we simply assume the package must exist,
+1:+				new JavacHasABug(MismatchType.EclipseErrorsJavacNone, ((long)54)<<16, 0000) : null; // FIXME: use JDK11
+1:+		// not really using Java 10, but apiLevel JLS10 as per bug report
+1:+ 		assertEquals("Wrong value", ClassFileConstants.JDK11, reader.getVersion()); // TODO: Fix this for JDK11
+1:+ 		assertEquals("Wrong value", ClassFileConstants.JDK10, reader.getVersion()); // TODO: Fix this for JDK11
+2:+			&& this.complianceLevel < ClassFileConstants.JDK11) { // TODO: After merging to master refactor this circus into a single function.
+1:+			// move on;
+2:+				// move on
+3:+				// move on
+4:+				// move on
+5:+			// move on;
+1:+				"		mh.invoke(null, new ArrayList<>());        // Bug 501457 fixed this\n" + 
+1:+			// for type inference having null annotations upfront gives better results
+1:+				// TODO see if this can be handled in ITB18.isCompatibleWith() itself
+1:+	// temporary debug for Bug 532176 - [10] NPE during reconcile
+1:+			} else if (polyExpression != null) { // Should be instanceof LambdaExpression, but this is safer
+1:+ * https://bugs.eclipse.org/128653 - [formatter] Improve tag description indentation in javadoc
+2:+ * https://bugs.eclipse.org/128653 - [formatter] Improve tag description indentation in javadoc
+3:+ * https://bugs.eclipse.org/128653 - [formatter] Improve tag description indentation in javadoc
+4:+ * https://bugs.eclipse.org/128653 - [formatter] Improve tag description indentation in javadoc
+5:+ * https://bugs.eclipse.org/128653 - [formatter] Improve tag description indentation in javadoc
+6:+ * https://bugs.eclipse.org/128653 - [formatter] Improve tag description indentation in javadoc
+7:+ * https://bugs.eclipse.org/128653 - [formatter] Improve tag description indentation in javadoc
+8:+ * https://bugs.eclipse.org/128653 - [formatter] Improve tag description indentation in javadoc
+9:+ * https://bugs.eclipse.org/128653 - [formatter] Improve tag description indentation in javadoc
+1:+	// TODO: Figure out a way to get the scope and hence the compliance
+1:+		// TODO: we haven't finalized what path the JRT is represented by. Don't attempt to validate it.
+1:+//TODO: remove once ReferenceCollection.internQualifiedNames(StringSet) is adapted to use java.util.Set, so that git history is preserved
+2:+//TODO: remove once PDE API Tools has been adapted to also use java.util.Set, so that git history is preserved
+3:+// TODO: remove once ReferenceCollection.internSimpleNames(StringSet, boolean) is adapted to use java.util.Set, so that git history is preserved
+4:+//TODO: adjust to use java.util.Set once PDE API Tools have been adapted to use the set version, so that git history is preserved
+1:+				//TODO: Some of the code in case CPE_LIBRARY is handled here. Revisit when confirmed
+2:+							// TODO: This should be taken care of by the clients.
+1:+// variation of test008 on behalf of Bug 526335 - [9][hovering] Deprecation warning should show the new 'since' deprecation value
+2:+				"                                    map, // this would work syntactically: new MyMap<MyKey, MyValue>(),\n" + 
+1:+		// If we didn't find the binding, maybe it's a nested type;
+2:+		//TODO: Surely there has to be a better way than calling toString().toCharArray()?
+3:+					// TODO: Revisit for access rules
+4:+			//TODO: Check if any conversion needed for path separator
+5:+		// TODO: Revisit
+6:+			// Move on
+7:+				// report an error and bail out
+8:+		// TODO: Revisit for access rules
+1:+			} else if (polyExpression != null) { // Should be instanceof LambdaExpression, but this is safer
+1:+// variation of test008 on behalf of Bug 526335 - [9][hovering] Deprecation warning should show the new 'since' deprecation value
+1:+				// FIXME:
+2:+				// FIXME:
+1:+		long tagBits = moduleInfo.getTagBits() & ~TagBits.AnnotationDeprecated; // TODO: kludge to avoid duplication of real annotation and tagBit induced standard annotation
+1:+// variation of test008 on behalf of Bug 526335 - [9][hovering] Deprecation warning should show the new 'since' deprecation value
+1:+				"                                    map, // this would work syntactically: new MyMap<MyKey, MyValue>(),\n" + 
+1:+// TODO: switch to bundle, once it updates BREE to 9:
+2:+		ReferenceBinding annotationType = environment.getType(typeName, environment.UnNamedModule); // TODO(SHMOD): null annotations from a module?
+3:+		// we should never have to report errors etc for those, but this entire construction is a kludge,
+4:+		// working around lack of support for modules in SourceTypeConverter
+1:+		return new BinaryModuleDescriptor(location.toString().toCharArray(), moduleName, // TODO: module name only known for JRT
+1:+				"                                    map, // this would work syntactically: new MyMap<MyKey, MyValue>(),\n" + 
+1:+		// If we didn't find the binding, maybe it's a nested type;
+2:+		//TODO: Surely there has to be a better way than calling toString().toCharArray()?
+1:+		// If we didn't find the binding, maybe it's a nested type;
+2:+		//TODO: Surely there has to be a better way than calling toString().toCharArray()?
+1:+					// TODO: Revisit for access rules
+2:+			//TODO: Check if any conversion needed for path separator
+3:+		// TODO: Revisit
+4:+			// Move on
+5:+		// TODO: Revisit for access rules
+1:+					// TODO: Revisit for access rules
+2:+			//TODO: Check if any conversion needed for path separator
+3:+		// TODO: Revisit
+4:+			// Move on
+5:+		// TODO: Revisit for access rules
+1:+			// TODO uncomment after bug509050 is done
+1:+				// report an error and bail out
+1:+				// report an error and bail out
+1:+							this.lookupEnvironment.unitBeingCompleted = parsedUnit; // better resilient to further error reporting
+2:+		// TODO : filter the results - remove packs without a type in impl.
+1:+							this.lookupEnvironment.unitBeingCompleted = parsedUnit; // better resilient to further error reporting
+2:+		// TODO : filter the results - remove packs without a type in impl.
+1:+				: getType(this.getNullableAnnotationName(), this.UnNamedModule); // FIXME(SHMOD) module for null
+1:+				// TODO: Java 9 Should report better
+2:+			// TODO Java 9: we need new type of classpath to handle Jmod files in batch compiler.
+3:+	// TODO: Java 9 Think about clearing the cache too.
+4:+		// TODO Java 9 no reference seen in jvms draft - only in sotm
+5:+		final String compliance = CompilerOptions.VERSION_1_8; // TODO: Java 9 Revisit
+6:+		// TODO: Java 9 Should report better
+7:+			// TODO: Java 9 Should report better
+1:+		// FIXME: Note Javac fails here as well
+2:+	public void _testTypeAnnotations12Binary() throws Exception { // FIXME: disabled after 3 consecutive failures on hudson, which could not be reproduced locally
+3:+		LookupEnvironment le = _env.getLookupEnvironment(); // FIXME(SHMOD): does this lookup need to be module-aware?
+4:+		//TODO: Surely there has to be a better way than calling toString().toCharArray()?
+5:+		int modifiers = this.binding.tagBits; // TODO: This is wrong, this should be "modifiers"
+6:+			// FIXME: Does it have any impact for unnamed modules - default package combo?
+7:+			// TODO: Yet to see this in ModuleBinding. Check again.
+8:+		// FIXME: fill-up
+9:+			// FIXME: same for module source path?
+10:+			// FIXME: Find a way to get the options from the EclipseCompiler and pass it to the parser.
+11:+			// FIXME: need to be the latest and not hardcoded value
+12:+		// FIXME: Need special handling in case of module class loaders.
+13:+		// FIXME
+14:+			// TODO: Check unnamed modules can have their own module specific path - probably not
+15:+		// TODO: At the moment, we can't have RELEASE_9 here because Eclipse must still be able to run on JRE 8
+16:+		// Come up with a better way to return the version constants.
+17:+	// TODO: This is not yet used anywhere
+18:+						// TODO: Still possible to end up with a non-null module name without JDK 9 in build path
+19:+									// TODO: double check, should it be platform or system module?
+20:+					// TODO: Revisit when JRE 9 no longer throws IllegalStateException for getLocation.
+21:+					// TODO: Revisit when JRE 9 no longer throws IllegalStateException for getLocation.
+22:+		// FIXME: fill-up
+23:+			// FIXME: same for module source path?
+24:+			// FIXME: Find a way to get the options from the EclipseCompiler and pass it to the parser.
+25:+			// FIXME: need to be the latest and not hardcoded value
+26:+		// FIXME: Need special handling in case of module class loaders.
+27:+		// FIXME
+28:+			// TODO: Check unnamed modules can have their own module specific path - probably not
+29:+	// Bug 354536 - compiling package-info.java still depends on the order of compilation units
+30:+	// Bug 354536 - compiling package-info.java still depends on the order of compilation units
+31:+	// Bug 354536 - compiling package-info.java still depends on the order of compilation units
+32:+// Nested anonymous diamonds - TODO - confirm that this is indeed correct as per spec
+33:+// Redundant type argument specification - TODO - confirm that this is correct
+34:+// FIXME: was differentiating error messages ever implemented?
+35:+//	TESTS_NAMES = new String[] { "testBugXXX" };
+36:+			// workaround: I need a way to navigate from a source module to a binary module containing "uses" and "provides":
+37:+			// TODO improve test for getJLS8()
+38:+			// TODO improve test for getJLS8()
+39:+			// TODO improve test for getJLS8()
+40:+			// TODO improve test for getJLS8()
+41:+			// TODO improve test for getJLS8()
+42:+			// TODO improve test for getJLS8()
+43:+			// TODO improve test for getJLS8()
+44:+			// TODO improve test for getJLS8()
+45:+			// search binary module in jar dependency:
+46:+	//TODO enable once we know how to update project cache
+47:+	// TODO - to be confirmed with spec
+48:+	// test that a package declared in a non-modular project conflicts with a package with the same name
+49:+			// TODO uncomment after bug509050 is done
+50:+	if (!isPackage(qualifiedPackageName, null)) return null; // most common case TODO(SHMOD): use module name from this.module?
+51:+	String moduleName = this.module != null ? String.valueOf(this.module.name()) : null; // TODO(SHMOD): test for ModuleBinding.ANY & UNNAMED
+52:+		return false; // TODO(SHMOD): implement
+53:+				// TODO: BETA_JAVA9 Should report better
+54:+				.filter(m -> limitModule == null || limitModule.contains(m)) // TODO: implement algo from JEP 261 (root selection & transitive closure)
+55:+			for (String moduleName : classpath.getModuleNames(null)) // TODO limit-modules?
+56:+			for (String moduleName : classpath.getModuleNames(null)) // TODO limit-modules?
+57:+			// TODO BETA_JAVA9: we need new type of classpath to handle Jmod files in batch compiler.
+58:+						// TODO: This needs revisit in case a source file specified in command line is
+59:+				// TODO: better to validate the option before processing it further?
+60:+	// TODO: What about chained jars from MANIFEST.MF? Check with spec
+61:+							// Files doesn't exist and perhaps doesn't belong in a module, move on to other files
+62:+						//this.requestor.setIgnored(CompletionProposal.MODULE_DECLARATION, false); //TODO: Hack until ui fixes this issue.
+63:+		// TODO: Filter the results wrt accessibility and add relevance to the results.
+64:+		// TODO: Filter the results wrt accessibility and add relevance to the results.
+65:+		// TODO : filter the results.
+66:+		// TODO : filter the results.
+67:+			// TODO ignore for now
+68:+		// TODO
+69:+// TODO : Change to ExportsReference/PackageReference once we have the new compiler ast.node
+70:+			// TODO exports_flags - check when they are set
+71:+			// TODO opens_flags - check when they are set
+72:+			// TODO: need a check for empty package as well
+73:+				// TODO(SHMOD): specific error?
+74:+						ref.bits |= ASTNode.IsCapturedOuterLocal; // TODO: selective flagging if ref.binding is not one of earlier inlined LVBs.
+75:+		//TODO: For field accesses in the form of a.b.c and b.c - could there be a non-trivial dup - to check?
+76:+			// TODO(SHMOD): handle null case
+77:+				// TODO(SHMOD): report incomplete module path?
+78:+				// TODO(SHMOD): report incomplete module path?
+79:+		ReferenceBinding annotationType = this.environment.getType(typeName, this.environment.UnNamedModule); // TODO(SHMOD): null annotations from a module?
+80:+						// TODO: there are cases were we need to compute glb(capturedWildcardBound, substitutedVariableSuperclass)
+81:+						//       but then when glb (perhaps triggered inside setFirstBound()) fails, how to report the error??
+82:+	// TODO(SHMOD): verify: this block moved here from buildTypeBindings.
+83:+	return new ProblemReferenceBinding(one.compoundName, one, ProblemReasons.Ambiguous); // TODO(SHMOD): use a new problem ID
+84:+		// when asking a split package getType0() we may have answered null in case of ambiguity (not knowing the module context).
+85:+		this.knownPackages.put(constantPoolName[0], packageBinding); // TODO: split?
+86:+	ReferenceBinding nullable = this.nullableAnnotation != null ? this.nullableAnnotation.getAnnotationType() : getType(this.getNullableAnnotationName(), this.UnNamedModule); //FIXME(SHMOD) module for null annotations??
+87:+	 // TODO(SHMOD): I'm not sure if the verifier would need to be created with a specific LE?
+88:+			// TODO(SHMOD) report error
+89:+			// TODO(SHMOD): report (when? where?)
+90:+		// TODO(SHMOD): cache the result?
+91:+			// TODO(SHMOD): store export status in the PackageBinding?
+92:+		// TODO(SHMOD) implement deprecation for modules
+93:+	final public CompilationUnitScope scope; // TODO(SHMOD): consider cleanup at end of compile
+94:+		// TODO(SHMOD): it's a bit awkward that we may get called after applyModuleUpdates() has already worked.
+95:+		//TODO: This code is untested as we don't yet get a scope in ModuleBinding
+96:+		// if a candidate has problems, pick the "better" candidate:
+97:+			PackageBinding next = moduleBinding.getVisiblePackage(incarnation, name); // TODO(SHMOD): reduce split-package work during this invocation?
+98:+		// don't cache the result, maybe incomplete
+99:+					return new ProblemReferenceBinding(type.compoundName, candidate, ProblemReasons.Ambiguous); // TODO(SHMOD) add module information
+100:+			return new ProblemReferenceBinding(candidate.compoundName, candidate, ProblemReasons.NotAccessible); // TODO(SHMOD) more info
+101:+			if (receiverType.isInterface()) // default is not allowed. TODO: do we need a target level check here?
+102:+			if (this.fPackage instanceof SplitPackageBinding) // leverage SplitPackageBinding to avoid duplicate creation of BinaryTypeBinding
+103:+		// TODO: can't we do away with all these additions except for ProvidesStatement - to check
+104:+	// TODO: BETA_JAVA9 Think about clearing the cache too.
+105:+		if (pvsStmt.declarationEnd > sourceEnd) sourceEnd = pvsStmt.declarationEnd; // TODO: working around a compiler issue
+106:+		// TODO
+107:+		// TODO BETA_JAVA9 no reference seen in jvms draft - only in sotm
+108:+		// do not cache - performance could be improved by caching computed flags
+109:+		// TODO: The following needs fix once we can get ModuleDeclaration from IndexBinaryType
+110:+		// TODO: we haven't finalized what path the JRT is represented by. Don't attempt to validate it.
+111:+		final String compliance = CompilerOptions.VERSION_1_8; // TODO: BETA_JAVA9 Revisit
+112:+				// TODO: should project compliance level be checked here?
+113:+			// TODO : Should we signal error via JavaModelException
+114:+				// FIXME(SHMOD): only considers source modules?? (MODULEPATH container is only experimental)
+115:+		if (modules.length > 0) { // TODO what to do??
+116:+		// TODO(SHMOD): verify (is unnamed handled correctly?)
+117:+						// (this.owner != null && this.owner.isPackage(pkgName)) // TODO(SHMOD) see old isPackage
+118:+						// (this.owner != null && this.owner.isPackage(pkgName)) // TODO(SHMOD) see old isPackage
+119:+									moduleContext = new IPackageFragmentRoot[] { (IPackageFragmentRoot) current }; // TODO: validate
+120:+		ClassFileReader classfile = ClassFileReader.read(file, IModule.MODULE_INFO_CLASS); // FIXME: use jar cache
+121:+	this.module = null; // TODO(SHMOD): is this safe?
+122:+		// TODO: BETA_JAVA9 Should report better
+123:+			// TODO: BETA_JAVA9 Should report better
+124:+	// TODO: revisit this - is this really required??
+125:+	// TODO: This is only needed because SourceFile.module() uses the module set on the location
+126:+				// TODO(SHMOD) assert that patchModule has been assigned
+127:+			// TODO(SHMOD) report an error
+128:+					// TODO: Ideally we need to do something like mapToModulePathEntry using the path and if it is indeed
+129:+			// TODO(SHMOD): report problem: patchedModuleName didn't match a module from this location
+130:+					// TODO(SHMOD): report problem: patchedModuleName didn't match a module from this location
+131:+		this.compilerBinding = new PackageBinding(this.compoundName, null, this.environment, this.environment.module); //TODO(SHMOD) enclosingModule
+132:+	public final char[] moduleName; // TODO: not sure if this will be needed once wired to the index?
+133:+		return new BinaryModuleDescriptor(location.toString().toCharArray(), null, // TODO: module name not know at this point
+134:+// FIXME: support module in the new index
+135:+		pkgFragment= ((PackageFragmentRoot) this.lastPkgFragmentRoot).getPackageFragment(pkgName, moduleName); //BUG 478143
+136:+						null, // TODO(SHMOD): don't have a module name, but while looking in unindexed classpath locations, this is probably OK
+137:+						null,  // TODO(SHMOD): don't have a module name, but while looking in unindexed classpath locations, this is probably OK
+138:+				// TODO : JAVA 9 - module-info.java has the same name across modules - Any issues here?
+139:+				// TODO implement regular expression match
+140:+						contents = module != null ? sourceMapper.findSource(module) : CharOperation.NO_CHAR; // FIXME(SHMOD)
+1:+				// TODO: Java 9 Should report better
+2:+			// TODO Java 9: we need new type of classpath to handle Jmod files in batch compiler.
+3:+	// TODO: Java 9 Think about clearing the cache too.
+4:+		// TODO Java 9 no reference seen in jvms draft - only in sotm
+5:+		final String compliance = CompilerOptions.VERSION_1_8; // TODO: Java 9 Revisit
+6:+		// TODO: Java 9 Should report better
+7:+			// TODO: Java 9 Should report better
+1:+		// FIXME: Note Javac fails here as well
+2:+	public void _testTypeAnnotations12Binary() throws Exception { // FIXME: disabled after 3 consecutive failures on hudson, which could not be reproduced locally
+3:+		LookupEnvironment le = _env.getLookupEnvironment(); // FIXME(SHMOD): does this lookup need to be module-aware?
+4:+		//TODO: Surely there has to be a better way than calling toString().toCharArray()?
+5:+		int modifiers = this.binding.tagBits; // TODO: This is wrong, this should be "modifiers"
+6:+			// FIXME: Does it have any impact for unnamed modules - default package combo?
+7:+			// TODO: Yet to see this in ModuleBinding. Check again.
+8:+		// FIXME: fill-up
+9:+			// FIXME: same for module source path?
+10:+			// FIXME: Find a way to get the options from the EclipseCompiler and pass it to the parser.
+11:+			// FIXME: need to be the latest and not hardcoded value
+12:+		// FIXME: Need special handling in case of module class loaders.
+13:+		// FIXME
+14:+			// TODO: Check unnamed modules can have their own module specific path - probably not
+15:+		// TODO: At the moment, we can't have RELEASE_9 here because Eclipse must still be able to run on JRE 8
+16:+		// Come up with a better way to return the version constants.
+17:+	// TODO: This is not yet used anywhere
+18:+						// TODO: Still possible to end up with a non-null module name without JDK 9 in build path
+19:+									// TODO: double check, should it be platform or system module?
+20:+					// TODO: Revisit when JRE 9 no longer throws IllegalStateException for getLocation.
+21:+					// TODO: Revisit when JRE 9 no longer throws IllegalStateException for getLocation.
+22:+		// FIXME: fill-up
+23:+			// FIXME: same for module source path?
+24:+			// FIXME: Find a way to get the options from the EclipseCompiler and pass it to the parser.
+25:+			// FIXME: need to be the latest and not hardcoded value
+26:+		// FIXME: Need special handling in case of module class loaders.
+27:+		// FIXME
+28:+			// TODO: Check unnamed modules can have their own module specific path - probably not
+29:+	// Bug 354536 - compiling package-info.java still depends on the order of compilation units
+30:+	// Bug 354536 - compiling package-info.java still depends on the order of compilation units
+31:+	// Bug 354536 - compiling package-info.java still depends on the order of compilation units
+32:+// Nested anonymous diamonds - TODO - confirm that this is indeed correct as per spec
+33:+// Redundant type argument specification - TODO - confirm that this is correct
+34:+// FIXME: was differentiating error messages ever implemented?
+35:+//	TESTS_NAMES = new String[] { "testBugXXX" };
+36:+			// workaround: I need a way to navigate from a source module to a binary module containing "uses" and "provides":
+37:+			// TODO improve test for getJLS8()
+38:+			// TODO improve test for getJLS8()
+39:+			// TODO improve test for getJLS8()
+40:+			// TODO improve test for getJLS8()
+41:+			// TODO improve test for getJLS8()
+42:+			// TODO improve test for getJLS8()
+43:+			// TODO improve test for getJLS8()
+44:+			// TODO improve test for getJLS8()
+45:+			// search binary module in jar dependency:
+46:+	//TODO enable once we know how to update project cache
+47:+	// TODO - to be confirmed with spec
+48:+	// test that a package declared in a non-modular project conflicts with a package with the same name
+49:+			// TODO uncomment after bug509050 is done
+50:+	if (!isPackage(qualifiedPackageName, null)) return null; // most common case TODO(SHMOD): use module name from this.module?
+51:+	String moduleName = this.module != null ? String.valueOf(this.module.name()) : null; // TODO(SHMOD): test for ModuleBinding.ANY & UNNAMED
+52:+		return false; // TODO(SHMOD): implement
+53:+				// TODO: BETA_JAVA9 Should report better
+54:+				.filter(m -> limitModule == null || limitModule.contains(m)) // TODO: implement algo from JEP 261 (root selection & transitive closure)
+55:+			for (String moduleName : classpath.getModuleNames(null)) // TODO limit-modules?
+56:+			for (String moduleName : classpath.getModuleNames(null)) // TODO limit-modules?
+57:+			// TODO BETA_JAVA9: we need new type of classpath to handle Jmod files in batch compiler.
+58:+						// TODO: This needs revisit in case a source file specified in command line is
+59:+				// TODO: better to validate the option before processing it further?
+60:+	// TODO: What about chained jars from MANIFEST.MF? Check with spec
+61:+							// Files doesn't exist and perhaps doesn't belong in a module, move on to other files
+62:+						//this.requestor.setIgnored(CompletionProposal.MODULE_DECLARATION, false); //TODO: Hack until ui fixes this issue.
+63:+		// TODO: Filter the results wrt accessibility and add relevance to the results.
+64:+		// TODO: Filter the results wrt accessibility and add relevance to the results.
+65:+		// TODO : filter the results.
+66:+		// TODO : filter the results.
+67:+			// TODO ignore for now
+68:+		// TODO
+69:+// TODO : Change to ExportsReference/PackageReference once we have the new compiler ast.node
+70:+			// TODO exports_flags - check when they are set
+71:+			// TODO opens_flags - check when they are set
+72:+			// TODO: need a check for empty package as well
+73:+				// TODO(SHMOD): specific error?
+74:+						ref.bits |= ASTNode.IsCapturedOuterLocal; // TODO: selective flagging if ref.binding is not one of earlier inlined LVBs.
+75:+		//TODO: For field accesses in the form of a.b.c and b.c - could there be a non-trivial dup - to check?
+76:+			// TODO(SHMOD): handle null case
+77:+				// TODO(SHMOD): report incomplete module path?
+78:+				// TODO(SHMOD): report incomplete module path?
+79:+		ReferenceBinding annotationType = this.environment.getType(typeName, this.environment.UnNamedModule); // TODO(SHMOD): null annotations from a module?
+80:+						// TODO: there are cases were we need to compute glb(capturedWildcardBound, substitutedVariableSuperclass)
+81:+						//       but then when glb (perhaps triggered inside setFirstBound()) fails, how to report the error??
+82:+	// TODO(SHMOD): verify: this block moved here from buildTypeBindings.
+83:+	return new ProblemReferenceBinding(one.compoundName, one, ProblemReasons.Ambiguous); // TODO(SHMOD): use a new problem ID
+84:+		// when asking a split package getType0() we may have answered null in case of ambiguity (not knowing the module context).
+85:+		this.knownPackages.put(constantPoolName[0], packageBinding); // TODO: split?
+86:+	ReferenceBinding nullable = this.nullableAnnotation != null ? this.nullableAnnotation.getAnnotationType() : getType(this.getNullableAnnotationName(), this.UnNamedModule); //FIXME(SHMOD) module for null annotations??
+87:+	 // TODO(SHMOD): I'm not sure if the verifier would need to be created with a specific LE?
+88:+			// TODO(SHMOD) report error
+89:+			// TODO(SHMOD): report (when? where?)
+90:+		// TODO(SHMOD): cache the result?
+91:+			// TODO(SHMOD): store export status in the PackageBinding?
+92:+		// TODO(SHMOD) implement deprecation for modules
+93:+	final public CompilationUnitScope scope; // TODO(SHMOD): consider cleanup at end of compile
+94:+		// TODO(SHMOD): it's a bit awkward that we may get called after applyModuleUpdates() has already worked.
+95:+		//TODO: This code is untested as we don't yet get a scope in ModuleBinding
+96:+		// if a candidate has problems, pick the "better" candidate:
+97:+			PackageBinding next = moduleBinding.getVisiblePackage(incarnation, name); // TODO(SHMOD): reduce split-package work during this invocation?
+98:+		// don't cache the result, maybe incomplete
+99:+					return new ProblemReferenceBinding(type.compoundName, candidate, ProblemReasons.Ambiguous); // TODO(SHMOD) add module information
+100:+			return new ProblemReferenceBinding(candidate.compoundName, candidate, ProblemReasons.NotAccessible); // TODO(SHMOD) more info
+101:+			if (receiverType.isInterface()) // default is not allowed. TODO: do we need a target level check here?
+102:+			if (this.fPackage instanceof SplitPackageBinding) // leverage SplitPackageBinding to avoid duplicate creation of BinaryTypeBinding
+103:+		// TODO: can't we do away with all these additions except for ProvidesStatement - to check
+104:+	// TODO: BETA_JAVA9 Think about clearing the cache too.
+105:+		if (pvsStmt.declarationEnd > sourceEnd) sourceEnd = pvsStmt.declarationEnd; // TODO: working around a compiler issue
+106:+		// TODO
+107:+		// TODO BETA_JAVA9 no reference seen in jvms draft - only in sotm
+108:+		// do not cache - performance could be improved by caching computed flags
+109:+		// TODO: The following needs fix once we can get ModuleDeclaration from IndexBinaryType
+110:+		// TODO: we haven't finalized what path the JRT is represented by. Don't attempt to validate it.
+111:+		final String compliance = CompilerOptions.VERSION_1_8; // TODO: BETA_JAVA9 Revisit
+112:+				// TODO: should project compliance level be checked here?
+113:+			// TODO : Should we signal error via JavaModelException
+114:+				// FIXME(SHMOD): only considers source modules?? (MODULEPATH container is only experimental)
+115:+		if (modules.length > 0) { // TODO what to do??
+116:+		// TODO(SHMOD): verify (is unnamed handled correctly?)
+117:+						// (this.owner != null && this.owner.isPackage(pkgName)) // TODO(SHMOD) see old isPackage
+118:+						// (this.owner != null && this.owner.isPackage(pkgName)) // TODO(SHMOD) see old isPackage
+119:+									moduleContext = new IPackageFragmentRoot[] { (IPackageFragmentRoot) current }; // TODO: validate
+120:+		ClassFileReader classfile = ClassFileReader.read(file, IModule.MODULE_INFO_CLASS); // FIXME: use jar cache
+121:+	this.module = null; // TODO(SHMOD): is this safe?
+122:+		// TODO: BETA_JAVA9 Should report better
+123:+			// TODO: BETA_JAVA9 Should report better
+124:+	// TODO: revisit this - is this really required??
+125:+	// TODO: This is only needed because SourceFile.module() uses the module set on the location
+126:+				// TODO(SHMOD) assert that patchModule has been assigned
+127:+			// TODO(SHMOD) report an error
+128:+					// TODO: Ideally we need to do something like mapToModulePathEntry using the path and if it is indeed
+129:+			// TODO(SHMOD): report problem: patchedModuleName didn't match a module from this location
+130:+					// TODO(SHMOD): report problem: patchedModuleName didn't match a module from this location
+131:+		this.compilerBinding = new PackageBinding(this.compoundName, null, this.environment, this.environment.module); //TODO(SHMOD) enclosingModule
+132:+	public final char[] moduleName; // TODO: not sure if this will be needed once wired to the index?
+133:+		return new BinaryModuleDescriptor(location.toString().toCharArray(), null, // TODO: module name not know at this point
+134:+// FIXME: support module in the new index
+135:+		pkgFragment= ((PackageFragmentRoot) this.lastPkgFragmentRoot).getPackageFragment(pkgName, moduleName); //BUG 478143
+136:+						null, // TODO(SHMOD): don't have a module name, but while looking in unindexed classpath locations, this is probably OK
+137:+						null,  // TODO(SHMOD): don't have a module name, but while looking in unindexed classpath locations, this is probably OK
+138:+				// TODO : JAVA 9 - module-info.java has the same name across modules - Any issues here?
+139:+				// TODO implement regular expression match
+140:+						contents = module != null ? sourceMapper.findSource(module) : CharOperation.NO_CHAR; // FIXME(SHMOD)
+1:+		// FIXME: Note Javac fails here as well
+2:+		//TODO: Surely there has to be a better way than calling toString().toCharArray()?
+3:+		int modifiers = this.binding.tagBits; // TODO: This is wrong, this should be "modifiers"
+4:+			// FIXME: Does it have any impact for unnamed modules - default package combo?
+5:+			// TODO: Yet to see this in ModuleBinding. Check again.
+6:+		//TODO: This code is untested as we don't yet get a scope in ModuleBinding
+1:+		// FIXME: fill-up
+2:+			// FIXME: same for module source path?
+3:+			// FIXME: Find a way to get the options from the EclipseCompiler and pass it to the parser.
+4:+			// FIXME: need to be the latest and not hardcoded value
+5:+		// FIXME: Need special handling in case of module class loaders.
+6:+		// FIXME
+7:+			// TODO: Check unnamed modules can have their own module specific path - probably not
+8:+	// TODO: This is not yet used anywhere
+9:+						// TODO: Still possible to end up with a non-null module name without JDK 9 in build path
+10:+									// TODO: double check, should it be platform or system module?
+11:+					// TODO: Revisit when JRE 9 no longer throws IllegalStateException for getLocation.
+12:+					// TODO: Revisit when JRE 9 no longer throws IllegalStateException for getLocation.
+13:+		// FIXME: fill-up
+14:+			// FIXME: same for module source path?
+15:+			// FIXME: Find a way to get the options from the EclipseCompiler and pass it to the parser.
+16:+			// FIXME: need to be the latest and not hardcoded value
+17:+		// FIXME: Need special handling in case of module class loaders.
+18:+		// FIXME
+19:+			// TODO: Check unnamed modules can have their own module specific path - probably not
+1:+				.filter(m -> limitModule == null || limitModule.contains(m)) // TODO: implement algo from JEP 261 (root selection & transitive closure)
+2:+			for (String moduleName : classpath.getModuleNames(null)) // TODO limit-modules?
+3:+			for (String moduleName : classpath.getModuleNames(null)) // TODO limit-modules?
+1:+//	TESTS_NAMES = new String[] { "testBugXXX" };
+1:+						// TODO: there are cases were we need to compute glb(capturedWildcardBound, substitutedVariableSuperclass)
+2:+						//       but then when glb (perhaps triggered inside setFirstBound()) fails, how to report the error??
+1:+						contents = module != null ? sourceMapper.findSource(module) : CharOperation.NO_CHAR; // FIXME(SHMOD)
+1:+			if (receiverType.isInterface()) // default is not allowed. TODO: do we need a target level check here?
+1:+			// TODO(SHMOD) report an error
+1:+				// TODO(SHMOD) assert that patchModule has been assigned
+2:+			// TODO(SHMOD): report problem: patchedModuleName didn't match a module from this location
+3:+				// TODO(SHMOD): report problem: patchedModuleName didn't match a module from this location
+1:+									moduleContext = new IPackageFragmentRoot[] { (IPackageFragmentRoot) current }; // TODO: validate
+2:+		// FIXME: JrtPackageFragmentRoot, ProjectEntry ??
+1:+		ClassFileReader classfile = ClassFileReader.read(file, IModule.MODULE_INFO_CLASS); // FIXME: use jar cache
+1:+				// FIXME(SHMOD): only considers source modules?? (MODULEPATH container is only experimental)
+1:+	public void _testTypeAnnotations12Binary() throws Exception { // FIXME: disabled after 3 consecutive failures on hudson, which could not be reproduced locally
+1:+	public final char[] moduleName; // TODO: not sure if this will be needed once wired to the index?
+2:+		return new BinaryModuleDescriptor(location.toString().toCharArray(), null, // TODO: module name not know at this point
+3:+// FIXME: support module in the new index
+1:+			IBinaryAnnotation[] tAnnotations = walker.toMethodReturn().getAnnotationsAtCursor(this.id, false); // FIXME: When both exist, order could become an issue.
+1:+		// don't cache the result, maybe incomplete
+1:+			// search binary module in jar dependency:
+1:+		// TODO: The following needs fix once we can get ModuleDeclaration from IndexBinaryType
+2:+					// FIXME(SHMOD): not working
+3:+						contents = sourceMapper.findSource(module.getElementName()); // FIXME(SHMOD)
+4:+		// FIXME(SHMOD): not useful
+5:+			// FIXME(SHMOD): premature
+1:+							// Files doesn't exist and perhaps doesn't belong in a module, move on to other files
+1:+		// TODO: At the moment, we can't have RELEASE_9 here because Eclipse must still be able to run on JRE 8
+2:+		// Come up with a better way to return the version constants.
+1:+			// TODO(SHMOD): store export status in the PackageBinding?
+1:+				return true; // TODO(SHMOD): store export status in the PackageBinding
+1:+				// TODO(SHMOD): report incomplete module path?
+2:+				// TODO(SHMOD): report incomplete module path?
+1:+	 // TODO(SHMOD): I'm not sure if the verifier would need to be created with a specific LE?
+1:+						// (this.owner != null && this.owner.isPackage(pkgName)) // TODO(SHMOD) see old isPackage
+1:+			if (this.fPackage instanceof SplitPackageBinding) // leverage SplitPackageBinding to avoid duplicate creation of BinaryTypeBinding
+2:+						// (this.owner != null && this.owner.isPackage(pkgName)) // TODO(SHMOD) see old isPackage
+3:+								// FIXME(SHMOD): avoid this (platform dependent) temp file!!
+4:+				moduleNames = CharOperation.arrayConcat(moduleNames, aName); // FIXME(SHMOD): handle multiple modules per location
+1:+		// if a candidate has problems, pick the "better" candidate:
+1:+	public void _test019() { // FIXME(SHMOD): check underlying assumptions
+2:+		this.knownPackages.put(constantPoolName[0], packageBinding); // TODO: split?
+3:+			PackageBinding next = moduleBinding.getVisiblePackage(incarnation, name); // TODO(SHMOD): reduce split-package work during this invocation?
+1:+//		if (compiler instanceof EclipseCompiler) {
+2:+		ModuleBinding binding = lookup.getModule(name.toString().toCharArray()); //TODO: Surely there has to be a better way than calling toString().toCharArray()?
+3:+		int modifiers = this.binding.tagBits; // TODO: This is wrong, this should be "modifiers"
+4:+			// TODO: Yet to see this in ModuleBinding. Check again.
+5:+	// TODO: This is not yet used anywhere
+6:+		//TODO: This code is untested as we don't yet get a scope in ModuleBinding
+1:+	// TODO - to be confirmed with spec
+2:+	// test that a package declared in a non-modular project conflicts with a package with the same name
+1:+	public void testBug519310_001() throws Exception {// TODO: Uncomment after bug 488541 is fixed
+1:+			if (incarnation.knownTypes != null && incarnation.knownTypes.elementSize > 0) { // FIXME(SHMOD): this is a workaround for checking existence of any CU
+1:+			// workaround: I need a way to navigate from a source module to a binary module containing "uses" and "provides":
+1:+		LookupEnvironment le = _env.getLookupEnvironment(); // FIXME(SHMOD): does this lookup need to be module-aware?
+2:+		IModule module = null; // FIXME(SHMOD): always null??
+3:+// FIXME: was differentiating error messages ever implemented?
+4:+	if (!isPackage(qualifiedPackageName, null)) return null; // most common case TODO(SHMOD): use module name from this.module?
+5:+	String moduleName = this.module != null ? String.valueOf(this.module.name()) : null; // TODO(SHMOD): test for ModuleBinding.ANY & UNNAMED
+6:+		return false; // TODO(SHMOD): implement
+7:+		// TODO(SHMOD): revert to Java 8 version?
+8:+			// TODO(SHMOD): support package split among different classpath locations?
+9:+			sourcepathClasspathArg, null, true, false); // FIXME(SHMOD): why null encoding??
+10:+				// TODO(SHMOD): specific error?
+11:+			NameEnvironmentAnswer answer = other.findClass(typeName, qualifiedPackageName, moduleName, qualifiedBinaryFileName, binaryOnly); // FIXME(SHMOD) dupl. mod name
+12:+		// FIXME(SHMOD): the following triggers a lot of recursive resolving, make it more lazy!
+13:+			// TODO(SHMOD): handle null case
+14:+		// FIXME(SHMOD): impl resolving of uses/services/implementations from binary
+15:+		ReferenceBinding annotationType = this.environment.getType(typeName, this.environment.UnNamedModule); // TODO(SHMOD): null annotations from a module?
+16:+	// TODO(SHMOD): verify: this block moved here from buildTypeBindings.
+17:+	return new ProblemReferenceBinding(one.compoundName, one, ProblemReasons.Ambiguous); // TODO(SHMOD): use a new problem ID
+18:+		// when asking a split package getType0() we may have answered null in case of ambiguity (not knowing the module context).
+19:+	ReferenceBinding nullable = this.nullableAnnotation != null ? this.nullableAnnotation.getAnnotationType() : getType(this.getNullableAnnotationName(), this.UnNamedModule); //FIXME(SHMOD) module for null annotations??
+20:+		binding = new UnresolvedReferenceBinding(compoundName, packageBinding); // TODO(SHMOD): relies on this & packageBinding for module context. Is this OK?
+21:+	HashtableOfPackage declaredPackages; // TODO(SHMOD): measure if this is worth the memory. LE->PackageBinding basically hold the same information
+22:+			// TODO(SHMOD) report error
+23:+			// FIXME(SHMOD) error reporting
+24:+			// FIXME(SHMOD) error reporting
+25:+//		if (this.requiredModules != null) // FIXME(SHMOD): for caching: when invoked? must have resolved first)
+26:+			// TODO(SHMOD): report (when? where?)
+27:+		// TODO(SHMOD): cache the result?
+28:+				dep -> dep.isPackageExportedTo(pkg, ModuleBinding.this) // TODO(SHMOD): store export status in the PackageBinding
+29:+		// TODO(SHMOD) implement deprecation for modules
+30:+		this.enclosingModule = parent.enclosingModule; // FIXME(SHMOD): check parent for split package?
+31:+		HashtableOfObject typeOrPackageCache = unitScope.typeOrPackageCache; // FIXME(SHMOD): dangerous, may mask other same named packages
+32:+	final public CompilationUnitScope scope; // TODO(SHMOD): consider cleanup at end of compile
+33:+		// TODO(SHMOD): it's a bit awkward that we may get called after applyModuleUpdates() has already worked.
+34:+		return null; // FIXME(SHMOD) is this an error?? (note that requestedModule could be the unnamed module
+35:+			if (type != null) { // FIXME(SHMOD) differentiate non-public vs. non-exported
+36:+					return new ProblemReferenceBinding(type.compoundName, candidate, ProblemReasons.Ambiguous); // TODO(SHMOD) add module information
+37:+			return new ProblemReferenceBinding(candidate.compoundName, candidate, ProblemReasons.NotAccessible); // TODO(SHMOD) more info
+38:+			targetType = environment.askForType(this.compoundName, this.fPackage.enclosingModule); // FIXME(SHMOD): split package?
+39:+// FIXME(SHMOD): crippled
+40:+				// FIXME(SHMOD) verify vs. version below
+41:+//						.filter(env -> env instanceof ClasspathDirectory)
+42:+	// FIXME(SHMOD) may need a module name also here
+43:+				// FIXME(SHMOD): only considers source modules??
+44:+		// TODO(SHMOD): verify (is unnamed handled correctly?)
+45:+					if (this.nameLookup.isPackage(pkgName, packageRoot)) // TODO(SHMOD): need to distinguish kinds?
+46:+					if (this.nameLookup.isPackage(pkgName, packageRoot)) // TODO(SHMOD): need to distinguish kinds?
+47:+				// (this.owner != null && this.owner.isPackage(pkgName)) // TODO(SHMOD) see old isPackage
+48:+	this.module = null; // TODO(SHMOD): is this safe?
+49:+		// TODO(SHMOD): also search sourceLocations?
+50:+		this.compilerBinding = new PackageBinding(this.compoundName, null, this.environment, this.environment.module); //TODO(SHMOD) enclosingModule
+51:+			// FIXME(SHMOD): when answering non-null, should we record the module, too?
+52:+						null, // TODO(SHMOD): don't have a module name, but while looking in unindexed classpath locations, this is probably OK
+53:+						null,  // TODO(SHMOD): don't have a module name, but while looking in unindexed classpath locations, this is probably OK
+54:+				moduleNames = CharOperation.arrayConcat(moduleNames, module.name()); // FIXME(SHMOD): handle multiple modules per location
+1:+	public void _testBug518843_001() throws Exception {// TODO: Uncomment after bug 488541 is fixed
+1:+	// TODO behavior would change once restricted keywords support is in place
+1:+		this.isOpen = binding.isOpen; // TODO
+1:+	// Bug 354536 - compiling package-info.java still depends on the order of compilation units
+2:+	// Bug 354536 - compiling package-info.java still depends on the order of compilation units
+3:+	// Bug 354536 - compiling package-info.java still depends on the order of compilation units
+1:+" should have a binding", node.resolveBinding());//TODO: enable after bug 515875 enables module binding
+1:+		// this.open = binding.isOpen; // TODO
+2:+		// TODO BETA_JAVA9 no reference seen in jvms draft - only in sotm
+3:+		return this.isOpen; // TODO: info needs to be derived from compiler ast - bug 517269 awaited.
+4:+			//TODO: How do we resolve target modules? From the entire Java Model Scope? Wait for the new lookup environment.
+1:+		// replacing this.properties() by this.<I>properties() fixes the problem
+2:+			"		sam2.apply(null); // variation: unchecked, so intentionally no warning reported, but would give NPE too \n" +
+3:+			"		return i1.equals((I3)i2);\n" + // cast doesn't fix a problem
+4:+	// TODO: compute relevances
+5:+					// FIXME(stephan): turn into an exception once we are sure about this 
+6:+		// be properly aligned. If we ever want to use this sort of field for other data types
+7:+		// that don't require alignment, we may want to replace this with something smarter
+8:+		// this could be removed and things would probably still work.
+1:+/*			IModuleBinding moduleBinding = node.resolveBinding(); //TODO: enable after bug 515875 enables module binding
+2:+//				assertTrue(node.resolveBinding() == null);//TODO: enable after bug 515875 enables module binding
+3:+/*		IModuleBinding moduleBinding = node.resolveBinding();//TODO: enable after bug 515875 enables module binding
+4:+//			assertNotNull(node+" should have a binding", node.resolveBinding());//TODO: enable after bug 515875 enables module binding
+5:+/*		case ASTNode.MODULE_DECLARATION: //TODO: Enable after bug 515875 enable module binding
+6:+			// this.foundBinding = node.resolveBinding(); TODO: Enable after bug 515875 enables module binding
+1:+					ModuleDeclaration module = parsedUnit.moduleDeclaration;//modInfo.scope.compilationUnitScope().referenceContext.moduleDeclaration ;//TODO, could be null
+2:+			return; //TODO No idea what a problem module declaration should look like
+3:+		// TODO
+1:+					else if (this.referenceBinding.isModule()) // TODO: add isModuleInfo() to TypeDeclaration
+1:+			this.foundBinding = null;// TODO BETA_JAVA9 define node.resolveBinding();
+1:+		if (modules.length > 0) { // TODO what to do??
+1:+	// Hack to load all classes before computing their suite of test cases
+1:+					// FIXME(stephan): turn into an exception once we are sure about this 
+1:+	// Hack to load all classes before computing their suite of test cases
+1:+		// replacing this.properties() by this.<I>properties() fixes the problem
+1:+				// TODO : JAVA 9 - module-info.java has the same name across modules - Any issues here?
+2:+			// TODO: handle anything other than ClassPathLocation, if any.
+3:+				// TODO implement regular expression match
+1:+			"		return i1.equals((I3)i2);\n" + // cast doesn't fix a problem
+1:+		// be properly aligned. If we ever want to use this sort of field for other data types
+2:+		// that don't require alignment, we may want to replace this with something smarter
+3:+		// this could be removed and things would probably still work.
+1:+			"		sam2.apply(null); // variation: unchecked, so intentionally no warning reported, but would give NPE too \n" +
+1:+	    		annotations = walker.toMethodReturn().getAnnotationsAtCursor(this.id, false); // FIXME: When both exist, order could become an issue.
+2:+	public static final int TYPE_INFERRED_FINAL = 3; // as above plus asserting that target type was a proper type
+1:+	    		annotations = walker.toMethodReturn().getAnnotationsAtCursor(this.id, false); // FIXME: When both exist, order could become an issue.
+1:+			// TODO BETA_JAVA9: we need new type of classpath to handle Jmod files in batch compiler.
+2:+	// TODO: The following needs fix once we can get ModuleDeclaration from IndexBinaryType
+1:+	public static final int TYPE_INFERRED_FINAL = 3; // as above plus asserting that target type was a proper type
+2:+				return true; // TODO: which way to interpret?
+3:+			if (!lastArg.isArrayType()) // TODO: what if argtype is ivar that should resolve to array??
+4:+			// TODO: also consider (T[] ...)!
+1:+		// TOOD: BETA_JAVA9 - Should really check for packages with the module context
+1:+	// Bug 388281 - [compiler][null] inheritance of null annotations as an option
+2:+	// Bug 440477 - [null] Infrastructure for feeding external annotations into compilation
+3:+	// Bug 440687 - [compiler][batch][null] improve command line option for external annotations
+4:+	// Bug 440687 - [compiler][batch][null] improve command line option for external annotations
+5:+	// Bug 440687 - [compiler][batch][null] improve command line option for external annotations
+6:+	// Bug 440687 - [compiler][batch][null] improve command line option for external annotations
+7:+	// Bug 440687 - [compiler][batch][null] improve command line option for external annotations
+8:+					// TODO: handle TypeBinding if needed
+9:+// TODO: switch to also combining variables, if needed (filter duplicates?):
+10:+					// consider prefix location as less specific, put to back (e.g.: referring to a library via a project):
+1:+	// TODO:
+1:+					// TODO: handle TypeBinding if needed
+2:+// TODO: switch to also combining variables, if needed (filter duplicates?):
+1:+	// Bug 388281 - [compiler][null] inheritance of null annotations as an option
+2:+	// Bug 440477 - [null] Infrastructure for feeding external annotations into compilation
+3:+	// Bug 440687 - [compiler][batch][null] improve command line option for external annotations
+4:+	// Bug 440687 - [compiler][batch][null] improve command line option for external annotations
+5:+	// Bug 440687 - [compiler][batch][null] improve command line option for external annotations
+6:+	// Bug 440687 - [compiler][batch][null] improve command line option for external annotations
+7:+	// Bug 440687 - [compiler][batch][null] improve command line option for external annotations
+1:+					// consider prefix location as less specific, put to back (e.g.: referring to a library via a project):
+1:+		info.target[i] = exportInfo.targets[i]; // TODO: confirm if it is okay to use the array as is instead of making a copy.
+2:+	resolveDuplicates(handle); // TODO: really necessary?
+3:+		info.target[i] = opensInfo.targets[i]; // TODO: confirm if it is okay to use the array as is instead of making a copy.
+1:+				job.run(); // TODO(stephan): ever reached? for ReferenceExpression? (would need a corresponding new call to flushBoundOutbox()).
+1:+				job.run(); // TODO(stephan): ever reached? for ReferenceExpression? (would need a corresponding new call to flushBoundOutbox()).
+1:+public void _test0105() throws JavaModelException, CoreException, IOException { // FIXME: re-enable!
+2:+			// TODO Look for opportunities to merge small blocks
+1:+		if (pvsStmt.declarationEnd > sourceEnd) sourceEnd = pvsStmt.declarationEnd; // TODO: working around a compiler issue
+2:+			// moduleDecl.resolveBinding(); TODO: Implement resolveBinding
+3:+		// performance could be improved by caching computed flags
+4:+		// do not cache - performance could be improved by caching computed flags
+1:+		if (pvsStmt.declarationEnd > sourceEnd) sourceEnd = pvsStmt.declarationEnd; // TODO: working around a compiler issue
+2:+			// moduleDecl.resolveBinding(); TODO: Implement resolveBinding
+3:+		// performance could be improved by caching computed flags
+4:+		// do not cache - performance could be improved by caching computed flags
+1:+// TODO : Change to ExportsReference/PackageReference once we have the new compiler ast.node
+2:+		// TODO: can't we do away with all these additions except for ProvidesStatement - to check
+1:+	// TODO: change to compliance 9 once tests run with 9
+2:+			// TODO uncomment after bug509050 is done
+3:+							// TODO
+4:+//							if (exportReference instanceof CompletionOnKeywordModuleInfo) {
+5:+//						if (implementation instanceof CompletionOnProvidesImplementationsSingleTypeReference ||
+6:+//								implementation instanceof CompletionOnProvidesImplementationsQualifiedTypeReference) {
+7:+//		} else if (reference instanceof CompletionOnProvidesImplementationsQualifiedTypeReference) {
+8:+	//TODO
+9:+		// TODO
+10:+		//TODO refer super.consumeSingleRequiresModuleName
+11:+			// TODO exports_flags - check when they are set
+12:+			// TODO opens_flags - check when they are set
+13:+			// TODO: need a check for empty package as well
+14:+	// TODO: This should be replaced with RecoveredRequiresStatement ala. RecoveredImport
+15:+	// TODO replace with RecoveredUsesStatement
+16:+			// TODO: to be uncommented once RecoveredRequiresStatement is introduced
+17:+			// TODO uncomment once RecoveredUsesStatement is in place
+18:+//	resolveDuplicates(handle); // TODO: really necessary?
+1:+			// TODO Look for opportunities to merge small blocks
+1:+			// TODO Look for opportunities to merge small blocks
+1:+				continue; // TODO: ideally we want to report an error.
+1:+			jar.isAutoModule = false; // TODO: check with spec on what the behavior should be
+1:+public void _test0105() throws JavaModelException, CoreException, IOException { // FIXME: re-enable!
+1:+	// TODO: Ideally, for source roots, we should get this information from the raw classpath
+2:+	// TODO: This is only needed because SourceFile.module() uses the module set on the location
+3:+					// TODO: Ideally we need to do something like mapToModulePathEntry using the path and if it is indeed
+4:+					// TODO: Ideally we need to do something like mapToModulePathEntry using the path and if it is indeed
+1:+					// static nested class. That's probably a bug;
+2:+	// this already worked without the patch for bug 501031.
+3:+		trial(1682762087, true); // exposed bugs in 2a,b
+4:+		trial(322922974, true); // exposed bugs in 3b(ii)
+5:+	// TODO(sxenos): setup the external annotation provider if the IBinaryType came from the index
+6:+	// TODO(sxenos): the old code always passed null as the third argument to setupExternalAnnotationProvider,
+7:+	// but this looks like a bug. I've preserved it for now but we need to figure out what was supposed to go
+8:+							// TODO(sxenos): this is causing each change event for an external jar file to be fired twice.
+9:+// TODO(sxenos): rename this to something like "StructDescriptor" -- it's more than a factory and the word
+10:+		// a bug.
+11:+		// If you're debugging issues related to duplicate deletions, set DEBUG_DUPLICATE_DELETIONS to true
+12:+		// A lock release probably means that some AST is going away. The result cache has to be
+13:+		// cleared since it may contain objects belonging to the AST that is going away. A failure
+14:+		// to release an AST object would cause a memory leak since the whole AST would remain
+15:+		// TODO(sprigogin): It would be more efficient to replace the global result cache with
+16:+				// give up on read locks
+17:+	// Derived data. Holds the address for the last block we know about
+18:+		// This assert verifies the alignment. We expect the low bits to be clear.
+19:+				return false; // there should never be duplicates
+20:+					return false; // There should never be duplicates.
+21:+					return true; // There should never be duplicates.
+22:+		// TODO: make use of lower-level System.arrayCopy
+23:+		// Clear out the block, lots of people are expecting this.
+24:+		// TODO Look for opportunities to merge blocks
+25:+		// If there is no generic signature, then fall back to heuristics based on what we know about
+26:+//TODO: check callers for handling of comments
+27:+			// TODO(sxenos): It would be much more efficient to mark files as being in one
+28:+			// of three states: unknown, dirty, or clean. Files would start in the unknown
+29:+			// event. They would move into the clean state after passing this sort of
+30:+			// it would eliminate the vast majority of these (slow) fingerprint tests.
+31:+		// TODO: delete and recreate the index
+32:+	// TODO(sxenos): Create something like a union to hold these, to eliminate this
+33:+			// InlineMethodTests in the JDT UI project. Need to investigate why before using it.
+34:+	// TODO(sxenos): Find a more appropriate and more specific place to trigger re-indexing
+35:+			// no better answer was found
+36:+				// If neither one is better, use the one with the earlier classpath position
+1:+					// static nested class. That's probably a bug;
+1:+	//TODO: If module was already part of another source folder, flag an error?
+1:+					ModuleDeclaration module = (ModuleDeclaration) parsedUnit.types[0];//TODO, could be null
+2:+	// TODO: Implement use cases to construct modules from location/key
+3:+		// Do what's needed. Question is, how are we going to look up for modules somewhere else in a workspace?
+1:+	resolveDuplicates(handle); // TODO: really necessary?
+2:+	resolveDuplicates(handle); // TODO: really necessary?
+3:+	resolveDuplicates(handle); // TODO: really necessary?
+4:+		//TODO add the rest of the stuff
+1:+		substF = Scope.substitute(getResultSubstitution(isInnerIc18 ? this.b2 : this.currentBounds), substF); // TODO: B3, rather than B2?!
+1:+						//this.requestor.setIgnored(CompletionProposal.MODULE_DECLARATION, false); //TODO: Hack until ui fixes this issue.
+1:+			if (addJDK_8153748ConstraintsFromInvocation(this.invocationArguments, method) == ReductionResult.TRUE) // TODO: return null on answer false?
+2:+//						if (samParam instanceof InferenceVariable)
+1:+	// this already worked without the patch for bug 501031.
+1:+// Nested anonymous diamonds - TODO - confirm that this is indeed correct as per spec
+2:+// Redundant type argument specification - TODO - confirm that this is correct
+1:+									this.requestor.setIgnored(CompletionProposal.MODULE_REF, false); //TODO: Remove once jdt.ui allows
+2:+								this.requestor.setIgnored(CompletionProposal.MODULE_REF, false); //TODO: Remove once jdt.ui allows
+3:+			// TODO ignore for now
+4:+//		TODO: Enable the code once NameLookup supports moduleContext when module-info.java file is still in flux
+5:+				// TODO: need better representation of IModuleEnvironment and IModulePathEntry
+1:+			// TODO: need a check for empty package as well
+1:+			// InlineMethodTests in the JDT UI project. Need to investigate why before using it.
+1:+		// If there is no generic signature, then fall back to heuristics based on what we know about
+1:+							// TODO(sxenos): this is causing each change event for an external jar file to be fired twice.
+1:+		// TODO: delete and recreate the index
+1:+		return false; // TODO: Revisit 
+2:+				// TODO: BETA_JAVA9 Should report better
+3:+					// ignore broken entry, keep searching
+4:+			//TODO - if the package is part of a named module, then we should check if the module exports the package
+5:+		// TODO: Situation can probably improved by adding NOtFoundPackage to this.declaredPackages 
+6:+		.filter(e -> CharOperation.prefixEquals(qualifiedPackageName, e.name())) // TODO: improve this
+7:+	// TODO: these should be abstract
+8:+//				if (!(this.classpaths[i] instanceof ClasspathDirectory)) continue;
+9:+		// No direct way to lookup, use the java model APIs instead
+10:+		// No direct way to lookup, use 
