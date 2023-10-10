@@ -37,13 +37,24 @@ public class SATD {
         return type !=null;
     }
     public String toString(){
-        return "\nTYPE:"+this.type + "\ncommitID:" + commitId + "\nIsParent:"+isParent+"\npath:" + fileName + "\nLINE:" + line + "\nCOMMENT:" + content+"\"";
+        return "\nTYPE:"+this.type + "\ncommitID:" + commitId + "\nHashcode"+pathHash+"\nIsParent:"+isParent+"\npath:" + fileName + "\nLINE:" + line + "\nCOMMENT:" + content+"\"";
     }
 
     public int getHash(){
         return this.pathHash;
     }
 
+    public String  getType(){
+        if(this.type== Type.DELETED){
+            return "DELETE";
+        }else if(this.type == Type.ADDED){
+            return "ADDED";
+        }else if(this.type == Type.REPLACE){
+            return "REPLACE";
+        }else{
+            return null;
+        }
+    }
 
     private void setType(Edit.Type type) {
         SATD.Type commentType;

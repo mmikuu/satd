@@ -3,12 +3,12 @@ package jp.naist.sdlab.miku.module.commit;
 import org.eclipse.jgit.revwalk.RevCommit;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
+
+import static jp.naist.sdlab.miku.main.main_satdtime.formatter;
 
 /**
  * This class is used to store/get data from Database (hibernate)
@@ -79,7 +79,9 @@ public class Commit implements Serializable {
      * Boolean if this commit is a merge commit.
      */
     public boolean isMergeCommit;
+    public static List<String> releaseDates = Arrays.asList("2016-06-22", "2017-06-28", "2018-06-27", "2018-09-19", "2018-12-19", "2019-03-20", "2019-06-19", "2019-09-19", "2019-12-18", "2020-03-18","2020-06-16");//, "2020-06-17", "2020-09-16", "2020-12-16", "2021-03-17", "2021-06-16", "2021-09-15", "2021-12-08", "2022-03-16"
 
+    public static List<String> release = Arrays.asList("TR1","TR2","RR1","RR2","RR3","RR4","RR5","RR6","RR7","RR8");
     public Commit(){
     }
 
@@ -120,6 +122,21 @@ public class Commit implements Serializable {
             addedLines += cf.addedLines;
             deletedLines += cf.deletedLines;
         }
+    }
+    public String getRelease(){
+        for(int i =0; i<releaseDates.size(); i++){
+            if( releaseDates.get(i) == "2020-06-16"){
+                break;
+            }
+            LocalDateTime releaseStartDate = LocalDate.parse(releaseDates.get(i), formatter).atStartOfDay();
+            LocalDateTime releaseEndDate = LocalDate.parse(releaseDates.get(i + 1), formatter).atStartOfDay();
+            if (this.commitDate.isBefore(releaseStartDate)) {
+                break;
+            } else if (this.commitDate.isBefore(releaseEndDate)) {
+                return release.get(i);
+            }
+        }
+        return null;
     }
     @Override
     public boolean equals(Object o){

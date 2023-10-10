@@ -22,6 +22,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 public class main_satdtime {
     // urlはCommandExecutorも変更する！
     static String url = "https://github.com/eclipse-jdt/eclipse.jdt.core";
@@ -44,9 +45,26 @@ public class main_satdtime {
         Git git = new Git(repository);
         Iterable<RevCommit> log = git.log().call();
         List<SATD>allSatd = new ArrayList<>();
-        CommandExecutor executor = new CommandExecutor(url, repository, "repos/eclipse.jdt.core/");
-        FileWriter addedSatdPFileWriter = new FileWriter("satdParentDate.csv",true);
-        FileWriter addedSatdCFileWriter = new FileWriter("satdChildDate.csv",true);
+
+        //database mysql connect
+        Connection connection = DriverManager.getConnection(
+                "jdbc:mysql://127.0.0.1:3306/satd_replace_db",
+                "me",
+                "goma");
+        //init database
+        Statement statement  = connection.createStatement();
+        connection.setAutoCommit(false);
+        statement.executeUpdate("DROP TABLE IF EXISTS parent_satd_list");
+        statement.executeUpdate("DROP TABLE IF EXISTS child_satd_list");
+        statement.executeUpdate("DROP TABLE IF EXISTS chunk_parent_list");
+        statement.executeUpdate("DROP TABLE IF EXISTS chunk_child_list");
+        statement.executeUpdate("DROP TABLE IF EXISTS commit_list");
+        creatTable(connection,statement,true);
+        creatTable(connection,statement,false);
+
+        //commandExecutor constructor
+        CommandExecutor executor = new CommandExecutor(url, repository, "repos/eclipse.jdt.core/",connection,statement,releaseDates);
+
         for (RevCommit commit : log) {
 //            LocalDateTime commitDate = LocalDateTime.ofInstant(commit.getAuthorIdent().getWhen().toInstant(), ZoneId.systemDefault());
             LocalDateTime commitDate = LocalDateTime.ofInstant(commit.getCommitterIdent().getWhen().toInstant(),
@@ -64,8 +82,7 @@ public class main_satdtime {
                     TotalReleaseCommit.put(releaseDates.get(i), AddedCommit);
                     List<SATD> eachSATDs = satdPerRelease.getOrDefault(releaseDates.get(i), new ArrayList<>());
                     executor.runCommand(commit.getId().getName());
-                    //TODO:Type:REPLACEの場合　類似度の計算を行う関数を作成する
-                    matchHash(executor.resultsParent, executor.resultsChild,addedSatdPFileWriter,addedSatdCFileWriter);
+                    matchHash(executor.resultsParent, executor.resultsChild,connection,statement);
                     eachSATDs.addAll(executor.resultsParent);
                     eachSATDs.addAll(executor.resultsChild);
                     satdPerRelease.put(releaseDates.get(i), eachSATDs);
@@ -74,45 +91,112 @@ public class main_satdtime {
         }
 
         writeResult(satdPerRelease);
-        printCounts(satdPerRelease);
+//        printCounts(satdPerRelease);
     }
 
-    private static void matchHash(List<SATD> resultsParent, List<SATD> resultsChild,FileWriter addedSatdPFileWriter,FileWriter addedSatdCFileWriter ) throws IOException{
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
 
-        try{
-            conn = DriverManager.getConnection(
-                    "jdbc:mysql//localhost:3306/samehash_db",
-                    "me",
-                    "goma");
-        } catch (SQLException e){
-            System.out.println("データベース接続エラー");
+    //create database
+    private static void creatTable(Connection conn,Statement stmt,Boolean isParent) throws SQLException {
+        String satdTableName =  "CREATE TABLE child_satd_list("
+                + "id INT(100) NOT NULL AUTO_INCREMENT,"
+                + "commitId VARCHAR(64) NOT NULL COLLATE utf8mb4_unicode_ci,"
+                + "fileName VARCHAR(300) NOT NULL COLLATE utf8mb4_unicode_ci,"
+                + "lineNo INT(64) NOT NULL,"
+                + "content VARCHAR(1000) NOT NULL COLLATE utf8mb4_unicode_ci,"
+                + "hashcode INT(64) NOT NULL ,"
+                + "type VARCHAR(10) NOT NULL COLLATE utf8mb4_unicode_ci,"
+                + "PRIMARY KEY(id))";
+
+        String chunkTableName = "CREATE TABLE chunk_child_list("
+                + "id INT(100) NOT NULL AUTO_INCREMENT,"
+                + "commitId VARCHAR(64) NOT NULL COLLATE utf8mb4_unicode_ci,"
+                + "fileName VARCHAR(300) NOT NULL COLLATE utf8mb4_unicode_ci,"
+                + "hashcode INT(64) NOT NULL ,"
+                + "type VARCHAR(10) NOT NULL COLLATE utf8mb4_unicode_ci,"
+                + "PRIMARY KEY(id))";
+
+        if(isParent) {
+            satdTableName = "CREATE TABLE parent_satd_list("
+                    + "id INT(100) NOT NULL AUTO_INCREMENT,"
+                    + "commitId VARCHAR(64) NOT NULL COLLATE utf8mb4_unicode_ci,"
+                    + "fileName VARCHAR(300) NOT NULL COLLATE utf8mb4_unicode_ci,"
+                    + "lineNo INT(64) NOT NULL,"
+                    + "content VARCHAR(1000) NOT NULL COLLATE utf8mb4_unicode_ci,"
+                    + "hashcode INT(64) NOT NULL,"
+                    + "type VARCHAR(10) NOT NULL COLLATE utf8mb4_unicode_ci,"
+                    + "PRIMARY KEY(id))";
+
+            chunkTableName = "CREATE TABLE chunk_parent_list("
+                    + "id INT(100) NOT NULL AUTO_INCREMENT,"
+                    + "commitId VARCHAR(64) NOT NULL COLLATE utf8mb4_unicode_ci,"
+                    + "fileName VARCHAR(300) NOT NULL COLLATE utf8mb4_unicode_ci,"
+                    + "hashcode INT(64) NOT NULL ,"
+                    + "type VARCHAR(10) NOT NULL COLLATE utf8mb4_unicode_ci,"
+                    + "PRIMARY KEY(id))";
+            //1回だけのテーブル作成の処理やから，isParentのif文の中に書いてる
+            String commitTableName = "CREATE TABLE commit_list("
+                    + "id INT(100) NOT NULL AUTO_INCREMENT,"
+                    + "commitId VARCHAR(64) NOT NULL COLLATE utf8mb4_unicode_ci,"
+                    + "commitDate timestamp NOT NULL ,"
+                    + "releasePart VARCHAR(10) NOT NULL COLLATE utf8mb4_unicode_ci,"
+                    + "fileName VARCHAR(100) NOT NULL COLLATE utf8mb4_unicode_ci,"
+                    + "commitComment VARCHAR(1000) NOT NULL COLLATE utf8mb4_unicode_ci ,"
+                    + "PRIMARY KEY(id))";
+            stmt.executeUpdate(commitTableName);
         }
+        stmt.executeUpdate(satdTableName);
+        stmt.executeUpdate(chunkTableName);
 
-        for(SATD satdP: resultsParent){
-//            System.out.println("P: "+satdP);
-            for(SATD satdC : resultsChild){
-//                System.out.println("C: "+satdC);
-                if(satdP.getHash() == satdC.getHash()){
-                    addedSatdPFileWriter.write(satdP.content + "\n");
-                    addedSatdCFileWriter.write(satdC.content + "\n");
-                    addedSatdPFileWriter.flush();
-                    addedSatdCFileWriter.flush();
-                    System.out.println("=============================");
-                    System.out.println("Parent");
-                    System.out.println(satdP.getHash());
-                    System.out.println(satdP.toString());
-                    System.out.println("-----------------------------");
-                    System.out.println("Child");
-                    System.out.println(satdC.getHash());
-                    System.out.println(satdC.toString());
-                    System.out.println("=============================");
-                }
-            }
+    }
+
+
+    private static void matchHash(List<SATD> resultsParent, List<SATD> resultsChild, Connection conn, Statement stmt ) throws IOException, SQLException {
+        for(SATD satdP: resultsParent) {
+            dataUpdate(conn, stmt, satdP, true);
+            System.out.println(satdP.toString());
+        }
+        for(SATD satdC : resultsChild) {
+            dataUpdate(conn, stmt, satdC, false);
+            System.out.println(satdC.toString());
+        }
+//        for(SATD satdP: resultsParent){
+//            for(SATD satdC : resultsChild){
+//                if(satdP.getHash() == satdC.getHash()){
+//                    System.out.println("=============================");
+//                    System.out.println("Parent");
+//                    System.out.println(satdP.getHash());
+//                    System.out.println(satdP.toString());
+//                    System.out.println("-----------------------------");
+//                    System.out.println("Child");
+//                    System.out.println(satdC.getHash());
+//                    System.out.println(satdC.toString());
+//                    System.out.println("=============================");
+//                }
+//            }
+//        }
+    }
+
+
+    private static void dataUpdate(Connection conn,Statement stmt,SATD satd,Boolean isParent) {
+        String satd_sql = "insert into child_satd_list(commitId,fileName,lineNo,content,hashcode,type) VALUES(?,?,?,?,?,?)";
+        if(isParent) {
+            satd_sql = "insert into parent_satd_list(commitId,fileName,lineNo,content,hashcode,type) VALUES(?,?,?,?,?,?)";
+        }
+        // Set satd data
+        try(PreparedStatement ps = conn.prepareStatement(satd_sql)){
+            ps.setString(1,satd.commitId);
+            ps.setString(2,satd.fileName);
+            ps.setInt(3,satd.line);
+            ps.setString(4,satd.content);
+            ps.setInt(5,satd.pathHash);
+            ps.setString(6,satd.getType());
+            ps.executeUpdate();
+            conn.commit();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
+
 
     private static void printCounts(Map<String, List<SATD>> satdPerRelease) throws IOException {
 
@@ -135,6 +219,10 @@ public class main_satdtime {
                         Integer DeletedCount = satdDeletedRelease.getOrDefault(dates, 0);
                         DeletedCount += 1;
                         satdDeletedRelease.put(dates, DeletedCount);
+                    case REPLACE:
+                        break;
+                    default:
+                        throw new RuntimeException();
                 }
             }
             System.out.println(dates + " : " + satdAddedRelease.get(dates));
