@@ -6,8 +6,6 @@ import jp.naist.se.commentlister.reader.CommentReader;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.diff.Edit;
 import org.eclipse.jgit.lib.Repository;
-import org.jruby.RubyProcess;
-import satd_detector.core.utils.SATDDetector;
 
 import java.io.*;
 import java.sql.*;
@@ -15,12 +13,7 @@ import java.util.*;
 
 import org.eclipse.jgit.revwalk.RevCommit;
 
-import javax.swing.plaf.nimbus.State;
-
-public class CommandExecutor {
-    public int AddedCount = 0;
-    public int DeletedCount = 0;
-
+public class DiffSATDDetector {
     public String url;
     public Repository repository;
     Git git;
@@ -28,69 +21,34 @@ public class CommandExecutor {
     private String repoPath;
     public List<SATD> resultsParent;
     public List<SATD> resultsChild;
-    public Connection connection;
-    public Statement statement;
-    public List<String> releaseDates;
 
-    public CommandExecutor(String url, Repository repository, String repoPath, Connection conn, Statement stmt,List<String> releaseDates) {
+
+    public DiffSATDDetector(String url, Repository repository, GitServiceImpl2 gitService,String repoPath) {
         this.url = url;
         this.repository = repository;
         this.git = new Git(repository);
-        this.gitService = new GitServiceImpl2();
+        this.gitService = gitService;
         this.repoPath = repoPath;
         this.resultsParent = new ArrayList<>();
         this.resultsChild = new ArrayList<>();
-        this.connection = conn;
-        this.statement = stmt;
-        this.releaseDates = releaseDates;
 
 
     }
 
-    public void runCommand(String commitId) throws IOException, InterruptedException {
-        System.out.println(commitId);
+    public void detectSATD(Commit childCommit) throws IOException, InterruptedException {
+        System.out.println(childCommit.commitId);
         this.resultsParent = new ArrayList<>();
         this.resultsChild = new ArrayList<>();
-//        if (!commitId.equals("907f50c0bd8abce7aa6051e48f2fed4e1bb60a7f")) return;
-        RevCommit commit;//checkoutするために
-        RevCommit[] parents;//親をcheckoutするために
-        this.checkout(commitId);
-        RevCommit revCommit = this.getCommit(commitId);
-        parents = revCommit.getParents();
-        if (parents.length == 1) {
-            Commit childCommit = gitService.getCommit(this.url, repository, revCommit);
-            addCommitData(childCommit);
+        this.checkout(childCommit.commitId);
+        if (childCommit.parentCommitIds.size() == 1) {
             detectSATD(childCommit, false, this.resultsChild);
             //親のcommitをcheckout
-            this.checkout(parents[0].getName());
+            this.checkout(childCommit.parentCommitIds.get(0));
             detectSATD(childCommit, true, this.resultsParent);
-        } else if (parents.length == 0) {
-            Commit childCommit = gitService.getCommit(this.url, repository, revCommit);
-            addCommitData(childCommit);
-            detectSATD(childCommit, false, this.resultsChild);
         }
     }
 
-    private void addCommitData(Commit childCommit) {
-        if(childCommit.getRelease() != null) {
-            String commit_sql = "insert into commit_list (commitId,commitDate,releasePart,fileName,commitComment) VALUES(?,?,?,?,?)";
-            try (PreparedStatement ps = connection.prepareStatement(commit_sql)) {
-                ps.setString(1, childCommit.commitId);
-                // LocalDateTimeからjava.sql.Timestampへ変換
-                Timestamp timestamp = Timestamp.valueOf(childCommit.commitDate);
-                ps.setTimestamp(2, timestamp);
-                System.out.println(timestamp);
-                ps.setString(3, childCommit.getRelease());
-                System.out.println(childCommit.getRelease());
-                ps.setString(4, childCommit.project);
-                ps.setString(5, childCommit.commitComment);
-                ps.executeUpdate();
-                connection.commit();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
+
 
     private void detectSATD(Commit commit, boolean isParent, List<SATD> results) throws IOException, InterruptedException {
         Map<String, Map<Integer, LineChange>> changedLinesInFilesInChildRevision = markLines(commit, isParent);
@@ -124,17 +82,7 @@ public class CommandExecutor {
         }
     }
 
-    public  RevCommit getCommit(String commitId) {
-        RevCommit commit;
-        //子のcommitをcheckout
-        try {
-            commit = git.log().add(repository.resolve(commitId)).setMaxCount(1).call().iterator().next();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            throw new RuntimeException();
-        }
-        return commit;
-    }
+
 
     public Map<String, Map<Integer, LineChange>> markLines(Commit commit, boolean isParent) throws IOException {
         Map<String, Map<Integer, LineChange>> map = new HashMap<>();
@@ -150,11 +98,9 @@ public class CommandExecutor {
                 if (isParent) {
                     startNo = chunk.getOldStartNo()+1;
                     endNo = chunk.getOldEndNo();
-//                    insertDate(commit,lc,true);
                 } else {
                     startNo = chunk.getNewStartNo()+1;
                     endNo = chunk.getNewEndNo();
-//                    insertDate(commit,lc,false);
                 }
                 for (int i = startNo; i <= endNo; i++) {
                     changedLines.put(i, lc);
@@ -169,27 +115,7 @@ public class CommandExecutor {
         return map;
     }
 
-    private void insertDate(Commit commit,LineChange lc,boolean isParent) {
-        String chunk_sql = "insert into chunk_child_list(commitId,fileName,hashcode,type) VALUES(?,?,?,?)";
-        if (isParent) {
-            chunk_sql = "insert into chunk_parent_list(commitId,fileName,hashcode,type) VALUES(?,?,?,?)";
-        }
-        // Set chunk data
-        try (PreparedStatement ps = connection.prepareStatement(chunk_sql)) {
-            ps.setString(1, commit.commitId);
-            if (isParent) {
-                ps.setString(2, lc.oldPath);
-            }else{
-                ps.setString(2, lc.newPath);
-            }
-            ps.setInt(3, lc.hashCode());
-            ps.setString(4, lc.getType());
-            ps.executeUpdate();
-            connection.commit();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
+
 
 
         public Map<String, Map<Integer, Comment>> detectComment(String path, Map<Integer, LineChange> changedLines) throws IOException {
@@ -228,7 +154,7 @@ public class CommandExecutor {
         InputStream is;
         public List<SATD> satdList;
         String commitId;
-        SATDDetector detector;
+        satd_detector.core.utils.SATDDetector detector;
         String path;
         boolean isParent;
         Comment comment;
@@ -236,7 +162,7 @@ public class CommandExecutor {
         private StreamGobbler(String commitId, Comment comment, boolean isParent, List<SATD> satdList) {
             this.satdList = satdList;
             this.commitId = commitId;
-            this.detector = new SATDDetector();
+            this.detector = new satd_detector.core.utils.SATDDetector();
             this.comment = comment;
             this.isParent = isParent;
             this.path = comment.filepath;

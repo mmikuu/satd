@@ -1,83 +1,69 @@
-import static org.junit.Assert.*;
-
-import jp.naist.sdlab.miku.main.main_satdtime;
-import jp.naist.sdlab.miku.module.CommandExecutor;
+import jp.naist.sdlab.miku.main.MainCalculatedTime;
+import jp.naist.sdlab.miku.module.DiffSATDDetector;
 import jp.naist.sdlab.miku.module.SATD;
 import jp.naist.sdlab.miku.module.commit.*;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.jruby.ext.nkf.Command;
 import org.junit.Assert;
 import org.junit.Test;
-import org.refactoringminer.api.GitService;
-import org.refactoringminer.util.GitServiceImpl;
 
-import java.io.IOException;
+import javax.xml.soap.SAAJResult;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
 import java.util.Arrays;
 import java.util.List;
-import org.eclipse.jgit.diff.DiffAlgorithm;
-import org.eclipse.jgit.diff.DiffConfig;
-import org.eclipse.jgit.diff.RawText;
-import org.eclipse.jgit.diff.RawTextComparator;
-import org.eclipse.jgit.diff.DiffFormatter;
-import org.eclipse.jgit.diff.EditList;
-import org.eclipse.jgit.diff.Edit;
-import org.eclipse.jgit.diff.HistogramDiff;
 
 public class CalcTest {
-    public   GitServiceImpl2 gitService = new GitServiceImpl2();
-    public  Repository repo;
-    public  String  testUrl = "https://github.com/mmikuu/CalcTestSatd";
-    public  CommandExecutor executor ;
-    public  int lineNo = 11;
-    public  String testCommitId ="bd2a0d30047aff33b8ce9533c5bc6c57f1d340dd";
-    public  String context = "/* TODO";
-    public  String fileName = "src/Main.java";
+
+    private DiffSATDDetector getExecutor(String testUrl, String testCommitId) throws Exception {
+        GitServiceImpl2 gitService = new GitServiceImpl2();
+        Repository testRepo = GitUtil.getRepo(gitService, testUrl);
+        Git git = new Git(testRepo);
+        RevCommit commit = GitUtil.getCommit(git, testRepo, testCommitId);
+
+
+        DiffSATDDetector executor = new DiffSATDDetector(testUrl, testRepo, gitService, "repos/CalcTestSatd/");
+        Commit childCommit = gitService.getCommit(testUrl, testRepo, commit);
+
+        executor.detectSATD(childCommit);
+        return executor;
+    }
+
 
     @Test
-    public void satdCount() throws Exception {
-        main_satdtime satd = new main_satdtime();
-        repo = getRepo(testUrl);
-        Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://127.0.0.1:3306/satd_replace_db",
-                "me",
-                "goma");
-        //init database
-        Statement statement  = connection.createStatement();
-        List<String> releaseDates = Arrays.asList("2023-10-9", "2023-10-12");
-        executor = new CommandExecutor(testUrl, repo, "repos/CalcTestSatd/",connection,statement,releaseDates);
-        TestCalcSatd();
+    public void testDetectAddedSATD() throws Exception {
+        String testUrl = "https://github.com/mmikuu/CalcTestSatd";
+        String testCommitId ="f4366773967d694d739b502fedd2055b17981947";
+
+        DiffSATDDetector executor = getExecutor(testUrl, testCommitId);
+
+        //全体
+        Assert.assertEquals(0, executor.resultsParent.size());//Delete=0
+        Assert.assertEquals(2, executor.resultsChild.size());//Added=2
+
+        //1つ目
+        SATD resultSATD1 = executor.resultsChild.get(0);
+        Assert.assertEquals("/* TODO", resultSATD1.content);
+        Assert.assertTrue(resultSATD1.isSATD());
+        Assert.assertEquals(SATD.Type.ADDED, resultSATD1.type);
+
+        //2つ目
+        SATD resultSATD2 = executor.resultsChild.get(1);
+        Assert.assertEquals("        * bug 1", resultSATD2.content);
+        Assert.assertTrue(resultSATD2.isSATD());
+        Assert.assertEquals(SATD.Type.ADDED, resultSATD2.type);
 
     }
 
-    private  Repository getRepo(String url) throws Exception {
-        String[] tmp = url.split("/");
-        String project = tmp[tmp.length - 1];
-        String cloneDir = "repos/" + project;
-        Repository repository = gitService.cloneIfNotExists(cloneDir, url);
-        return repository;
-    }
 
-    public void TestCalcSatd() throws IOException, InterruptedException {
-//        Comment comment = Calcexpect(testCommitId,context,fileName);
-//        SATD exepect = new SATD(testCommitId,fileName,comment,false);
-        executor.runCommand(testCommitId);
-        System.out.println(executor.resultsParent);
-        System.out.println(executor.resultsChild);
-        Assert.assertEquals("no match",executor.resultsChild.get(0).getContent(),context);
+
+    @Test
+    public void testDetectDeletedSATD() throws Exception {
+        String testCommitId = "68e5ea621ac9b428e0e5c2ef2c579eee1cce957a";
 
     }
 
-    private Comment Calcexpect(String testCommitId,String context,String fileName) {
-        RevCommit revCommit = executor.getCommit(testCommitId);
-        Commit childCommit = gitService.getCommit(testUrl, repo, revCommit);
-        Chunk chunk = childCommit.changedFileList.get(0).chunks.get(0);
-        LineChange lc = new LineChange(fileName, fileName, chunk);
-        Comment comment = new  Comment(lineNo, context, lc, fileName);
-        return comment;
-    }
+
 }

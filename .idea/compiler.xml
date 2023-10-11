@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="satd-analytics" />
         <module name="satd1" />
+        <module name="satd" />
       </profile>
     </annotationProcessing>
   </component>

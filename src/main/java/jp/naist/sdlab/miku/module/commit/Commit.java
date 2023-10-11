@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.*;
 
-import static jp.naist.sdlab.miku.main.main_satdtime.formatter;
+import static jp.naist.sdlab.miku.main.MainCalculatedTime.formatter;
 
 /**
  * This class is used to store/get data from Database (hibernate)

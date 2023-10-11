@@ -1,14 +1,16 @@
 package jp.naist.sdlab.miku.main;
 
-import jp.naist.sdlab.miku.module.CommandExecutor;
+import jp.naist.sdlab.miku.module.CommitDatabaseManager;
+import jp.naist.sdlab.miku.module.DiffSATDDetector;
 import jp.naist.sdlab.miku.module.SATD;
+import jp.naist.sdlab.miku.module.commit.Commit;
+import jp.naist.sdlab.miku.module.commit.GitServiceImpl2;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.refactoringminer.api.GitService;
 import org.refactoringminer.util.GitServiceImpl;
 
-import javax.swing.plaf.nimbus.State;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -22,10 +24,9 @@ import java.util.List;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-public class main_satdtime {
+public class MainCalculatedTime {
     // urlはCommandExecutorも変更する！
     static String url = "https://github.com/eclipse-jdt/eclipse.jdt.core";
 //    static String url = "https://github.com/eclipse-platform/eclipse.platform.ui.git";
@@ -37,39 +38,36 @@ public class main_satdtime {
     public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static Map<String, Integer> TotalReleaseCommit = new LinkedHashMap<>();
     public static List<String> releaseDates = Arrays.asList("2016-06-22", "2017-06-28", "2018-06-27", "2018-09-19", "2018-12-19", "2019-03-20", "2019-06-19", "2019-09-19", "2019-12-18", "2020-03-18", "2020-06-17", "2020-09-16", "2020-12-16", "2021-03-17", "2021-06-16");//, "2020-06-16", "2020-06-16", "2021-09-15", "2021-12-08", "2022-03-16"
+    public static GitServiceImpl2 gitService;
+    public static Git git;
+    public static Repository repository;
+    public static CommitDatabaseManager  dbManager;
+
 
     public static void main(String[] args) throws Exception {
 
         Map<String, List<SATD>> satdPerRelease = new LinkedHashMap<>();
-        Repository repository = getRepo(url);//url変えればテストも本番でも実行できる
-        Git git = new Git(repository);
+        repository = getRepo(url);//url変えればテストも本番でも実行できる
+        git = new Git(repository);
         Iterable<RevCommit> log = git.log().call();
 
+        dbManager = new CommitDatabaseManager();
         //database mysql connect
-        Connection connection = DriverManager.getConnection(
-                "jdbc:mysql://127.0.0.1:3306/satd_replace_db",
-                "me",
-                "goma");
-        //init database
-        Statement statement  = connection.createStatement();
-        connection.setAutoCommit(false);
-        //testでは，消さんでいいかもこのTable
-        statement.executeUpdate("DROP TABLE IF EXISTS parent_satd_list");
-        statement.executeUpdate("DROP TABLE IF EXISTS child_satd_list");
-        statement.executeUpdate("DROP TABLE IF EXISTS chunk_parent_list");
-        statement.executeUpdate("DROP TABLE IF EXISTS chunk_child_list");
-        statement.executeUpdate("DROP TABLE IF EXISTS commit_list");
-        creatTable(connection,statement,true);
-        creatTable(connection,statement,false);
 
-        //commandExecutor constructor
-        CommandExecutor executor = new CommandExecutor(url, repository, "repos/eclipse.jdt.core/",connection,statement,releaseDates);
-        CalcSatd(log,satdPerRelease,executor,connection,statement);
+        dbManager.creatTable(true);
+        dbManager.creatTable(false);
+
+
+        gitService = new GitServiceImpl2();
+
+
+        DiffSATDDetector executor = new DiffSATDDetector(url, repository, gitService, "repos/eclipse.jdt.core/");
+        CalcSatd(log,satdPerRelease,executor);
 //        writeResult(satdPerRelease);
 //        printCounts(satdPerRelease);
     }
 
-    private static void CalcSatd(Iterable<RevCommit> log, Map<String, List<SATD>> satdPerRelease, CommandExecutor executor, Connection connection, Statement statement) throws IOException, InterruptedException, SQLException {
+    private static void CalcSatd(Iterable<RevCommit> log, Map<String, List<SATD>> satdPerRelease, DiffSATDDetector executor) throws IOException, InterruptedException, SQLException {
         for (RevCommit commit : log) {
 //            LocalDateTime commitDate = LocalDateTime.ofInstant(commit.getAuthorIdent().getWhen().toInstant(), ZoneId.systemDefault());
             LocalDateTime commitDate = LocalDateTime.ofInstant(commit.getCommitterIdent().getWhen().toInstant(),
@@ -86,8 +84,13 @@ public class main_satdtime {
                     AddedCommit += 1;
                     TotalReleaseCommit.put(releaseDates.get(i), AddedCommit);
                     List<SATD> eachSATDs = satdPerRelease.getOrDefault(releaseDates.get(i), new ArrayList<>());
-                    executor.runCommand(commit.getId().getName());
-                    matchHash(executor.resultsParent, executor.resultsChild,connection,statement);
+                    //commandExecutor constructor
+
+
+                    Commit childCommit = gitService.getCommit(url, repository, commit);
+                    dbManager.addCommitData(childCommit);
+                    executor.detectSATD(childCommit);
+                    matchHash(executor.resultsParent, executor.resultsChild);
                     eachSATDs.addAll(executor.resultsParent);
                     eachSATDs.addAll(executor.resultsChild);
                     satdPerRelease.put(releaseDates.get(i), eachSATDs);
@@ -107,67 +110,15 @@ public class main_satdtime {
 
 
     //create database
-    private static void creatTable(Connection conn,Statement stmt,Boolean isParent) throws SQLException {
-        String satdTableName =  "CREATE TABLE child_satd_list("
-                + "id INT(100) NOT NULL AUTO_INCREMENT,"
-                + "commitId VARCHAR(64) NOT NULL COLLATE utf8mb4_unicode_ci,"
-                + "fileName VARCHAR(300) NOT NULL COLLATE utf8mb4_unicode_ci,"
-                + "lineNo INT(64) NOT NULL,"
-                + "content VARCHAR(1000) NOT NULL COLLATE utf8mb4_unicode_ci,"
-                + "hashcode INT(64) NOT NULL ,"
-                + "type VARCHAR(10) NOT NULL COLLATE utf8mb4_unicode_ci,"
-                + "PRIMARY KEY(id))";
-
-        String chunkTableName = "CREATE TABLE chunk_child_list("
-                + "id INT(100) NOT NULL AUTO_INCREMENT,"
-                + "commitId VARCHAR(64) NOT NULL COLLATE utf8mb4_unicode_ci,"
-                + "fileName VARCHAR(300) NOT NULL COLLATE utf8mb4_unicode_ci,"
-                + "hashcode INT(64) NOT NULL ,"
-                + "type VARCHAR(10) NOT NULL COLLATE utf8mb4_unicode_ci,"
-                + "PRIMARY KEY(id))";
-
-        if(isParent) {
-            satdTableName = "CREATE TABLE parent_satd_list("
-                    + "id INT(100) NOT NULL AUTO_INCREMENT,"
-                    + "commitId VARCHAR(64) NOT NULL COLLATE utf8mb4_unicode_ci,"
-                    + "fileName VARCHAR(300) NOT NULL COLLATE utf8mb4_unicode_ci,"
-                    + "lineNo INT(64) NOT NULL,"
-                    + "content VARCHAR(1000) NOT NULL COLLATE utf8mb4_unicode_ci,"
-                    + "hashcode INT(64) NOT NULL,"
-                    + "type VARCHAR(10) NOT NULL COLLATE utf8mb4_unicode_ci,"
-                    + "PRIMARY KEY(id))";
-
-            chunkTableName = "CREATE TABLE chunk_parent_list("
-                    + "id INT(100) NOT NULL AUTO_INCREMENT,"
-                    + "commitId VARCHAR(64) NOT NULL COLLATE utf8mb4_unicode_ci,"
-                    + "fileName VARCHAR(300) NOT NULL COLLATE utf8mb4_unicode_ci,"
-                    + "hashcode INT(64) NOT NULL ,"
-                    + "type VARCHAR(10) NOT NULL COLLATE utf8mb4_unicode_ci,"
-                    + "PRIMARY KEY(id))";
-            //1回だけのテーブル作成の処理やから，isParentのif文の中に書いてる
-            String commitTableName = "CREATE TABLE commit_list("
-                    + "id INT(100) NOT NULL AUTO_INCREMENT,"
-                    + "commitId VARCHAR(64) NOT NULL COLLATE utf8mb4_unicode_ci,"
-                    + "commitDate timestamp NOT NULL ,"
-                    + "releasePart VARCHAR(10) NOT NULL COLLATE utf8mb4_unicode_ci,"
-                    + "fileName VARCHAR(100) NOT NULL COLLATE utf8mb4_unicode_ci,"
-                    + "commitComment VARCHAR(1000) NOT NULL COLLATE utf8mb4_unicode_ci ,"
-                    + "PRIMARY KEY(id))";
-            stmt.executeUpdate(commitTableName);
-        }
-        stmt.executeUpdate(satdTableName);
-        stmt.executeUpdate(chunkTableName);
-
-    }
 
 
-    private static void matchHash(List<SATD> resultsParent, List<SATD> resultsChild, Connection conn, Statement stmt ) throws IOException, SQLException {
+    private static void matchHash(List<SATD> resultsParent, List<SATD> resultsChild) throws IOException, SQLException {
         for(SATD satdP: resultsParent) {
-            dataUpdate(conn, stmt, satdP, true);
+            dbManager.dataUpdate(satdP, true);
             System.out.println(satdP.toString());
         }
         for(SATD satdC : resultsChild) {
-            dataUpdate(conn, stmt, satdC, false);
+            dbManager.dataUpdate(satdC, false);
             System.out.println(satdC.toString());
         }
 //        for(SATD satdP: resultsParent){
@@ -188,25 +139,7 @@ public class main_satdtime {
     }
 
 
-    private static void dataUpdate(Connection conn,Statement stmt,SATD satd,Boolean isParent) {
-        String satd_sql = "insert into child_satd_list(commitId,fileName,lineNo,content,hashcode,type) VALUES(?,?,?,?,?,?)";
-        if(isParent) {
-            satd_sql = "insert into parent_satd_list(commitId,fileName,lineNo,content,hashcode,type) VALUES(?,?,?,?,?,?)";
-        }
-        // Set satd data
-        try(PreparedStatement ps = conn.prepareStatement(satd_sql)){
-            ps.setString(1,satd.commitId);
-            ps.setString(2,satd.fileName);
-            ps.setInt(3,satd.line);
-            ps.setString(4,satd.content);
-            ps.setInt(5,satd.pathHash);
-            ps.setString(6,satd.getType());
-            ps.executeUpdate();
-            conn.commit();
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
+
 
 
     private static void printCounts(Map<String, List<SATD>> satdPerRelease) throws IOException {
