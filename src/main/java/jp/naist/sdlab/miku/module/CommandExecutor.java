@@ -94,7 +94,6 @@ public class CommandExecutor {
 
     private void detectSATD(Commit commit, boolean isParent, List<SATD> results) throws IOException, InterruptedException {
         Map<String, Map<Integer, LineChange>> changedLinesInFilesInChildRevision = markLines(commit, isParent);
-        System.out.println("a");
         for (Map.Entry<String, Map<Integer, LineChange>> i : changedLinesInFilesInChildRevision.entrySet()) {
             Map<String, Map<Integer, Comment>> commentsPerFile = detectComment(i.getKey(), i.getValue());
             if (commentsPerFile != null) {
