@@ -120,7 +120,7 @@ public class CommandExecutor {
         }
     }
 
-    private RevCommit getCommit(String commitId) {
+    public  RevCommit getCommit(String commitId) {
         RevCommit commit;
         //子のcommitをcheckout
         try {
@@ -146,11 +146,11 @@ public class CommandExecutor {
                 if (isParent) {
                     startNo = chunk.getOldStartNo()+1;
                     endNo = chunk.getOldEndNo();
-                    insertDate(commit,lc,true);
+//                    insertDate(commit,lc,true);
                 } else {
                     startNo = chunk.getNewStartNo()+1;
                     endNo = chunk.getNewEndNo();
-                    insertDate(commit,lc,false);
+//                    insertDate(commit,lc,false);
                 }
                 for (int i = startNo; i <= endNo; i++) {
                     changedLines.put(i, lc);

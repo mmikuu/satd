@@ -55,6 +55,9 @@ public class SATD {
             return null;
         }
     }
+    public String getContent(){
+        return this.content;
+    }
 
     private void setType(Edit.Type type) {
         SATD.Type commentType;

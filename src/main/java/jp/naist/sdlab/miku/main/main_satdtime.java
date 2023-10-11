@@ -7,6 +7,8 @@ import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.refactoringminer.api.GitService;
 import org.refactoringminer.util.GitServiceImpl;
+
+import javax.swing.plaf.nimbus.State;
 import java.io.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -28,6 +30,8 @@ public class main_satdtime {
     static String url = "https://github.com/eclipse-jdt/eclipse.jdt.core";
 //    static String url = "https://github.com/eclipse-platform/eclipse.platform.ui.git";
 //    static String url = "https://github.com/eclipse-platform/eclipse.platform.swt.git";
+    static String testUrl = "https://github.com/mmikuu/CalcTestSatd.git";
+
 
 
     public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -35,16 +39,11 @@ public class main_satdtime {
     public static List<String> releaseDates = Arrays.asList("2016-06-22", "2017-06-28", "2018-06-27", "2018-09-19", "2018-12-19", "2019-03-20", "2019-06-19", "2019-09-19", "2019-12-18", "2020-03-18", "2020-06-17", "2020-09-16", "2020-12-16", "2021-03-17", "2021-06-16");//, "2020-06-16", "2020-06-16", "2021-09-15", "2021-12-08", "2022-03-16"
 
     public static void main(String[] args) throws Exception {
-        GitService gitService = new GitServiceImpl();
-        String[] tmp = url.split("/");
-        String project = tmp[tmp.length - 1];
-        String cloneDir = "repos/" + project;
+
         Map<String, List<SATD>> satdPerRelease = new LinkedHashMap<>();
-        int AddedCommit = 0;
-        Repository repository = gitService.cloneIfNotExists(cloneDir, url);
+        Repository repository = getRepo(url);//url変えればテストも本番でも実行できる
         Git git = new Git(repository);
         Iterable<RevCommit> log = git.log().call();
-        List<SATD>allSatd = new ArrayList<>();
 
         //database mysql connect
         Connection connection = DriverManager.getConnection(
@@ -54,6 +53,7 @@ public class main_satdtime {
         //init database
         Statement statement  = connection.createStatement();
         connection.setAutoCommit(false);
+        //testでは，消さんでいいかもこのTable
         statement.executeUpdate("DROP TABLE IF EXISTS parent_satd_list");
         statement.executeUpdate("DROP TABLE IF EXISTS child_satd_list");
         statement.executeUpdate("DROP TABLE IF EXISTS chunk_parent_list");
@@ -64,7 +64,19 @@ public class main_satdtime {
 
         //commandExecutor constructor
         CommandExecutor executor = new CommandExecutor(url, repository, "repos/eclipse.jdt.core/",connection,statement,releaseDates);
+        CalcSatd(log,satdPerRelease,executor,connection,statement);
+        TestCalcSatd(log,executor);
+//        writeResult(satdPerRelease);
+//        printCounts(satdPerRelease);
+    }
 
+    private static void TestCalcSatd(Iterable<RevCommit> log,CommandExecutor executor) throws IOException, InterruptedException {
+        for (RevCommit commit : log) {
+            executor.runCommand(commit.getId().getName());
+        }
+    }
+
+    private static void CalcSatd(Iterable<RevCommit> log, Map<String, List<SATD>> satdPerRelease, CommandExecutor executor, Connection connection, Statement statement) throws IOException, InterruptedException, SQLException {
         for (RevCommit commit : log) {
 //            LocalDateTime commitDate = LocalDateTime.ofInstant(commit.getAuthorIdent().getWhen().toInstant(), ZoneId.systemDefault());
             LocalDateTime commitDate = LocalDateTime.ofInstant(commit.getCommitterIdent().getWhen().toInstant(),
@@ -77,7 +89,7 @@ public class main_satdtime {
                 if (commitDate.isBefore(releaseStartDate)) {
                     break;
                 } else if (commitDate.isBefore(releaseEndDate)) {
-                    AddedCommit = TotalReleaseCommit.getOrDefault(releaseDates.get(i), 0);
+                    int AddedCommit = TotalReleaseCommit.getOrDefault(releaseDates.get(i), 0);
                     AddedCommit += 1;
                     TotalReleaseCommit.put(releaseDates.get(i), AddedCommit);
                     List<SATD> eachSATDs = satdPerRelease.getOrDefault(releaseDates.get(i), new ArrayList<>());
@@ -89,9 +101,15 @@ public class main_satdtime {
                 }
             }
         }
+    }
 
-        writeResult(satdPerRelease);
-//        printCounts(satdPerRelease);
+    private static Repository getRepo(String url) throws Exception {
+        GitService gitService = new GitServiceImpl();
+        String[] tmp = url.split("/");
+        String project = tmp[tmp.length - 1];
+        String cloneDir = "repos/" + project;
+        Repository repository = gitService.cloneIfNotExists(cloneDir, url);
+        return repository;
     }
 
 
