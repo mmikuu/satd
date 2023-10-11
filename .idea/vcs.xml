@@ -3,6 +3,7 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/CommentLister" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/repos/CalcTestSatd" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/repos/eclipse.jdt.core" vcs="Git" />
   </component>
 </project>

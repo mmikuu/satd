@@ -64,6 +64,10 @@ public class CommandExecutor {
             //親のcommitをcheckout
             this.checkout(parents[0].getName());
             detectSATD(childCommit, true, this.resultsParent);
+        } else if (parents.length == 0) {
+            Commit childCommit = gitService.getCommit(this.url, repository, revCommit);
+            addCommitData(childCommit);
+            detectSATD(childCommit, false, this.resultsChild);
         }
     }
 
@@ -90,6 +94,7 @@ public class CommandExecutor {
 
     private void detectSATD(Commit commit, boolean isParent, List<SATD> results) throws IOException, InterruptedException {
         Map<String, Map<Integer, LineChange>> changedLinesInFilesInChildRevision = markLines(commit, isParent);
+        System.out.println("a");
         for (Map.Entry<String, Map<Integer, LineChange>> i : changedLinesInFilesInChildRevision.entrySet()) {
             Map<String, Map<Integer, Comment>> commentsPerFile = detectComment(i.getKey(), i.getValue());
             if (commentsPerFile != null) {

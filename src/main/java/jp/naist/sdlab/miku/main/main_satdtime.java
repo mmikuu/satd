@@ -65,15 +65,8 @@ public class main_satdtime {
         //commandExecutor constructor
         CommandExecutor executor = new CommandExecutor(url, repository, "repos/eclipse.jdt.core/",connection,statement,releaseDates);
         CalcSatd(log,satdPerRelease,executor,connection,statement);
-        TestCalcSatd(log,executor);
 //        writeResult(satdPerRelease);
 //        printCounts(satdPerRelease);
-    }
-
-    private static void TestCalcSatd(Iterable<RevCommit> log,CommandExecutor executor) throws IOException, InterruptedException {
-        for (RevCommit commit : log) {
-            executor.runCommand(commit.getId().getName());
-        }
     }
 
     private static void CalcSatd(Iterable<RevCommit> log, Map<String, List<SATD>> satdPerRelease, CommandExecutor executor, Connection connection, Statement statement) throws IOException, InterruptedException, SQLException {
