@@ -45,6 +45,8 @@ public class DiffSATDDetector {
             //親のcommitをcheckout
             this.checkout(childCommit.parentCommitIds.get(0));
             detectSATD(childCommit, true, this.resultsParent);
+        } else if (childCommit.parentCommitIds.size() == 0) {
+            detectSATD(childCommit, false, this.resultsChild);
         }
     }
 

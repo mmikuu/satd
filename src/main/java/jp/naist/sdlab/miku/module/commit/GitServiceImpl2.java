@@ -11,6 +11,7 @@ import org.eclipse.jgit.patch.FileHeader;
 import org.eclipse.jgit.patch.HunkHeader;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.revwalk.RevWalk;
+import org.eclipse.jgit.treewalk.EmptyTreeIterator;
 import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.util.io.DisabledOutputStream;
 import org.refactoringminer.util.GitServiceImpl;
@@ -29,7 +30,7 @@ public class GitServiceImpl2 extends GitServiceImpl {
      */
     public Commit getCommit(String project, Repository repository, RevCommit currentCommit) {
         if (currentCommit.getParentCount() <= 0) {
-            return new Commit(project, currentCommit);
+            return getCommit(project, repository, currentCommit, null);
         }
         RevCommit parent = currentCommit.getParent(0);
         return getCommit(project, repository, currentCommit, parent);
@@ -44,11 +45,21 @@ public class GitServiceImpl2 extends GitServiceImpl {
      */
     private Commit getCommit(String project, Repository repository, RevCommit currentCommit, RevCommit parent){
         ObjectId newTree = currentCommit.getTree();
-        ObjectId oldTree = parent.getTree();
+        ObjectId oldTree;
+
+        if (parent==null){
+            oldTree = null;
+        }else{
+            oldTree = parent.getTree();
+        }
         TreeWalk tw = new TreeWalk(repository);
         tw.setRecursive(true);
         try {
-            tw.addTree(oldTree);
+            if(oldTree==null){
+                tw.addTree(new EmptyTreeIterator());
+            }else{
+                tw.addTree(oldTree);
+            }
             tw.addTree(newTree);
             List<DiffEntry> diffs = DiffEntry.scan(tw);
             Commit commit = new Commit(project, currentCommit);
@@ -60,6 +71,7 @@ public class GitServiceImpl2 extends GitServiceImpl {
             throw new AssertionError();
         }
     }
+
 
     /**
      * get changed files in the commit
