@@ -69,8 +69,9 @@ public class SATDDatabaseManager {
                 + "child_satd_list.type AS ctype, "
                 + "commit_list.releasePart AS releasePart "
                 + "FROM child_satd_list "
-                + "JOIN parent_satd_list ON child_satd_list.hashcode != parent_satd_list.hashcode AND child_satd_list.type = 'REPLACE' AND parent_satd_list.type = 'REPLACE' "
                 + "JOIN commit_list  ON child_satd_list.commitId = commit_list.commitId "
+                + "LEFT JOIN parent_satd_list ON child_satd_list.hashcode = parent_satd_list.hashcode AND child_satd_list.type = 'REPLACE' AND parent_satd_list.type = 'REPLACE' "
+                + "WHERE  parent_satd_list.hashcode = 'null' "
                 + "GROUP BY commit_list.releasePart ";
 
         if(isParent){
@@ -110,7 +111,8 @@ public class SATDDatabaseManager {
                     + "commit_list.releasePart AS releasePart "
                     + "FROM parent_satd_list "
                     + "JOIN commit_list ON parent_satd_list.commitId = commit_list.commitId "
-                    + "LEFTOUTER JOIN child_satd_list ON child_satd_list.hashcode != parent_satd_list.hashcode AND parent_satd_list.type = 'REPLACE' AND child_satd_list.type = 'REPLACE' "
+                    + "LEFT JOIN child_satd_list ON child_satd_list.hashcode = parent_satd_list.hashcode AND parent_satd_list.type = 'REPLACE' AND child_satd_list.type = 'REPLACE' "
+                    + "WHERE child_satd_list.hashcode = 'null' "
                     + "GROUP BY commit_list.releasePart ";
 
         }
