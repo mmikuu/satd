@@ -1,5 +1,6 @@
-package jp.naist.sdlab.miku.module;
+package jp.naist.sdlab.miku.module.db;
 
+import jp.naist.sdlab.miku.module.SATD;
 import jp.naist.sdlab.miku.module.commit.ChangedFile;
 import jp.naist.sdlab.miku.module.commit.Chunk;
 import jp.naist.sdlab.miku.module.commit.Commit;
@@ -7,14 +8,10 @@ import jp.naist.sdlab.miku.module.commit.LineChange;
 
 import java.sql.*;
 
-public class CommitDatabaseManager {
-    public Connection connection;
+public class CommitDatabaseManager extends DatabaseManager{
     public Statement statement;
     public CommitDatabaseManager() throws SQLException {
-        connection = DriverManager.getConnection(
-                "jdbc:mysql://127.0.0.1:3306/satd_replace_db",
-                "me",
-                "goma");
+        super();
         //init database
         statement  = connection.createStatement();
         connection.setAutoCommit(false);
@@ -138,7 +135,7 @@ public class CommitDatabaseManager {
                 + "PRIMARY KEY(id))";
     }
 
-    public void dataUpdate(SATD satd,Boolean isParent) {
+    public void dataUpdate(SATD satd, Boolean isParent) {
         String satd_sql = "insert into child_satd_list(commitId,fileName,lineNo,content,hashcode,type) VALUES(?,?,?,?,?,?)";
         if(isParent) {
             satd_sql = "insert into parent_satd_list(commitId,fileName,lineNo,content,hashcode,type) VALUES(?,?,?,?,?,?)";

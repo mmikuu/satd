@@ -1,6 +1,6 @@
 package jp.naist.sdlab.miku.main;
 
-import jp.naist.sdlab.miku.module.CommitDatabaseManager;
+import jp.naist.sdlab.miku.module.db.CommitDatabaseManager;
 import jp.naist.sdlab.miku.module.DiffSATDDetector;
 import jp.naist.sdlab.miku.module.SATD;
 import jp.naist.sdlab.miku.module.commit.Commit;

@@ -1,29 +1,25 @@
-package jp.naist.sdlab.miku.module;
+package jp.naist.sdlab.miku.module.db;
 
 
 //SQP Import
 
 import jp.naist.sdlab.miku.module.commit.Replace;
+import weka.knowledgeflow.Data;
 
 import java.sql.*;
 
 
-public class SATDDatabaseManager {
+public class SATDDatabaseManager extends DatabaseManager {
     public static Connection connection;
     public static Statement statement;
     public static Statement statementD;
     public static Statement statementR;
     public static Statement statementSR;
-    public static final String ip = "jdbc:mysql://127.0.0.1";
-    public static final String port = "3306";
-    public static final String db = "satd_replace_db";
+
 
 
     public SATDDatabaseManager() throws SQLException {
-        connection = DriverManager.getConnection(
-                ip+":"+port+"/"+db,
-                "me",
-                "goma");
+        super();
         //init database
         statement = connection.createStatement();
         statementD = connection.createStatement();

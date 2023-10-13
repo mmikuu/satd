@@ -6,7 +6,7 @@ package jp.naist.sdlab.miku.main;
 import jp.naist.sdlab.miku.module.ReplaceChecker;
 import jp.naist.sdlab.miku.module.ReplaceCounter;
 import jp.naist.sdlab.miku.module.commit.Replace;
-import jp.naist.sdlab.miku.module.SATDDatabaseManager;
+import jp.naist.sdlab.miku.module.db.SATDDatabaseManager;
 
 import java.sql.*;
 import java.util.Map;

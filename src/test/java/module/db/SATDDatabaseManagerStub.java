@@ -1,6 +1,6 @@
-package module;
+package module.db;
 
-import jp.naist.sdlab.miku.module.SATDDatabaseManager;
+import jp.naist.sdlab.miku.module.db.SATDDatabaseManager;
 
 import java.sql.SQLException;
 

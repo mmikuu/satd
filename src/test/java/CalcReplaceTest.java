@@ -27,4 +27,15 @@ public class CalcReplaceTest {
 
 
     }
+    @Test
+    public void testReplacePatternB() throws Exception {
+        //TODO: 1コミット分データを入れる
+
+
+
+        //TODO: PYTHONをJavaから動かす（テストテーブルで動くようにする）
+        //TODO: 集計
+        //TODO: 答え合わせ（Assert）
+    }
+
 }
