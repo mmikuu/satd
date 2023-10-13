@@ -3,7 +3,8 @@ package jp.naist.sdlab.miku.main;
 
 //SQP Import
 
-import jp.naist.sdlab.miku.module.JudgeIsReplace;
+import jp.naist.sdlab.miku.module.ReplaceChecker;
+import jp.naist.sdlab.miku.module.ReplaceCounter;
 import jp.naist.sdlab.miku.module.commit.Replace;
 import jp.naist.sdlab.miku.module.SATDDatabaseManager;
 
@@ -13,60 +14,53 @@ import java.util.Map;
 
 public class MainCountSATD {
     public static SATDDatabaseManager dbManager;
-    public static JudgeIsReplace judgeManager;
+    public static ReplaceCounter replaceCounter;
 
     public static void main(String[] args) throws Exception {
         dbManager = new SATDDatabaseManager();
-        judgeManager = new JudgeIsReplace();
+        replaceCounter = new ReplaceCounter();
 
-        ResultSet rsH = dbManager.getHashDate();//simiralityのデータを取得
-        ManageJudgeReplace(rsH);//similarityをもとにreplaceか判定
-
-        Replace replace = dbManager.count_AD_satd(true);//DBをもとに各TYPE(Add,Delete,Replace)をReleacePartごとに取得
-        ManageTypeCount(replace,true);//取得したReplacepartごとに分けた各TYPEを集計
-
-        replace = dbManager.count_AD_satd(false);//DBをもとに各TYPE(Add,Delete,Replace)をReleacePartごとに取得
-        ManageTypeCount(replace,false);//取得したReplacepartごとに分けた各TYPEを集計
-
-
-        Map<String, String> Acount = judgeManager.getAcount();//Acountを取得
-        Map<String, String> Dcount = judgeManager.getDcount();//Dcountを取得
-
-        System.out.println("Acount" + Acount);
-        System.out.println("Dcount" + Dcount);
-
-        Integer Atr = Integer.valueOf(Acount.get("TR1")) + Integer.valueOf(Acount.get("TR2"));
-        Integer Arr = Integer.valueOf(Acount.get("RR1")) + Integer.valueOf(Acount.get("RR2")) + Integer.valueOf(Acount.get("RR3")) + Integer.valueOf(Acount.get("RR4")) + Integer.valueOf(Acount.get("RR5")) + Integer.valueOf(Acount.get("RR6")) + Integer.valueOf(Acount.get("RR7")) + Integer.valueOf(Acount.get("RR8"));
-        Integer Dtr = Integer.valueOf(Dcount.get("TR1")) + Integer.valueOf(Dcount.get("TR2"));
-        Integer Drr = Integer.valueOf(Dcount.get("RR1")) + Integer.valueOf(Dcount.get("RR2")) + Integer.valueOf(Dcount.get("RR3")) + Integer.valueOf(Dcount.get("RR4")) + Integer.valueOf(Dcount.get("RR5")) + Integer.valueOf(Dcount.get("RR6")) + Integer.valueOf(Dcount.get("RR7")) + Integer.valueOf(Dcount.get("RR8"));
-
-        System.out.println("Atr:" + Atr + " Arr:" + Arr);
-        System.out.println("Dtr:" + Dtr + " Drr:" + Drr);
-    }
-
-    private static void ManageJudgeReplace(ResultSet rsH) throws SQLException {
-        while(rsH.next()){
-
+        ResultSet rsH = dbManager.getHashDate();//similarityのデータを取得
+        while(rsH.next()) {
             int id = rsH.getInt("id");
-            double calcBert = rsH.getDouble("calc_bert");
-            double calcLeven = rsH.getDouble("calc_leven");
-            double distanceLeven = rsH.getDouble("calc_leven_long");
-
-            boolean isReplace = judgeManager.JudgeReplace(id,calcBert,calcLeven,distanceLeven);
-
-            if(isReplace){
-                dbManager.addDate(id,true);
-            }else{
-                dbManager.addDate(id,false);
-            }
+            boolean isReplace = checkReplace(rsH);//similarityをもとにreplaceか判定
+            dbManager.addDate(id, isReplace);
         }
+
+        Replace replace = dbManager.countAddSatd(true);//DBをもとに各TYPE(Add,Delete,Replace)をReleacePartごとに取得
+        countSATD(replace,true);//取得したReplacepartごとに分けた各TYPEを集計
+
+        replace = dbManager.countAddSatd(false);//DBをもとに各TYPE(Add,Delete,Replace)をReleacePartごとに取得
+        countSATD(replace,false);//取得したReplacepartごとに分けた各TYPEを集計
+
+
+        Map<String, String> countAdd = replaceCounter.getAddCount();//Acountを取得
+        Map<String, String> countDelete = replaceCounter.getDeleteCount();//Dcountを取得
+
+        System.out.println("Acount" + countAdd);
+        System.out.println("Dcount" + countDelete);
+
+        int addInTR = Integer.parseInt(countAdd.get("TR1")) + Integer.parseInt(countAdd.get("TR2"));
+        int addInRR = Integer.parseInt(countAdd.get("RR1")) + Integer.parseInt(countAdd.get("RR2")) + Integer.parseInt(countAdd.get("RR3")) + Integer.parseInt(countAdd.get("RR4")) + Integer.parseInt(countAdd.get("RR5")) + Integer.parseInt(countAdd.get("RR6")) + Integer.parseInt(countAdd.get("RR7")) + Integer.parseInt(countAdd.get("RR8"));
+        int deleteInTR = Integer.parseInt(countDelete.get("TR1")) + Integer.parseInt(countDelete.get("TR2"));
+        int deleteInRR = Integer.parseInt(countDelete.get("RR1")) + Integer.parseInt(countDelete.get("RR2")) + Integer.parseInt(countDelete.get("RR3")) + Integer.parseInt(countDelete.get("RR4")) + Integer.parseInt(countDelete.get("RR5")) + Integer.parseInt(countDelete.get("RR6")) + Integer.parseInt(countDelete.get("RR7")) + Integer.parseInt(countDelete.get("RR8"));
+
+        System.out.println("Atr:" + addInTR + " Arr:" + addInRR);
+        System.out.println("Dtr:" + deleteInTR + " Drr:" + deleteInRR);
     }
 
-    private static void ManageTypeCount(Replace replace,boolean isParent) throws SQLException {
+    private static boolean checkReplace(ResultSet rsH) throws SQLException {
+        double calcBert = rsH.getDouble("calc_bert");
+        double calcLeven = rsH.getDouble("calc_leven");
+        double distanceLeven = rsH.getDouble("calc_leven_long");
+        return ReplaceChecker.check(calcBert,calcLeven,distanceLeven);
+    }
 
-        judgeManager.countResultA(replace.rsA);
-        judgeManager.countResultD(replace.rsD);
-        judgeManager.countResultR(replace.rsR,isParent);
-        judgeManager.countResultSR(replace.rsSR,isParent);
+    private static void countSATD(Replace replace, boolean isParent) throws SQLException {
+
+        replaceCounter.countResultADD(replace.rsA);
+        replaceCounter.countResultDELETE(replace.rsD);
+        replaceCounter.countResultReplace(replace.rsR,isParent);
+        replaceCounter.countResultSingleReplace(replace.rsSR,isParent);
     }
 }

@@ -1,10 +1,5 @@
 import jp.naist.sdlab.miku.module.DiffSATDDetector;
 import jp.naist.sdlab.miku.module.SATD;
-import jp.naist.sdlab.miku.module.commit.*;
-import org.eclipse.core.commands.common.CommandException;
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.revwalk.RevCommit;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -12,7 +7,7 @@ import static util.SatdUtil.getExecutor;
 
 public class SatdDetectTest {
     @Test
-    public void testDetectFisrtSATD() throws Exception {
+    public void testDetectFirstSATD() throws Exception {
         //First
         String testUrl = "https://github.com/mmikuu/CalcTestSatd";
         String testCommitId ="bd2a0d30047aff33b8ce9533c5bc6c57f1d340dd";
