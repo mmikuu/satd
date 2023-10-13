@@ -26,10 +26,12 @@ public class CommitDatabaseManager {
         statement.executeUpdate("DROP TABLE IF EXISTS commit_list");
     }
     public void addCommitData(Commit childCommit) {
+        System.out.println("aaa");
         if(childCommit.parentCommitIds.size()>1){
             return;//対象外
         }
         if (childCommit.getRelease() != null) {
+            System.out.println("bbb");
             String commit_sql = "insert into commit_list (commitId,commitDate,releasePart,fileName,commitComment) VALUES(?,?,?,?,?)";
             try (PreparedStatement ps = connection.prepareStatement(commit_sql)) {
                 ps.setString(1, childCommit.commitId);

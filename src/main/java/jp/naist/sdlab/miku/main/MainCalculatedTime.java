@@ -21,11 +21,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 //SQP Import
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
+
 public class MainCalculatedTime {
     // urlはCommandExecutorも変更する！
     static String url = "https://github.com/eclipse-jdt/eclipse.jdt.core";
@@ -37,7 +34,7 @@ public class MainCalculatedTime {
 
     public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static Map<String, Integer> TotalReleaseCommit = new LinkedHashMap<>();
-    public static List<String> releaseDates = Arrays.asList("2016-06-22", "2017-06-28", "2018-06-27", "2018-09-19", "2018-12-19", "2019-03-20", "2019-06-19", "2019-09-19", "2019-12-18", "2020-03-18", "2020-06-17", "2020-09-16", "2020-12-16", "2021-03-17", "2021-06-16");//, "2020-06-16", "2020-06-16", "2021-09-15", "2021-12-08", "2022-03-16"
+    public static List<String> releaseDates = Arrays.asList("2016-06-22", "2017-06-28", "2018-06-27", "2018-09-19", "2018-12-19", "2019-03-20", "2019-06-19", "2019-09-19", "2019-12-18", "2020-03-18", "2020-06-16");//, "2020-06-16", "2020-06-16", "2021-09-15", "2021-12-08", "2022-03-16"
     public static GitServiceImpl2 gitService;
     public static Git git;
     public static Repository repository;
@@ -80,13 +77,12 @@ public class MainCalculatedTime {
                 if (commitDate.isBefore(releaseStartDate)) {
                     break;
                 } else if (commitDate.isBefore(releaseEndDate)) {
+                    System.out.println("is ture");
                     int AddedCommit = TotalReleaseCommit.getOrDefault(releaseDates.get(i), 0);
                     AddedCommit += 1;
                     TotalReleaseCommit.put(releaseDates.get(i), AddedCommit);
                     List<SATD> eachSATDs = satdPerRelease.getOrDefault(releaseDates.get(i), new ArrayList<>());
                     //commandExecutor constructor
-
-
                     Commit childCommit = gitService.getCommit(url, repository, commit);
                     dbManager.addCommitData(childCommit);
                     executor.detectSATD(childCommit);
