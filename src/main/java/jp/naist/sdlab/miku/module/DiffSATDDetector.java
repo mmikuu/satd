@@ -31,8 +31,6 @@ public class DiffSATDDetector {
         this.repoPath = repoPath;
         this.resultsParent = new ArrayList<>();
         this.resultsChild = new ArrayList<>();
-
-
     }
 
     public void detectSATD(Commit childCommit) throws IOException, InterruptedException {
