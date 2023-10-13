@@ -87,42 +87,7 @@ public class CommitDatabaseManager {
     }
 
     public void creatTable(Boolean isParent) throws SQLException {
-        String satdTableName =  "CREATE TABLE child_satd_list("
-                + "id INT(100) NOT NULL AUTO_INCREMENT,"
-                + "commitId VARCHAR(64) NOT NULL COLLATE utf8mb4_unicode_ci,"
-                + "fileName VARCHAR(300) NOT NULL COLLATE utf8mb4_unicode_ci,"
-                + "lineNo INT(64) NOT NULL,"
-                + "content VARCHAR(1000) NOT NULL COLLATE utf8mb4_unicode_ci,"
-                + "hashcode INT(64) NOT NULL ,"
-                + "type VARCHAR(10) NOT NULL COLLATE utf8mb4_unicode_ci,"
-                + "PRIMARY KEY(id))";
-
-        String chunkTableName = "CREATE TABLE chunk_child_list("
-                + "id INT(100) NOT NULL AUTO_INCREMENT,"
-                + "commitId VARCHAR(64) NOT NULL COLLATE utf8mb4_unicode_ci,"
-                + "fileName VARCHAR(300) NOT NULL COLLATE utf8mb4_unicode_ci,"
-                + "hashcode INT(64) NOT NULL ,"
-                + "type VARCHAR(10) NOT NULL COLLATE utf8mb4_unicode_ci,"
-                + "PRIMARY KEY(id))";
-
         if(isParent) {
-            satdTableName = "CREATE TABLE parent_satd_list("
-                    + "id INT(100) NOT NULL AUTO_INCREMENT,"
-                    + "commitId VARCHAR(64) NOT NULL COLLATE utf8mb4_unicode_ci,"
-                    + "fileName VARCHAR(300) NOT NULL COLLATE utf8mb4_unicode_ci,"
-                    + "lineNo INT(64) NOT NULL,"
-                    + "content VARCHAR(1000) NOT NULL COLLATE utf8mb4_unicode_ci,"
-                    + "hashcode INT(64) NOT NULL,"
-                    + "type VARCHAR(10) NOT NULL COLLATE utf8mb4_unicode_ci,"
-                    + "PRIMARY KEY(id))";
-
-            chunkTableName = "CREATE TABLE chunk_parent_list("
-                    + "id INT(100) NOT NULL AUTO_INCREMENT,"
-                    + "commitId VARCHAR(64) NOT NULL COLLATE utf8mb4_unicode_ci,"
-                    + "fileName VARCHAR(300) NOT NULL COLLATE utf8mb4_unicode_ci,"
-                    + "hashcode INT(64) NOT NULL ,"
-                    + "type VARCHAR(10) NOT NULL COLLATE utf8mb4_unicode_ci,"
-                    + "PRIMARY KEY(id))";
             //1回だけのテーブル作成の処理やから，isParentのif文の中に書いてる
             String commitTableName = "CREATE TABLE commit_list("
                     + "id INT(100) NOT NULL AUTO_INCREMENT,"
@@ -134,9 +99,43 @@ public class CommitDatabaseManager {
                     + "PRIMARY KEY(id))";
             statement.executeUpdate(commitTableName);
         }
-        statement.executeUpdate(satdTableName);
-        statement.executeUpdate(chunkTableName);
+        statement.executeUpdate(this.getSatdTableSQL(isParent));
+        statement.executeUpdate(this.getChunkTableSQL(isParent));
 
+    }
+
+    private String getSatdTableSQL(Boolean isParent) {
+        String table;
+        if(isParent){
+            table = "parent_satd_list";
+        }else{
+            table = "child_satd_list";
+
+        }
+        return  "CREATE TABLE "+table+"("
+                + "id INT(100) NOT NULL AUTO_INCREMENT,"
+                + "commitId VARCHAR(64) NOT NULL COLLATE utf8mb4_unicode_ci,"
+                + "fileName VARCHAR(300) NOT NULL COLLATE utf8mb4_unicode_ci,"
+                + "lineNo INT(64) NOT NULL,"
+                + "content VARCHAR(1000) NOT NULL COLLATE utf8mb4_unicode_ci,"
+                + "hashcode INT(64) NOT NULL ,"
+                + "type VARCHAR(10) NOT NULL COLLATE utf8mb4_unicode_ci,"
+                + "PRIMARY KEY(id))";
+    }
+    private String getChunkTableSQL(boolean isParent){
+        String table;
+        if(isParent){
+            table = "chunk_parent_list";
+        }else{
+            table = "chunk_child_list";
+        }
+        return  "CREATE TABLE " + table + "("
+                + "id INT(100) NOT NULL AUTO_INCREMENT,"
+                + "commitId VARCHAR(64) NOT NULL COLLATE utf8mb4_unicode_ci,"
+                + "fileName VARCHAR(300) NOT NULL COLLATE utf8mb4_unicode_ci,"
+                + "hashcode INT(64) NOT NULL ,"
+                + "type VARCHAR(10) NOT NULL COLLATE utf8mb4_unicode_ci,"
+                + "PRIMARY KEY(id))";
     }
 
     public void dataUpdate(SATD satd,Boolean isParent) {

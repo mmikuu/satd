@@ -115,12 +115,12 @@ public class SATDDatabaseManager {
     }
 
 
-    public static ResultSet getHashDate() throws SQLException {
+    public ResultSet getHashDate() throws SQLException {
         String hash_sql = "SELECT * from satd_calc_list";
         return statement.executeQuery(hash_sql);
     }
 
-    private static void addColumn() throws SQLException {
+    private void addColumn() throws SQLException {
         String column_sql = "ALTER TABLE satd_calc_list ADD isReplace BOOLEAN AFTER calc_leven_long";
         statement.execute(column_sql);
     }

@@ -27,11 +27,11 @@ public class MainCountSATD {
             dbManager.addDate(id, isReplace);
         }
 
-        Replace replace = dbManager.countAddSatd(true);//DBをもとに各TYPE(Add,Delete,Replace)をReleacePartごとに取得
-        countSATD(replace,true);//取得したReplacepartごとに分けた各TYPEを集計
+        Replace replace = dbManager.countAddSatd(true);//DBをもとに各TYPE(Add,Delete,Replace)をReplace Partごとに取得
+        countSATD(replace,true);//取得したReplace partごとに分けた各TYPEを集計
 
-        replace = dbManager.countAddSatd(false);//DBをもとに各TYPE(Add,Delete,Replace)をReleacePartごとに取得
-        countSATD(replace,false);//取得したReplacepartごとに分けた各TYPEを集計
+        replace = dbManager.countAddSatd(false);//DBをもとに各TYPE(Add,Delete,Replace)をReplace Partごとに取得
+        countSATD(replace,false);//取得したReplace partごとに分けた各TYPEを集計
 
 
         Map<String, String> countAdd = replaceCounter.getAddCount();//Acountを取得
@@ -57,7 +57,6 @@ public class MainCountSATD {
     }
 
     private static void countSATD(Replace replace, boolean isParent) throws SQLException {
-
         replaceCounter.countResultADD(replace.rsA);
         replaceCounter.countResultDELETE(replace.rsD);
         replaceCounter.countResultReplace(replace.rsR,isParent);

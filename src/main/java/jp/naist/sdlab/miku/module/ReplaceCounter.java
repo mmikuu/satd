@@ -55,6 +55,7 @@ public class ReplaceCounter {
     public void countResultReplace(ResultSet rsR, boolean isParent) throws SQLException {
         countResultReplace(rsR, isParent, 1, 4);
     }
+
     public void countResultReplace(ResultSet rsR, boolean isParent, int valueIndex, int labelIndex) throws SQLException {
         ResultSetMetaData metaData = rsR.getMetaData();
         int columnCount = metaData.getColumnCount();
