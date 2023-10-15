@@ -10,7 +10,7 @@ import java.sql.*;
 
 
 public class SATDDatabaseManager extends DatabaseManager {
-    public static Connection connection;
+
     public static Statement statement;
     public static Statement statementD;
     public static Statement statementR;
