@@ -121,7 +121,7 @@ if __name__ == '__main__':
     if(len(args)==1):
         db = 'satd_replace_db'
     else:
-        db = 'test_satd_replace_db'
+        db = args[0]#'test_satd_replace_db'
 
     model = SentenceTransformer('all-mpnet-base-v2')
 
