@@ -4,10 +4,10 @@ import jp.naist.sdlab.miku.module.db.SATDDatabaseManager;
 
 import java.sql.SQLException;
 
-public class SATDDatabaseManagerStub extends SATDDatabaseManager {
+public class CommitDatabaseManagerStub extends SATDDatabaseManager {
     public static final String db = "test_db";
 
-    public SATDDatabaseManagerStub() throws SQLException {
+    public CommitDatabaseManagerStub() throws SQLException {
         super(this.db);
     }
 }

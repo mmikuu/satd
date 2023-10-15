@@ -20,6 +20,13 @@ public class SATDDatabaseManager extends DatabaseManager {
 
     public SATDDatabaseManager() throws SQLException {
         super();
+        initDB();
+    }
+    public SATDDatabaseManager(String db) throws SQLException {
+        super(db);
+        initDB();
+    }
+    public void initDB() throws SQLException {
         //init database
         statement = connection.createStatement();
         statementD = connection.createStatement();

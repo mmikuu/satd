@@ -12,6 +12,13 @@ public class CommitDatabaseManager extends DatabaseManager{
     public Statement statement;
     public CommitDatabaseManager() throws SQLException {
         super();
+        initDB();
+    }
+    public CommitDatabaseManager(String db) throws SQLException {
+        super(db);
+        initDB();
+    }
+    public void initDB() throws SQLException {
         //init database
         statement  = connection.createStatement();
         connection.setAutoCommit(false);
@@ -22,6 +29,8 @@ public class CommitDatabaseManager extends DatabaseManager{
         statement.executeUpdate("DROP TABLE IF EXISTS chunk_child_list");
         statement.executeUpdate("DROP TABLE IF EXISTS commit_list");
     }
+
+
     public void addCommitData(Commit childCommit) {
         System.out.println("aaa");
         if(childCommit.parentCommitIds.size()>1){
