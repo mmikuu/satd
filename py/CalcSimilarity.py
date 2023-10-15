@@ -114,8 +114,14 @@ def getId(dict,value):
         if value == v:
             return k
 
+import sys
 
 if __name__ == '__main__':
+    args = sys.argv
+    if(len(args)==1):
+        db = 'satd_replace_db'
+    else:
+        db = 'test_satd_replace_db'
 
     model = SentenceTransformer('all-mpnet-base-v2')
 
@@ -124,7 +130,7 @@ if __name__ == '__main__':
         host='localhost',
         user='me',
         passwd='goma',
-        db='satd_replace_db')
+        db=db)
     cursor = connection.cursor()
 
     # generate result database
