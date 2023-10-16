@@ -49,7 +49,7 @@ public class ReplaceCounter {
     }
 
     public void countResultSingleReplace(ResultSet rsSR, boolean isParent) throws SQLException {
-        countResultReplace(rsSR, isParent, 1, 7);
+        countResultReplace(rsSR, isParent, 1, 6);
 
     }
     public void countResultReplace(ResultSet rsR, boolean isParent) throws SQLException {

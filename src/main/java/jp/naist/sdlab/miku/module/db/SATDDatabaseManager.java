@@ -58,12 +58,11 @@ public class SATDDatabaseManager extends DatabaseManager {
                     + "parent_satd_list.hashcode AS pHash, "
                     + "child_satd_list.hashcode AS cHash, "
                     + "parent_satd_list.type AS ptype, "
-                    + "child_satd_list.type AS ctype, "
                     + "commit_list.releasePart AS releasePart "
                     + "FROM parent_satd_list "
                     + "JOIN commit_list ON parent_satd_list.commitId = commit_list.commitId "
-                    + "LEFT JOIN child_satd_list ON child_satd_list.hashcode = parent_satd_list.hashcode AND parent_satd_list.type = 'REPLACE' AND child_satd_list.type = 'REPLACE' "
-                    + "WHERE child_satd_list.hashcode = 'null' "
+                    + "LEFT JOIN child_satd_list ON parent_satd_list.hashcode = child_satd_list.hashcode "
+                    + "WHERE child_satd_list.hashcode IS NULL AND parent_satd_list.type = 'REPLACE' "
                     + "GROUP BY commit_list.releasePart ";
 
         }else{
@@ -71,13 +70,12 @@ public class SATDDatabaseManager extends DatabaseManager {
                     + "child_satd_list.id AS cId, "
                     + "child_satd_list.hashcode AS cHash, "
                     + "parent_satd_list.hashcode AS pHash, "
-                    + "parent_satd_list.type AS ptype, "
                     + "child_satd_list.type AS ctype, "
                     + "commit_list.releasePart AS releasePart "
                     + "FROM child_satd_list "
-                    + "JOIN commit_list  ON child_satd_list.commitId = commit_list.commitId "
-                    + "LEFT JOIN parent_satd_list ON child_satd_list.hashcode = parent_satd_list.hashcode AND child_satd_list.type = 'REPLACE' AND parent_satd_list.type = 'REPLACE' "
-                    + "WHERE  parent_satd_list.hashcode = 'null' "
+                    + "JOIN commit_list ON child_satd_list.commitId = commit_list.commitId "
+                    + "LEFT JOIN parent_satd_list ON child_satd_list.hashcode = parent_satd_list.hashcode "
+                    + "WHERE  parent_satd_list.hashcode IS NULL AND child_satd_list.type = 'REPLACE' "
                     + "GROUP BY commit_list.releasePart ";
         }
         return sql;
@@ -98,7 +96,7 @@ public class SATDDatabaseManager extends DatabaseManager {
                 + select
                 + "commit_list.releasePart AS releasePart "
                 + "FROM satd_calc_list "
-                + "JOIN commit_list ON " + column + " = commit_list.commitId AND satd_calc_list.isReplace = '0' "
+                + "JOIN commit_list ON " + column + " = commit_list.id AND satd_calc_list.isReplace = '0' "
                 + "GROUP BY commit_list.releasePart ";
     }
 

@@ -15,8 +15,8 @@ public class SatdDetectTest {
         DiffSATDDetector executor = getExecutor(testUrl, testCommitId);
 
         //全体
-        Assert.assertEquals(0, executor.resultsParent.size());
         Assert.assertEquals(1, executor.resultsChild.size());
+        Assert.assertEquals(0, executor.resultsParent.size());
 
         //1つ目
         SATD resultSATD1 = executor.resultsChild.get(0);
