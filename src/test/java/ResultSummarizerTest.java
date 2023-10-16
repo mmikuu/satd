@@ -36,6 +36,8 @@ public class ResultSummarizerTest {
         testTwelveCommitCountSATD(summarizer.countAdd,summarizer.countDelete);
         testThirteenCommitCountSATD(summarizer.countAdd,summarizer.countDelete);
         testFourteenCommitCountSATD(summarizer.countAdd,summarizer.countDelete);
+        testFifteenCommitCountSATD(summarizer.countAdd,summarizer.countDelete);
+        testSixteenCommitCountSATD(summarizer.countAdd,summarizer.countDelete);
 
     }
 
@@ -226,6 +228,33 @@ public class ResultSummarizerTest {
         if(countDelete.get("test_"+testCommitId) != null){
             int actualDelete = Integer.parseInt(countDelete.get("test_"+testCommitId));
             Assert.assertEquals(testCommitId,0, actualDelete);
+        }
+    }
+
+    public void testFifteenCommitCountSATD(Map<String, String> countAdd, Map<String, String> countDelete) throws SQLException {
+
+        String testCommitId = "2c652847fde25285c63f267735c9f2ebcdd093c3";
+
+        if(countAdd.get("test_"+testCommitId) != null){
+            int actualAdd = Integer.parseInt(countAdd.get("test_"+testCommitId));
+            Assert.assertEquals(testCommitId,1, actualAdd);
+        }
+        if(countDelete.get("test_"+testCommitId) != null){
+            int actualDelete = Integer.parseInt(countDelete.get("test_"+testCommitId));
+            Assert.assertEquals(testCommitId,1, actualDelete);
+        }
+    }
+    public void testSixteenCommitCountSATD(Map<String, String> countAdd, Map<String, String> countDelete) throws SQLException {
+
+        String testCommitId = "f0ecbe90b60d0b6712001b28ef08dac681002887";
+
+        if(countAdd.get("test_"+testCommitId) != null){
+            int actualAdd = Integer.parseInt(countAdd.get("test_"+testCommitId));
+            Assert.assertEquals(testCommitId,1, actualAdd);
+        }
+        if(countDelete.get("test_"+testCommitId) != null){
+            int actualDelete = Integer.parseInt(countDelete.get("test_"+testCommitId));
+            Assert.assertEquals(testCommitId,1, actualDelete);
         }
     }
 
