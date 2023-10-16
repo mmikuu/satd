@@ -19,7 +19,7 @@ public class MainCountSATD {
         SATDDatabaseManager dbManager = new SATDDatabaseManager();
         ResultSummarizer summarizer = new ResultSummarizer(dbManager);
         summarizer.run();
-        summarizer.countPrint();
+        //summarizer.countPrint();
 
     }
 

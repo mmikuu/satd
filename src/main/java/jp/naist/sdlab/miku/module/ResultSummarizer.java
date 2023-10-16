@@ -39,12 +39,33 @@ public class ResultSummarizer {
 
         Replace replace = dbManager.countAddSatd(true);//DBをもとに各TYPE(Add,Delete,Replace)をReplace Partごとに取得
         countSATD(replace,true);//取得したReplace partごとに分けた各TYPEを集計
+        updateReplace(replace.rsR,true);
+        updateReplace(replace.rsSR,true);
+
+
 
         replace = dbManager.countAddSatd(false);//DBをもとに各TYPE(Add,Delete,Replace)をReplace Partごとに取得
         countSATD(replace,false);//取得したReplace partごとに分けた各TYPEを集計
+        updateReplace(replace.rsR,false);
+        updateReplace(replace.rsSR,false);
 
         countAdd = getCountAddDelete( "Add");
         countDelete = getCountAddDelete( "Del");
+
+    }
+
+    private void updateReplace(ResultSet rs,boolean isParent) throws SQLException {
+        while(rs.next()){
+            int Id;
+            if(isParent){
+                Id = rs.getInt("pid");
+            }else{
+                Id = rs.getInt("cId");
+            }
+
+            System.out.println("aaa");
+            dbManager.addResultDate(Id,rs,isParent);
+        }
     }
 
     private Map<String,String> getCountAddDelete(String AddorDel) {

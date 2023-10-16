@@ -100,7 +100,8 @@ public class SATDDatabaseManager extends DatabaseManager {
                 + "commit_list.releasePart AS releasePart "
                 + "FROM satd_calc_list "
                 + "JOIN " + satdTB + " ON " + column + " = " + satdTB + ".id "
-                + "JOIN commit_list ON " + satdTB + ".commitId = commit_list.id AND satd_calc_list.isReplace = '0' "
+                + "JOIN commit_list ON " + satdTB + ".commitId = commit_list.commitId "
+                + "WHERE satd_calc_list.isReplace = '0'"
                 + "GROUP BY commit_list.releasePart ";
     }
 
@@ -146,7 +147,23 @@ public class SATDDatabaseManager extends DatabaseManager {
         }
     }
 
+    public void addResultDate(int id,ResultSet rs,boolean isParent) {
+        String isTypeSQL = "update child_satd_list set type = ? where id = ?";
+        if (isParent) {
+            isTypeSQL = "update parent_satd_list set type = ? where id = ?";
+        }
 
-
-
+        try (PreparedStatement ps = connection.prepareStatement(isTypeSQL)) {
+            if(isParent){
+                ps.setString(1, "DELETE");
+            }else{
+                ps.setString(1, "ADDED");
+            }
+            ps.setInt(2, id);
+            ps.executeUpdate();
+            connection.commit();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

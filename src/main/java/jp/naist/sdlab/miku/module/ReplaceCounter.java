@@ -53,7 +53,7 @@ public class ReplaceCounter {
 
     }
     public void countResultReplace(ResultSet rsR, boolean isParent) throws SQLException {
-        countResultReplace(rsR, isParent, 1, 4);
+        countResultReplace(rsR, isParent, 1, 5);
     }
 
     public void countResultReplace(ResultSet rsR, boolean isParent, int valueIndex, int labelIndex) throws SQLException {
