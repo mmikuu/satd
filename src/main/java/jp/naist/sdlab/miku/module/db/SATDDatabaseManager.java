@@ -82,21 +82,25 @@ public class SATDDatabaseManager extends DatabaseManager {
     }
 
     private String createReplaceSQL(boolean isParent) {
-        String select, column;
+        String select, column, satdTB;
         if (isParent){
             select = "satd_calc_list.pId AS pId, ";
             column = "satd_calc_list.pId";
+            satdTB = "parent_satd_list";
         }else{
             select = "satd_calc_list.cId AS cId, ";
             column = "satd_calc_list.cId";
+            satdTB = "child_satd_list";
         }
 
         return "SELECT COUNT(*) AS count, "
                 + "satd_calc_list.id AS id, "
                 + select
+                + satdTB + ".commitId AS commitId, "
                 + "commit_list.releasePart AS releasePart "
                 + "FROM satd_calc_list "
-                + "JOIN commit_list ON " + column + " = commit_list.id AND satd_calc_list.isReplace = '0' "
+                + "JOIN " + satdTB + " ON " + column + " = " + satdTB + ".id "
+                + "JOIN commit_list ON " + satdTB + ".commitId = commit_list.id AND satd_calc_list.isReplace = '0' "
                 + "GROUP BY commit_list.releasePart ";
     }
 

@@ -45,7 +45,6 @@ public class ResultSummarizer {
 
         countAdd = getCountAddDelete( "Add");
         countDelete = getCountAddDelete( "Del");
-
     }
 
     private Map<String,String> getCountAddDelete(String AddorDel) {

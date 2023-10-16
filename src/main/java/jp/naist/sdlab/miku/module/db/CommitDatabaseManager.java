@@ -44,12 +44,7 @@ public class CommitDatabaseManager extends DatabaseManager{
             Timestamp timestamp = Timestamp.valueOf(childCommit.commitDate);
             ps.setTimestamp(2, timestamp);
             System.out.println(timestamp);
-            if(childCommit.getRelease()==null){
-                System.out.println("test");
-                ps.setString(3, "test");
-            }else {
-                ps.setString(3, childCommit.getRelease());
-            }
+            ps.setString(3, childCommit.getRelease());
             System.out.println(childCommit.getRelease());
             ps.setString(4, childCommit.project);
             ps.setString(5, childCommit.commitComment);
@@ -74,7 +69,7 @@ public class CommitDatabaseManager extends DatabaseManager{
 
         }
     }
-    private void insertDate(Commit commit, LineChange lc, boolean isParent) {
+    public void insertDate(Commit commit, LineChange lc, boolean isParent) {
         String chunk_sql = "insert into chunk_child_list(commitId,fileName,hashcode,type) VALUES(?,?,?,?)";
         if (isParent) {
             chunk_sql = "insert into chunk_parent_list(commitId,fileName,hashcode,type) VALUES(?,?,?,?)";
@@ -103,7 +98,7 @@ public class CommitDatabaseManager extends DatabaseManager{
                     + "id INT(100) NOT NULL AUTO_INCREMENT,"
                     + "commitId VARCHAR(64) NOT NULL COLLATE utf8mb4_unicode_ci,"
                     + "commitDate timestamp NOT NULL ,"
-                    + "releasePart VARCHAR(10) NOT NULL COLLATE utf8mb4_unicode_ci,"
+                    + "releasePart VARCHAR(100) NOT NULL COLLATE utf8mb4_unicode_ci,"
                     + "fileName VARCHAR(100) NOT NULL COLLATE utf8mb4_unicode_ci,"
                     + "commitComment VARCHAR(1000) NOT NULL COLLATE utf8mb4_unicode_ci ,"
                     + "PRIMARY KEY(id))";
