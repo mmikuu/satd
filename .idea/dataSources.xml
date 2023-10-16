@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="satd_replace_db@127.0.0.1" uuid="0569e2cc-745d-4de2-9cf9-b1a523aec03c">
+    <data-source source="LOCAL" name="test_db@127.0.0.1" uuid="0569e2cc-745d-4de2-9cf9-b1a523aec03c">
+      <driver-ref>mysql.8</driver-ref>
+      <synchronize>true</synchronize>
+      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mysql://127.0.0.1:3306/test_db</jdbc-url>
+      <working-dir>$ProjectFileDir$</working-dir>
+    </data-source>
+    <data-source source="LOCAL" name="satd_replace_db@127.0.0.1" uuid="a8f0e1ef-9e22-4c65-a47d-3a49b2176d8b">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>

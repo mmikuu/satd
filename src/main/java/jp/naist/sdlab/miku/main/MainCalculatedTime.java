@@ -35,7 +35,9 @@ public class MainCalculatedTime {
     public static DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static Map<String, Integer> TotalReleaseCommit = new LinkedHashMap<>();
     public static List<String> releaseDates = Arrays.asList("2016-06-22", "2017-06-28", "2018-06-27", "2018-09-19", "2018-12-19", "2019-03-20", "2019-06-19", "2019-09-19", "2019-12-18", "2020-03-18", "2020-06-16");//, "2020-06-16", "2020-06-16", "2021-09-15", "2021-12-08", "2022-03-16"
+    public static List<String> release = Arrays.asList("TR1","TR2","RR1","RR2","RR3","RR4","RR5","RR6","RR7","RR8");
     public static GitServiceImpl2 gitService;
+
     public static Git git;
     public static Repository repository;
     public static CommitDatabaseManager  dbManager;
@@ -95,7 +97,7 @@ public class MainCalculatedTime {
         }
     }
 
-    private static Repository getRepo(String url) throws Exception {
+    public static Repository getRepo(String url) throws Exception {
         GitService gitService = new GitServiceImpl();
         String[] tmp = url.split("/");
         String project = tmp[tmp.length - 1];

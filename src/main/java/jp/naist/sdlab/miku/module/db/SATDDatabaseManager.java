@@ -7,6 +7,8 @@ import jp.naist.sdlab.miku.module.commit.Replace;
 import weka.knowledgeflow.Data;
 
 import java.sql.*;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class SATDDatabaseManager extends DatabaseManager {
@@ -39,8 +41,9 @@ public class SATDDatabaseManager extends DatabaseManager {
 
 
     public Replace countAddSatd(boolean isParent) throws SQLException {
-        ResultSet rsA = statement.executeQuery(this.createAddDeleteSQL("ADDED", isParent));
+
         ResultSet rsD = statementD.executeQuery(this.createAddDeleteSQL("DELETE", isParent));
+        ResultSet rsA = statement.executeQuery(this.createAddDeleteSQL("ADDED", isParent));
         ResultSet rsR = statementR.executeQuery(this.createReplaceSQL(isParent));
         ResultSet rsSR = statementSR.executeQuery(this.createSingleReplaceSQL(isParent));
 
@@ -108,12 +111,12 @@ public class SATDDatabaseManager extends DatabaseManager {
             table = "child_satd_list";
         }
         return  "SELECT COUNT(*) AS count, "
-                + "child_satd_list.id AS id, "
-                + "child_satd_list.commitId AS cId, "
-                + "child_satd_list.type AS type, "
+                + table + ".id AS id, "
+                + table + ".commitId AS cId, "
+                + table + ".type AS type, "
                 + "commit_list.releasePart AS releasePart "
                 + "FROM " + table + " "
-                + "JOIN commit_list ON child_satd_list.commitId = commit_list.commitId AND child_satd_list.type = '"+ADDorDelete+"' "
+                + "JOIN commit_list ON " + table + ".commitId = commit_list.commitId AND "+ table +".type = '"+ADDorDelete+"' "
                 + "GROUP BY commit_list.releasePart ";
     }
 
@@ -123,7 +126,7 @@ public class SATDDatabaseManager extends DatabaseManager {
         return statement.executeQuery(hash_sql);
     }
 
-    private void addColumn() throws SQLException {
+    public void addColumn() throws SQLException {
         String column_sql = "ALTER TABLE satd_calc_list ADD isReplace BOOLEAN AFTER calc_leven_long";
         statement.execute(column_sql);
     }

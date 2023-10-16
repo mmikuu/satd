@@ -32,29 +32,33 @@ public class CommitDatabaseManager extends DatabaseManager{
 
 
     public void addCommitData(Commit childCommit) {
-        System.out.println("aaa");
         if(childCommit.parentCommitIds.size()>1){
             return;//対象外
         }
-        if (childCommit.getRelease() != null) {
-            System.out.println("bbb");
-            String commit_sql = "insert into commit_list (commitId,commitDate,releasePart,fileName,commitComment) VALUES(?,?,?,?,?)";
-            try (PreparedStatement ps = connection.prepareStatement(commit_sql)) {
-                ps.setString(1, childCommit.commitId);
-                // LocalDateTimeからjava.sql.Timestampへ変換
-                Timestamp timestamp = Timestamp.valueOf(childCommit.commitDate);
-                ps.setTimestamp(2, timestamp);
-                System.out.println(timestamp);
+
+        System.out.println("bbb");
+        String commit_sql = "insert into commit_list (commitId,commitDate,releasePart,fileName,commitComment) VALUES(?,?,?,?,?)";
+        try (PreparedStatement ps = connection.prepareStatement(commit_sql)) {
+            ps.setString(1, childCommit.commitId);
+            // LocalDateTimeからjava.sql.Timestampへ変換
+            Timestamp timestamp = Timestamp.valueOf(childCommit.commitDate);
+            ps.setTimestamp(2, timestamp);
+            System.out.println(timestamp);
+            if(childCommit.getRelease()==null){
+                System.out.println("test");
+                ps.setString(3, "test");
+            }else {
                 ps.setString(3, childCommit.getRelease());
-                System.out.println(childCommit.getRelease());
-                ps.setString(4, childCommit.project);
-                ps.setString(5, childCommit.commitComment);
-                ps.executeUpdate();
-                connection.commit();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
             }
+            System.out.println(childCommit.getRelease());
+            ps.setString(4, childCommit.project);
+            ps.setString(5, childCommit.commitComment);
+            ps.executeUpdate();
+            connection.commit();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
+
         for (ChangedFile change : childCommit.changedFileList) {
             for (Chunk chunk : change.chunks) {
                 if (chunk.getType() == null) {

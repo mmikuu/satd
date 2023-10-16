@@ -11,7 +11,6 @@ import jp.naist.sdlab.miku.module.db.SATDDatabaseManager;
 import java.sql.*;
 import java.util.Map;
 
-
 public class MainCountSATD {
     public static SATDDatabaseManager dbManager;
     public static ReplaceCounter replaceCounter;
@@ -25,6 +24,7 @@ public class MainCountSATD {
             int id = rsH.getInt("id");
             boolean isReplace = checkReplace(rsH);//similarityをもとにreplaceか判定
             dbManager.addDate(id, isReplace);
+
         }
 
         Replace replace = dbManager.countAddSatd(true);//DBをもとに各TYPE(Add,Delete,Replace)をReplace Partごとに取得
@@ -33,9 +33,23 @@ public class MainCountSATD {
         replace = dbManager.countAddSatd(false);//DBをもとに各TYPE(Add,Delete,Replace)をReplace Partごとに取得
         countSATD(replace,false);//取得したReplace partごとに分けた各TYPEを集計
 
+        Map<String, String> countAdd = getCountAddDelete("Add");
+        Map<String, String> countDelete = getCountAddDelete("Del");
 
-        Map<String, String> countAdd = replaceCounter.getAddCount();//Acountを取得
-        Map<String, String> countDelete = replaceCounter.getDeleteCount();//Dcountを取得
+        countPrint(countAdd,countDelete);
+
+    }
+
+    public static Map<String,String> getCountAddDelete(String AddorDel) {
+        if(AddorDel.equals("Add")){
+            return  replaceCounter.getAddCount();//Acountを取得
+        }else{
+            return replaceCounter.getDeleteCount();//Dcountを取得
+        }
+
+    }
+
+    public static void countPrint(Map<String, String> countAdd, Map<String, String> countDelete) {
 
         System.out.println("Acount" + countAdd);
         System.out.println("Dcount" + countDelete);
@@ -49,17 +63,45 @@ public class MainCountSATD {
         System.out.println("Dtr:" + deleteInTR + " Drr:" + deleteInRR);
     }
 
-    private static boolean checkReplace(ResultSet rsH) throws SQLException {
+    public static boolean checkReplace(ResultSet rsH) throws SQLException {
         double calcBert = rsH.getDouble("calc_bert");
         double calcLeven = rsH.getDouble("calc_leven");
         double distanceLeven = rsH.getDouble("calc_leven_long");
         return ReplaceChecker.check(calcBert,calcLeven,distanceLeven);
     }
 
-    private static void countSATD(Replace replace, boolean isParent) throws SQLException {
-        replaceCounter.countResultADD(replace.rsA);
-        replaceCounter.countResultDELETE(replace.rsD);
-        replaceCounter.countResultReplace(replace.rsR,isParent);
-        replaceCounter.countResultSingleReplace(replace.rsSR,isParent);
+    public static void countSATD(Replace replace, boolean isParent) throws SQLException {
+        if(replaceCounter == null){
+            System.out.println("replaceCounter is null");
+        }
+        if(replace.rsA != null){
+            try{
+                replaceCounter.countResultADD(replace.rsA);
+            }catch(Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
+        if(replace.rsD != null) {
+            try {
+                replaceCounter.countResultDELETE(replace.rsD);
+            } catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
+        if(replace.rsR != null){
+            try{
+                replaceCounter.countResultReplace(replace.rsR,isParent);
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
+        if(replace.rsSR != null){
+            try{
+                replaceCounter.countResultSingleReplace(replace.rsSR,isParent);
+            }catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+        }
+
     }
 }

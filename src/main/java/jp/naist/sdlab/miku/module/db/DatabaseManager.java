@@ -12,7 +12,7 @@ public abstract class DatabaseManager {
     abstract void initDB() throws SQLException;
 
     public DatabaseManager() throws SQLException {
-        this(this.db);
+        this(db);
     }
     public DatabaseManager(String db) throws SQLException {
         connection = DriverManager.getConnection(
